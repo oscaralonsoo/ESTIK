@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public static class SaveData
+public static class SaveLevelData
 {
     public static int GetStars(int level) => PlayerPrefs.GetInt($"stars_{level}", 0);
 

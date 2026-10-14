@@ -57,7 +57,7 @@ public class GameUI : MonoBehaviour
     public void ShowWin(int score, int stars)
     {
         gameEnded = true;
-        SaveData.SetStars(LevelLoader.CurrentLevel, stars);
+        SaveLevelData.SetStars(LevelLoader.CurrentLevel, stars);
 
         winScoreText.text = score.ToString();
         for (int i = 0; i < winStars.Length; i++)

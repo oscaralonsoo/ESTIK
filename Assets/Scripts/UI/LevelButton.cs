@@ -14,8 +14,8 @@ public class LevelButton : MonoBehaviour
 
     public void Setup(int level)
     {
-        bool unlocked = SaveData.IsUnlocked(level);
-        int earned = SaveData.GetStars(level);
+        bool unlocked = SaveLevelData.IsUnlocked(level);
+        int earned = SaveLevelData.GetStars(level);
 
         numberText.text = level.ToString();
         numberText.gameObject.SetActive(unlocked);
