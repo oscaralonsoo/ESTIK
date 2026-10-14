@@ -3,7 +3,8 @@ using UnityEngine;
 public class LevelSelectUI : MonoBehaviour
 {
     [SerializeField] LevelButton buttonPrefab;
-    [SerializeField] Transform container;   
+    [SerializeField] Transform container;  
+    [SerializeField] float stagger = 0.04f;
 
     void OnEnable()
     {
@@ -14,6 +15,12 @@ public class LevelSelectUI : MonoBehaviour
         }
 
         for (int i = 1; i <= LevelLoader.TotalLevels; i++)
-            Instantiate(buttonPrefab, container).Setup(i);
+        {
+            LevelButton btn = Instantiate(buttonPrefab, container);
+            btn.Setup(i);
+
+            if (btn.TryGetComponent(out ButtonFeedback fb))
+                fb.Appear((i - 1) * stagger);
+        }
     }
 }
