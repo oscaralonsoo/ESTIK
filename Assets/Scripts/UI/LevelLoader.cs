@@ -3,7 +3,7 @@ using UnityEngine.SceneManagement;
 
 public static class LevelLoader
 {
-    public const string MenuScene = "MainMenu";
+    public const string MenuScene = "UI";
     public const int TotalLevels = 12;
     public static int CurrentLevel = 1;
 
