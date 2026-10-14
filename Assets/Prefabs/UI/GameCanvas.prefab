@@ -627,6 +627,7 @@ GameObject:
   - component: {fileID: 6958752543757341641}
   - component: {fileID: 4227519729755856145}
   - component: {fileID: 6308968790840629807}
+  - component: {fileID: 9086642574269025235}
   m_Layer: 5
   m_Name: WinPanel
   m_TagString: Untagged
@@ -695,6 +696,29 @@ MonoBehaviour:
   buttonStagger: 0.07
   maxCascadeWindow: 0.55
   exitButtonStagger: 0.03
+--- !u!114 &9086642574269025235
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1028424690337319257}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 06284d76d63360f4eaed47dde9e50bb2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::UIStarRewardFX
+  winScoreText: {fileID: 1522725976751322396}
+  winStars:
+  - {fileID: 1945885214891267315}
+  - {fileID: 4089065852869999779}
+  - {fileID: 7786582733906860310}
+  starOn: {fileID: 21300000, guid: 2ac5a7ffbfed68145b0518f47a1a3504, type: 3}
+  starOff: {fileID: 21300000, guid: ad040399eb1828e499879270c30cd2d8, type: 3}
+  flashColor: {r: 1, g: 0.92, b: 0.55, a: 1}
+  flashSize: 2.6
+  sparkCount: 8
+  sparkDistance: 1.1
 --- !u!1 &1133888135268809252
 GameObject:
   m_ObjectHideFlags: 0
@@ -1218,17 +1242,7 @@ MonoBehaviour:
   pausePanel: {fileID: 8783970348403558788}
   winPanel: {fileID: 1028424690337319257}
   losePanel: {fileID: 8988806042191872314}
-  winScoreText: {fileID: 1522725976751322396}
-  winStars:
-  - {fileID: 1945885214891267315}
-  - {fileID: 4089065852869999779}
-  - {fileID: 7786582733906860310}
-  starOn: {fileID: 21300000, guid: 2ac5a7ffbfed68145b0518f47a1a3504, type: 3}
-  starOff: {fileID: 21300000, guid: ad040399eb1828e499879270c30cd2d8, type: 3}
-  flashColor: {r: 1, g: 0.92, b: 0.55, a: 1}
-  flashSize: 2.6
-  sparkCount: 8
-  sparkDistance: 1.1
+  starRewardFX: {fileID: 9086642574269025235}
 --- !u!114 &5902556319075200687
 MonoBehaviour:
   m_ObjectHideFlags: 0
