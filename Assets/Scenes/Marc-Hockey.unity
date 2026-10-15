@@ -393,17 +393,25 @@ MonoBehaviour:
   m_EditorClassIdentifier: '::'
   shootSpeed: 30
   maxDragDistance: 0.2
-  traceCirclePrefab: {fileID: 3246180424663436760, guid: 8e286d47fdcc4ba4f9f3f715a8c27a61, type: 3}
-  numberOfCircles: 15
-  timeBetweenCircles: 0.05
+  traceArrowSprite: {fileID: 21300000, guid: 0d63de08285554d4ab094c679c9daacc, type: 3}
+  traceArrowColor: {r: 1, g: 1, b: 1, a: 1}
+  traceArrowSize: 1
+  arrowAngleOffset: 0
+  lieFlatOnGround: 1
+  traceSortingOrder: 10
+  maxTraceArrows: 15
+  arrowSpacing: 1
+  traceDuration: 1.5
+  slowmo: 1
   slowMotionScale: 0.2
-  transitionDuration: 0.2
+  slowmoJoinTransitionDuration: 0.5
+  slowmoLeaveTransitionDuration: 0
   draging: 0
   currentShootSpeed: 0
   dragStartPosition: {x: 0, y: 0}
   dragEndPosition: {x: 0, y: 0}
   dragCurrentPosition: {x: 0, y: 0}
-  traceCircles: []
+  traceArrows: []
   ballRigidbody: {fileID: 0}
 --- !u!135 &1255727691
 SphereCollider:
