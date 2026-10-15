@@ -143,7 +143,7 @@ public class BallController : MonoBehaviour
 
         Vector3 shootDir = GetCameraRelativeDirection(dragDir);
 
-        Vector3 startPosition = ballRigidbody.position;
+        Vector3 startPosition = ballRigidbody.transform.position;
         Vector3 initialVelocity = shootDir * currentShootSpeed;
 
         for (int i = 0; i < numberOfCircles; i++)
