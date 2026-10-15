@@ -1,0 +1,159 @@
+using System.Collections.Generic;
+using UnityEditor.Experimental.GraphView;
+using UnityEngine;
+using UnityEngine.InputSystem;
+
+public class BallController : MonoBehaviour
+{
+    [Header("SHOOT PROPERTIES")]
+    [SerializeField] private float shootSpeed = 30f;
+    [SerializeField] private float maxDragDistance = 0.2f;
+
+    [Header("TRACE PROPERTIES")]
+    [SerializeField] private GameObject traceCirclePrefab;
+    [SerializeField] private int numberOfCircles = 15;
+    [SerializeField] private float timeBetweenCircles = 0.1f;
+
+    [Header("DEBUG")]
+    [SerializeField] private bool canShoot = true;
+    [SerializeField] private bool draging = false;
+    [SerializeField] private float currentShootSpeed = 0f;
+    [SerializeField] private Vector2 dragStartPosition = Vector2.zero;
+    [SerializeField] private Vector2 dragEndPosition = Vector2.zero;
+    [SerializeField] private Vector2 dragCurrentPosition = Vector2.zero;
+    [SerializeField] private GameObject[] traceCircles;
+    [SerializeField] private Rigidbody ballRigidbody = null;
+
+
+    void Start()
+    {
+        if(this.gameObject.TryGetComponent<Rigidbody>(out Rigidbody rb))
+        {
+            ballRigidbody = rb;
+        }
+
+        traceCircles = new GameObject[numberOfCircles];
+
+        for (int i = 0; i < numberOfCircles; i++)
+        {
+            traceCircles[i] = Instantiate(
+                traceCirclePrefab,
+                transform.position,
+                Quaternion.identity
+            );
+
+            traceCircles[i].SetActive(false);
+        }
+    }
+
+    void Update()
+    {
+        if (Mouse.current == null || ballRigidbody == null)
+            return;
+
+        if (canShoot)
+        {
+            if (Mouse.current.leftButton.wasPressedThisFrame)
+            {
+                Vector2 rawPos = Mouse.current.position.ReadValue();
+                dragStartPosition = rawPos / Screen.height;
+
+                dragCurrentPosition = dragStartPosition;
+                draging = true;
+            }
+
+            if (draging)
+            {
+                Vector2 rawPos = Mouse.current.position.ReadValue();
+                dragCurrentPosition = rawPos / Screen.height;
+
+                ShowTrace();
+            }
+
+            if (Mouse.current.leftButton.wasReleasedThisFrame && draging)
+            {
+                Vector2 rawPos = Mouse.current.position.ReadValue();
+                dragEndPosition = rawPos / Screen.height;
+
+                Shoot();
+                OnShoot();
+            }
+        }
+    }
+
+    private Vector3 GetCameraRelativeDirection(Vector2 dragDirection)
+    {
+        Transform camTransform = Camera.main.transform;
+
+        Vector3 camForward = camTransform.forward;
+        camForward.y = 0f;
+        camForward.Normalize();
+
+        Vector3 camRight = camTransform.right;
+        camRight.y = 0f;
+        camRight.Normalize();
+
+        Vector3 worldDirection = (camForward * dragDirection.y) + (camRight * dragDirection.x);
+
+        return worldDirection.normalized;
+    }
+
+    void Shoot()
+    {
+        if (!ballRigidbody) return;
+
+        Vector2 dragDir = dragStartPosition - dragEndPosition;
+
+        currentShootSpeed = dragDir.magnitude > maxDragDistance
+            ? shootSpeed
+            : dragDir.magnitude / maxDragDistance * shootSpeed;
+
+        Vector3 shootDir = GetCameraRelativeDirection(dragDir);
+
+        ballRigidbody.WakeUp();
+        ballRigidbody.linearVelocity = shootDir * currentShootSpeed;
+    }
+
+    void ShowTrace()
+    {
+        Vector2 dragDir = dragStartPosition - dragCurrentPosition;
+
+        currentShootSpeed = dragDir.magnitude > maxDragDistance
+            ? shootSpeed
+            : dragDir.magnitude / maxDragDistance * shootSpeed;
+
+        Vector3 shootDir = GetCameraRelativeDirection(dragDir);
+
+        Vector3 startPosition = ballRigidbody.position;
+        Vector3 initialVelocity = shootDir * currentShootSpeed;
+
+        for (int i = 0; i < numberOfCircles; i++)
+        {
+            float t = i * timeBetweenCircles;
+
+            Vector3 pointPosition = startPosition + (initialVelocity * t);
+
+            traceCircles[i].transform.position = pointPosition;
+            traceCircles[i].SetActive(true);
+        }
+    }
+
+    void HideTrace()
+    {
+        for (int i = 0; i < traceCircles.Length; i++)
+        {
+            traceCircles[i].SetActive(false);
+        }
+    }
+
+    void OnShoot()
+    {
+        HideTrace();
+
+        draging = false;
+        dragStartPosition = Vector2.zero;
+        dragCurrentPosition = Vector2.zero;
+        dragEndPosition = Vector2.zero;
+        currentShootSpeed = 0f;
+    }
+}
