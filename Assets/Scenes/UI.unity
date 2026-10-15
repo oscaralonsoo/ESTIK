@@ -596,6 +596,18 @@ PrefabInstance:
       propertyPath: m_ChildForceExpandHeight
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 643743643901509015, guid: 7cf6830b40dba8545a2cf307ce66ef6d, type: 3}
+      propertyPath: m_Type
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 643743643901509015, guid: 7cf6830b40dba8545a2cf307ce66ef6d, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: a9b0b152f983a0740a3755f6da3c3f7e, type: 3}
+    - target: {fileID: 643743643901509015, guid: 7cf6830b40dba8545a2cf307ce66ef6d, type: 3}
+      propertyPath: m_PreserveAspect
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 782248348897838930, guid: 7cf6830b40dba8545a2cf307ce66ef6d, type: 3}
       propertyPath: m_Name
       value: Subtitle
@@ -640,9 +652,33 @@ PrefabInstance:
       propertyPath: m_hasFontAssetChanged
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3344106224594551374, guid: 7cf6830b40dba8545a2cf307ce66ef6d, type: 3}
+      propertyPath: m_Type
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3344106224594551374, guid: 7cf6830b40dba8545a2cf307ce66ef6d, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: a9b0b152f983a0740a3755f6da3c3f7e, type: 3}
+    - target: {fileID: 3344106224594551374, guid: 7cf6830b40dba8545a2cf307ce66ef6d, type: 3}
+      propertyPath: m_PreserveAspect
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 3402592898348590659, guid: 7cf6830b40dba8545a2cf307ce66ef6d, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3628666067877155232, guid: 7cf6830b40dba8545a2cf307ce66ef6d, type: 3}
+      propertyPath: m_Type
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3628666067877155232, guid: 7cf6830b40dba8545a2cf307ce66ef6d, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: a9b0b152f983a0740a3755f6da3c3f7e, type: 3}
+    - target: {fileID: 3628666067877155232, guid: 7cf6830b40dba8545a2cf307ce66ef6d, type: 3}
+      propertyPath: m_PreserveAspect
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3776121047207559231, guid: 7cf6830b40dba8545a2cf307ce66ef6d, type: 3}
       propertyPath: m_AnchorMax.y
@@ -954,7 +990,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6993668483529918720, guid: 7cf6830b40dba8545a2cf307ce66ef6d, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7208148435474720798, guid: 7cf6830b40dba8545a2cf307ce66ef6d, type: 3}
       propertyPath: m_AnchorMax.y
@@ -1007,6 +1043,30 @@ PrefabInstance:
     - target: {fileID: 7394515847801801466, guid: 7cf6830b40dba8545a2cf307ce66ef6d, type: 3}
       propertyPath: m_AnchoredPosition.y
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7872785348323801351, guid: 7cf6830b40dba8545a2cf307ce66ef6d, type: 3}
+      propertyPath: m_Type
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7872785348323801351, guid: 7cf6830b40dba8545a2cf307ce66ef6d, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: a9b0b152f983a0740a3755f6da3c3f7e, type: 3}
+    - target: {fileID: 7872785348323801351, guid: 7cf6830b40dba8545a2cf307ce66ef6d, type: 3}
+      propertyPath: m_FillMethod
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7872785348323801351, guid: 7cf6830b40dba8545a2cf307ce66ef6d, type: 3}
+      propertyPath: m_UseSpriteMesh
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7872785348323801351, guid: 7cf6830b40dba8545a2cf307ce66ef6d, type: 3}
+      propertyPath: m_PreserveAspect
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7872785348323801351, guid: 7cf6830b40dba8545a2cf307ce66ef6d, type: 3}
+      propertyPath: m_PixelsPerUnitMultiplier
+      value: 9
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
