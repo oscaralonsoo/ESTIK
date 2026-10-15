@@ -312,6 +312,7 @@ MonoBehaviour:
   buttonsAppear: 0
   buttonRise: 30
   buttonStagger: 0.07
+  maxCascadeWindow: 0.55
   exitButtonStagger: 0.03
 --- !u!1 &1427427021
 GameObject:
@@ -483,6 +484,7 @@ MonoBehaviour:
   buttonsAppear: 0
   buttonRise: 30
   buttonStagger: 0.07
+  maxCascadeWindow: 0.55
   exitButtonStagger: 0.03
 --- !u!1 &1694918260 stripped
 GameObject:
@@ -608,8 +610,12 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3186736004961768768, guid: 7cf6830b40dba8545a2cf307ce66ef6d, type: 3}
       propertyPath: m_text
-      value: BITLLO
+      value: ESTIK
       objectReference: {fileID: 0}
+    - target: {fileID: 3186736004961768768, guid: 7cf6830b40dba8545a2cf307ce66ef6d, type: 3}
+      propertyPath: m_fontAsset
+      value: 
+      objectReference: {fileID: 11400000, guid: 23951a40e65b2ce45b6170fdc8af59b2, type: 2}
     - target: {fileID: 3186736004961768768, guid: 7cf6830b40dba8545a2cf307ce66ef6d, type: 3}
       propertyPath: m_fontColor.b
       value: 0.16470589
@@ -623,8 +629,16 @@ PrefabInstance:
       value: 0.10980393
       objectReference: {fileID: 0}
     - target: {fileID: 3186736004961768768, guid: 7cf6830b40dba8545a2cf307ce66ef6d, type: 3}
+      propertyPath: m_sharedMaterial
+      value: 
+      objectReference: {fileID: 2783574680600033382, guid: 23951a40e65b2ce45b6170fdc8af59b2, type: 2}
+    - target: {fileID: 3186736004961768768, guid: 7cf6830b40dba8545a2cf307ce66ef6d, type: 3}
       propertyPath: m_fontColor32.rgba
       value: 4280949788
+      objectReference: {fileID: 0}
+    - target: {fileID: 3186736004961768768, guid: 7cf6830b40dba8545a2cf307ce66ef6d, type: 3}
+      propertyPath: m_hasFontAssetChanged
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3402592898348590659, guid: 7cf6830b40dba8545a2cf307ce66ef6d, type: 3}
       propertyPath: m_AnchorMax.y
@@ -1072,6 +1086,7 @@ MonoBehaviour:
   buttonsAppear: 0
   buttonRise: 30
   buttonStagger: 0.07
+  maxCascadeWindow: 0.55
   exitButtonStagger: 0.03
 --- !u!1660057539 &9223372036854775807
 SceneRoots:

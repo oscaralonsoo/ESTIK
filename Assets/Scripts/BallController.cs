@@ -1,5 +1,3 @@
-using System.Collections.Generic;
-using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -10,9 +8,15 @@ public class BallController : MonoBehaviour
     [SerializeField] private float maxDragDistance = 0.2f;
 
     [Header("TRACE PROPERTIES")]
-    [SerializeField] private GameObject traceCirclePrefab;
-    [SerializeField] private int numberOfCircles = 15;
-    [SerializeField] private float timeBetweenCircles = 0.1f;
+    [SerializeField] private Sprite traceArrowSprite;
+    [SerializeField] private Color traceArrowColor = Color.white;
+    [SerializeField] private float traceArrowSize = 0.2f;
+    [SerializeField] private float arrowAngleOffset = 0f;
+    [SerializeField] private bool lieFlatOnGround = true;
+    [SerializeField] private int traceSortingOrder = 10;
+    [SerializeField] private int maxTraceArrows = 15;
+    [SerializeField] private float arrowSpacing = 1f;
+    [SerializeField] private float traceDuration = 1.5f;
 
     [Header("SLOWMO PROPERTIES")]
     [SerializeField] private bool slowmo = true;
@@ -26,29 +30,18 @@ public class BallController : MonoBehaviour
     [SerializeField] private Vector2 dragStartPosition = Vector2.zero;
     [SerializeField] private Vector2 dragEndPosition = Vector2.zero;
     [SerializeField] private Vector2 dragCurrentPosition = Vector2.zero;
-    [SerializeField] private GameObject[] traceCircles;
+    [SerializeField] private GameObject[] traceArrows;
     [SerializeField] private Rigidbody ballRigidbody = null;
 
 
     void Start()
     {
-        if(this.gameObject.TryGetComponent<Rigidbody>(out Rigidbody rb))
+        if (this.gameObject.TryGetComponent<Rigidbody>(out Rigidbody rb))
         {
             ballRigidbody = rb;
         }
 
-        traceCircles = new GameObject[numberOfCircles];
-
-        for (int i = 0; i < numberOfCircles; i++)
-        {
-            traceCircles[i] = Instantiate(
-                traceCirclePrefab,
-                transform.position,
-                Quaternion.identity
-            );
-
-            traceCircles[i].SetActive(false);
-        }
+        CreateTraceArrows();
     }
 
     void Update()
@@ -133,38 +126,6 @@ public class BallController : MonoBehaviour
         ballRigidbody.linearVelocity = shootDir * currentShootSpeed;
     }
 
-    void ShowTrace()
-    {
-        Vector2 dragDir = dragStartPosition - dragCurrentPosition;
-
-        currentShootSpeed = dragDir.magnitude > maxDragDistance
-            ? shootSpeed
-            : dragDir.magnitude / maxDragDistance * shootSpeed;
-
-        Vector3 shootDir = GetCameraRelativeDirection(dragDir);
-
-        Vector3 startPosition = ballRigidbody.transform.position;
-        Vector3 initialVelocity = shootDir * currentShootSpeed;
-
-        for (int i = 0; i < numberOfCircles; i++)
-        {
-            float t = i * timeBetweenCircles;
-
-            Vector3 pointPosition = startPosition + (initialVelocity * t);
-
-            traceCircles[i].transform.position = pointPosition;
-            traceCircles[i].SetActive(true);
-        }
-    }
-
-    void HideTrace()
-    {
-        for (int i = 0; i < traceCircles.Length; i++)
-        {
-            traceCircles[i].SetActive(false);
-        }
-    }
-
     void OnShoot()
     {
         HideTrace();
@@ -175,4 +136,97 @@ public class BallController : MonoBehaviour
         dragEndPosition = Vector2.zero;
         currentShootSpeed = 0f;
     }
+
+    #region Trace
+    private void CreateTraceArrows()
+    {
+        traceArrows = new GameObject[maxTraceArrows];
+
+        float spriteWidth = traceArrowSprite != null ? traceArrowSprite.bounds.size.x : 1f;
+        float scale = spriteWidth > 0f ? traceArrowSize / spriteWidth : 1f;
+
+        for (int i = 0; i < maxTraceArrows; i++)
+        {
+            GameObject arrow = new GameObject("TraceArrow_" + i);
+            arrow.transform.SetParent(transform);
+            arrow.transform.localScale = Vector3.one * scale;
+
+            SpriteRenderer sr = arrow.AddComponent<SpriteRenderer>();
+            sr.sprite = traceArrowSprite;
+            sr.color = traceArrowColor;
+            sr.sortingOrder = traceSortingOrder;
+
+            arrow.SetActive(false);
+            traceArrows[i] = arrow;
+        }
+    }
+
+    private void ShowTrace()
+    {
+        Vector2 dragDir = dragStartPosition - dragCurrentPosition;
+
+        currentShootSpeed = dragDir.magnitude > maxDragDistance
+            ? shootSpeed
+            : dragDir.magnitude / maxDragDistance * shootSpeed;
+
+        Vector3 shootDir = GetCameraRelativeDirection(dragDir);
+
+        if (shootDir.sqrMagnitude < 0.0001f || currentShootSpeed <= 0f)
+        {
+            HideTrace();
+            return;
+        }
+
+        float traceLength = currentShootSpeed * traceDuration;
+        int arrowsToShow = Mathf.Min(
+            maxTraceArrows,
+            Mathf.FloorToInt(traceLength / Mathf.Max(arrowSpacing, 0.0001f))
+        );
+
+        Vector3 startPosition = ballRigidbody.transform.position;
+        Quaternion arrowRotation = GetArrowRotation(shootDir);
+
+        for (int i = 0; i < maxTraceArrows; i++)
+        {
+            bool visible = i < arrowsToShow;
+            traceArrows[i].SetActive(visible);
+
+            if (!visible)
+                continue;
+
+            traceArrows[i].transform.SetPositionAndRotation(
+                startPosition + shootDir * ((i + 1) * arrowSpacing),
+                arrowRotation
+            );
+        }
+    }
+
+    private void HideTrace()
+    {
+        for (int i = 0; i < traceArrows.Length; i++)
+        {
+            traceArrows[i].SetActive(false);
+        }
+    }
+    private Quaternion GetArrowRotation(Vector3 shootDir)
+    {
+        if (lieFlatOnGround)
+        {
+            Quaternion flat = Quaternion.LookRotation(
+                Vector3.down,
+                Vector3.Cross(Vector3.down, shootDir)
+            );
+            return flat * Quaternion.Euler(0f, 0f, arrowAngleOffset);
+        }
+
+        Transform cam = Camera.main.transform;
+        float angle = Mathf.Atan2(
+            Vector3.Dot(shootDir, cam.up),
+            Vector3.Dot(shootDir, cam.right)
+        ) * Mathf.Rad2Deg;
+
+        return cam.rotation * Quaternion.Euler(0f, 0f, angle + arrowAngleOffset);
+    }
+
+    #endregion
 }
