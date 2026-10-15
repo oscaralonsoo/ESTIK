@@ -55,15 +55,15 @@ public class BallController : MonoBehaviour
         {
             if (Mouse.current.leftButton.wasPressedThisFrame)
             {
-                Vector2 rawPos = Mouse.current.position.ReadValue();
-                dragStartPosition = rawPos / Screen.height;
-
-                dragCurrentPosition = dragStartPosition;
                 draging = true;
             }
 
             if (draging)
             {
+                Vector3 ballScreenPos3D = Camera.main.WorldToScreenPoint(ballRigidbody.position);
+                Vector2 ballScreenPos = new Vector2(ballScreenPos3D.x, ballScreenPos3D.y);
+                dragStartPosition = ballScreenPos / Screen.height;
+
                 Vector2 rawPos = Mouse.current.position.ReadValue();
                 dragCurrentPosition = rawPos / Screen.height;
 
@@ -72,6 +72,10 @@ public class BallController : MonoBehaviour
 
             if (Mouse.current.leftButton.wasReleasedThisFrame && draging)
             {
+                Vector3 ballScreenPos3D = Camera.main.WorldToScreenPoint(ballRigidbody.position);
+                Vector2 ballScreenPos = new Vector2(ballScreenPos3D.x, ballScreenPos3D.y);
+                dragStartPosition = ballScreenPos / Screen.height;
+
                 Vector2 rawPos = Mouse.current.position.ReadValue();
                 dragEndPosition = rawPos / Screen.height;
 
