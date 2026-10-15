@@ -396,7 +396,8 @@ MonoBehaviour:
   traceCirclePrefab: {fileID: 3246180424663436760, guid: 8e286d47fdcc4ba4f9f3f715a8c27a61, type: 3}
   numberOfCircles: 15
   timeBetweenCircles: 0.05
-  canShoot: 1
+  slowMotionScale: 0.2
+  transitionDuration: 0.2
   draging: 0
   currentShootSpeed: 0
   dragStartPosition: {x: 0, y: 0}

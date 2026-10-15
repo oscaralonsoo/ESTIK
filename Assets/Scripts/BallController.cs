@@ -14,8 +14,13 @@ public class BallController : MonoBehaviour
     [SerializeField] private int numberOfCircles = 15;
     [SerializeField] private float timeBetweenCircles = 0.1f;
 
+    [Header("SLOWMO PROPERTIES")]
+    [SerializeField] private bool slowmo = true;
+    [SerializeField] private float slowMotionScale = 0.2f;
+    [SerializeField] private float slowmoJoinTransitionDuration = 0.5f;
+    [SerializeField] private float slowmoLeaveTransitionDuration = 0f;
+
     [Header("DEBUG")]
-    [SerializeField] private bool canShoot = true;
     [SerializeField] private bool draging = false;
     [SerializeField] private float currentShootSpeed = 0f;
     [SerializeField] private Vector2 dragStartPosition = Vector2.zero;
@@ -51,37 +56,47 @@ public class BallController : MonoBehaviour
         if (Mouse.current == null || ballRigidbody == null)
             return;
 
-        if (canShoot)
+        if (Mouse.current.leftButton.wasPressedThisFrame)
         {
-            if (Mouse.current.leftButton.wasPressedThisFrame)
-            {
-                draging = true;
-            }
+            draging = true;
+        }
 
-            if (draging)
-            {
-                Vector3 ballScreenPos3D = Camera.main.WorldToScreenPoint(ballRigidbody.position);
-                Vector2 ballScreenPos = new Vector2(ballScreenPos3D.x, ballScreenPos3D.y);
-                dragStartPosition = ballScreenPos / Screen.height;
+        if (draging)
+        {
+            Vector3 ballScreenPos3D = Camera.main.WorldToScreenPoint(ballRigidbody.position);
+            Vector2 ballScreenPos = new Vector2(ballScreenPos3D.x, ballScreenPos3D.y);
+            dragStartPosition = ballScreenPos / Screen.height;
 
-                Vector2 rawPos = Mouse.current.position.ReadValue();
-                dragCurrentPosition = rawPos / Screen.height;
+            Vector2 rawPos = Mouse.current.position.ReadValue();
+            dragCurrentPosition = rawPos / Screen.height;
+            ShowTrace();
+        }
 
-                ShowTrace();
-            }
+        if (Mouse.current.leftButton.wasReleasedThisFrame && draging)
+        {
+            Vector3 ballScreenPos3D = Camera.main.WorldToScreenPoint(ballRigidbody.position);
+            Vector2 ballScreenPos = new Vector2(ballScreenPos3D.x, ballScreenPos3D.y);
+            dragStartPosition = ballScreenPos / Screen.height;
 
-            if (Mouse.current.leftButton.wasReleasedThisFrame && draging)
-            {
-                Vector3 ballScreenPos3D = Camera.main.WorldToScreenPoint(ballRigidbody.position);
-                Vector2 ballScreenPos = new Vector2(ballScreenPos3D.x, ballScreenPos3D.y);
-                dragStartPosition = ballScreenPos / Screen.height;
+            Vector2 rawPos = Mouse.current.position.ReadValue();
+            dragEndPosition = rawPos / Screen.height;
 
-                Vector2 rawPos = Mouse.current.position.ReadValue();
-                dragEndPosition = rawPos / Screen.height;
+            Shoot();
+            OnShoot();
+        }
 
-                Shoot();
-                OnShoot();
-            }
+        if (slowmo)
+        {
+            float targetTimeScale = draging ? slowMotionScale : 1.0f;
+            float currentTransitionDuration = draging ? slowmoJoinTransitionDuration : slowmoLeaveTransitionDuration;
+            float changeSpeed = currentTransitionDuration > 0f ? (1f / currentTransitionDuration) * Time.unscaledDeltaTime : 1000f;
+            Time.timeScale = Mathf.MoveTowards(Time.timeScale, targetTimeScale, changeSpeed);
+            Time.fixedDeltaTime = 0.02f * Time.timeScale;
+        }
+        else
+        {
+            Time.timeScale = 1.0f;
+            Time.fixedDeltaTime = 0.02f;
         }
     }
 
