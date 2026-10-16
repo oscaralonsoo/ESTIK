@@ -31,7 +31,7 @@ public class DesaturationSlowmo : MonoBehaviour
 
         isActive = true;
         gameObject.SetActive(true);
-        StartTransition(1f);
+        StartTransition(0.4f);
     }
 
     public void DeactivatePostProcess()
