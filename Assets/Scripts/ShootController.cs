@@ -34,6 +34,12 @@ public class ShootController : MonoBehaviour
 
     private bool hasShot = false;
 
+    private DesaturationSlowmo postProcessSlowmo;
+    private void Awake()
+    {
+        postProcessSlowmo = FindAnyObjectByType<DesaturationSlowmo>();
+    }
+
     void Start()
     {
         for (int i = 0; i < throwableObjects.Count; i++)
@@ -81,6 +87,8 @@ public class ShootController : MonoBehaviour
                 dragStartPosition = Mouse.current.position.ReadValue();
                 dragCurrentPosition = dragStartPosition;
                 draging = true;
+
+                postProcessSlowmo.ActivatePostProcess();
             }
 
             if (draging)
