@@ -33,6 +33,13 @@ public class BallController : MonoBehaviour
     [SerializeField] private GameObject[] traceArrows;
     [SerializeField] private Rigidbody ballRigidbody = null;
 
+    private DesaturationSlowmo postProcessSlowmo;
+
+
+    private void Awake()
+    {
+        postProcessSlowmo = FindAnyObjectByType<DesaturationSlowmo>();
+    }
 
     void Start()
     {
@@ -85,6 +92,8 @@ public class BallController : MonoBehaviour
             float changeSpeed = currentTransitionDuration > 0f ? (1f / currentTransitionDuration) * Time.unscaledDeltaTime : 1000f;
             Time.timeScale = Mathf.MoveTowards(Time.timeScale, targetTimeScale, changeSpeed);
             Time.fixedDeltaTime = 0.02f * Time.timeScale;
+
+            if (draging) postProcessSlowmo.ActivatePostProcess(); else postProcessSlowmo.DeactivatePostProcess();
         }
         else
         {
