@@ -6,17 +6,11 @@ public class BallController : MonoBehaviour
     [Header("SHOOT PROPERTIES")]
     [SerializeField] private float shootSpeed = 30f;
     [SerializeField] private float maxDragDistance = 0.2f;
+    [SerializeField] private float maxAerealDragDistance = 0.3f;
+    [SerializeField] private float shootAngle = 30f;
 
     [Header("TRACE PROPERTIES")]
-    [SerializeField] private Sprite traceArrowSprite;
-    [SerializeField] private Color traceArrowColor = Color.white;
-    [SerializeField] private float traceArrowSize = 0.2f;
-    [SerializeField] private float arrowAngleOffset = 0f;
-    [SerializeField] private bool lieFlatOnGround = true;
-    [SerializeField] private int traceSortingOrder = 10;
-    [SerializeField] private int maxTraceArrows = 15;
-    [SerializeField] private float arrowSpacing = 1f;
-    [SerializeField] private float traceDuration = 1.5f;
+    [SerializeField] private GameObject tracePrefab;
 
     [Header("SLOWMO PROPERTIES")]
     [SerializeField] private bool slowmo = true;
@@ -25,8 +19,12 @@ public class BallController : MonoBehaviour
     [SerializeField] private float slowmoLeaveTransitionDuration = 0f;
 
     [Header("DEBUG")]
+    bool initialized = true;
     [SerializeField] private bool draging = false;
+    [SerializeField] private bool aerealShot = false;
+    [SerializeField] private int remainingShots = 1000;
     [SerializeField] private float currentShootSpeed = 0f;
+    [SerializeField] private float currentShootAngle = 0f;
     [SerializeField] private Vector2 dragStartPosition = Vector2.zero;
     [SerializeField] private Vector2 dragEndPosition = Vector2.zero;
     [SerializeField] private Vector2 dragCurrentPosition = Vector2.zero;
@@ -34,26 +32,36 @@ public class BallController : MonoBehaviour
     [SerializeField] private Rigidbody ballRigidbody = null;
 
     private DesaturationSlowmo postProcessSlowmo;
+    private TraceBehaviour traceBehaviour;
 
 
     private void Awake()
     {
-        postProcessSlowmo = FindAnyObjectByType<DesaturationSlowmo>();
+       
     }
 
     void Start()
     {
-        if (this.gameObject.TryGetComponent<Rigidbody>(out Rigidbody rb))
-        {
-            ballRigidbody = rb;
-        }
+        initialized = true;
 
-        CreateTraceArrows();
+        //POST PROCESSING
+        postProcessSlowmo = FindAnyObjectByType<DesaturationSlowmo>();
+        if (!postProcessSlowmo) initialized = false;
+
+        //BALL RIGIDBODY
+        ballRigidbody = GetComponent<Rigidbody>();
+        if (!ballRigidbody) initialized = false;
+
+        //TRACE
+        GameObject trace = Instantiate(tracePrefab);
+        trace.SetActive(false);
+        traceBehaviour = trace.GetComponentInChildren<TraceBehaviour>();
+        if (!traceBehaviour) initialized = false;
     }
 
     void Update()
     {
-        if (Mouse.current == null || ballRigidbody == null)
+        if (!initialized || Mouse.current == null || ballRigidbody == null || remainingShots <= 0)
             return;
 
         if (Mouse.current.leftButton.wasPressedThisFrame)
@@ -129,7 +137,23 @@ public class BallController : MonoBehaviour
             ? shootSpeed
             : dragDir.magnitude / maxDragDistance * shootSpeed;
 
+        if (aerealShot)
+        {
+            float aerialPercentage = Mathf.InverseLerp(maxDragDistance, maxAerealDragDistance, dragDir.magnitude);
+            currentShootAngle = Mathf.Lerp(0f, Mathf.Abs(shootAngle), aerialPercentage);
+        }
+        else
+        {
+            currentShootAngle = 0f;
+        }
+
         Vector3 shootDir = GetCameraRelativeDirection(dragDir);
+
+        if (currentShootAngle > 0f)
+        {
+            Vector3 rightAxis = Vector3.Cross(Vector3.up, shootDir);
+            shootDir = Quaternion.AngleAxis(-currentShootAngle, rightAxis) * shootDir;
+        }
 
         ballRigidbody.WakeUp();
         ballRigidbody.linearVelocity = shootDir * currentShootSpeed;
@@ -138,7 +162,7 @@ public class BallController : MonoBehaviour
     void OnShoot()
     {
         HideTrace();
-
+        remainingShots--;
         draging = false;
         dragStartPosition = Vector2.zero;
         dragCurrentPosition = Vector2.zero;
@@ -147,29 +171,6 @@ public class BallController : MonoBehaviour
     }
 
     #region Trace
-    private void CreateTraceArrows()
-    {
-        traceArrows = new GameObject[maxTraceArrows];
-
-        float spriteWidth = traceArrowSprite != null ? traceArrowSprite.bounds.size.x : 1f;
-        float scale = spriteWidth > 0f ? traceArrowSize / spriteWidth : 1f;
-
-        for (int i = 0; i < maxTraceArrows; i++)
-        {
-            GameObject arrow = new GameObject("TraceArrow_" + i);
-            arrow.transform.SetParent(transform);
-            arrow.transform.localScale = Vector3.one * scale;
-
-            SpriteRenderer sr = arrow.AddComponent<SpriteRenderer>();
-            sr.sprite = traceArrowSprite;
-            sr.color = traceArrowColor;
-            sr.sortingOrder = traceSortingOrder;
-
-            arrow.SetActive(false);
-            traceArrows[i] = arrow;
-        }
-    }
-
     private void ShowTrace()
     {
         Vector2 dragDir = dragStartPosition - dragCurrentPosition;
@@ -178,7 +179,24 @@ public class BallController : MonoBehaviour
             ? shootSpeed
             : dragDir.magnitude / maxDragDistance * shootSpeed;
 
+        if (aerealShot)
+        {
+            float aerialPercentage = Mathf.InverseLerp(maxDragDistance, maxAerealDragDistance, dragDir.magnitude);
+            aerialPercentage = Mathf.Sqrt(aerialPercentage);
+            currentShootAngle = Mathf.Lerp(0f, Mathf.Abs(shootAngle), aerialPercentage);
+        }
+        else
+        {
+            currentShootAngle = 0f;
+        }
+
         Vector3 shootDir = GetCameraRelativeDirection(dragDir);
+
+        if (currentShootAngle > 0f)
+        {
+            Vector3 rightAxis = Vector3.Cross(Vector3.up, shootDir);
+            shootDir = Quaternion.AngleAxis(-currentShootAngle, rightAxis) * shootDir;
+        }
 
         if (shootDir.sqrMagnitude < 0.0001f || currentShootSpeed <= 0f)
         {
@@ -186,56 +204,41 @@ public class BallController : MonoBehaviour
             return;
         }
 
-        float traceLength = currentShootSpeed * traceDuration;
-        int arrowsToShow = Mathf.Min(
-            maxTraceArrows,
-            Mathf.FloorToInt(traceLength / Mathf.Max(arrowSpacing, 0.0001f))
-        );
+        float fillPercentatge = currentShootSpeed / shootSpeed;
 
-        Vector3 startPosition = ballRigidbody.transform.position;
-        Quaternion arrowRotation = GetArrowRotation(shootDir);
+        Vector3 tracePosition = ballRigidbody.transform.position;
+        Quaternion traceRotation = Quaternion.identity;
+        if (shootDir != Vector3.zero) traceRotation = Quaternion.LookRotation(shootDir);
 
-        for (int i = 0; i < maxTraceArrows; i++)
-        {
-            bool visible = i < arrowsToShow;
-            traceArrows[i].SetActive(visible);
-
-            if (!visible)
-                continue;
-
-            traceArrows[i].transform.SetPositionAndRotation(
-                startPosition + shootDir * ((i + 1) * arrowSpacing),
-                arrowRotation
-            );
-        }
+        traceBehaviour.SetFillAmount(fillPercentatge);
+        traceBehaviour.gameObject.SetActive(true);
+        traceBehaviour.transform.SetPositionAndRotation(tracePosition, traceRotation);
+        
     }
 
     private void HideTrace()
     {
-        for (int i = 0; i < traceArrows.Length; i++)
+        if (traceBehaviour != null)
         {
-            traceArrows[i].SetActive(false);
+            traceBehaviour.gameObject.SetActive(false);
         }
-    }
-    private Quaternion GetArrowRotation(Vector3 shootDir)
-    {
-        if (lieFlatOnGround)
-        {
-            Quaternion flat = Quaternion.LookRotation(
-                Vector3.down,
-                Vector3.Cross(Vector3.down, shootDir)
-            );
-            return flat * Quaternion.Euler(0f, 0f, arrowAngleOffset);
-        }
-
-        Transform cam = Camera.main.transform;
-        float angle = Mathf.Atan2(
-            Vector3.Dot(shootDir, cam.up),
-            Vector3.Dot(shootDir, cam.right)
-        ) * Mathf.Rad2Deg;
-
-        return cam.rotation * Quaternion.Euler(0f, 0f, angle + arrowAngleOffset);
     }
 
     #endregion
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if(other.gameObject.tag == "Area")
+        {
+            aerealShot = true;
+            remainingShots = 1;
+        }
+    }
+    private void OnTriggerExit(Collider other)
+    {
+        if(other.gameObject.tag == "Area")
+        {
+            aerealShot = false;
+        }
+    }
 }
