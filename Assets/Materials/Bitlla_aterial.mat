@@ -21,7 +21,7 @@ Material:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: Bitlla_aterial
-  m_Shader: {fileID: 4800000, guid: 71fe9b7a7c62ddd4fa0a6ac9d5cdf603, type: 3}
+  m_Shader: {fileID: 4800000, guid: e124b1e2b49706b42b6d00d7f8a37c4d, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords: []
@@ -38,6 +38,10 @@ Material:
   m_SavedProperties:
     serializedVersion: 3
     m_TexEnvs:
+    - _BaseMap:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     - _MainTex:
         m_Texture: {fileID: 10307, guid: 0000000000000000f000000000000000, type: 0}
         m_Scale: {x: 1, y: 1}
@@ -45,22 +49,42 @@ Material:
     m_Ints: []
     m_Floats:
     - _AmbientCol: 0
+    - _AmbientStrength: 0.25
+    - _CastToCore: 0
     - _Clipped: 0
     - _ColBright: 0
     - _ColIntense: 1
+    - _Glossiness: 32
     - _Lumin: 0
     - _MaxLight: 1
     - _MinLight: 0
     - _Offset: 0.26
+    - _OutlineWidth: 0
+    - _RimSize: 0.453
+    - _RimSmooth: 0.05
     - _Segmented: 1
+    - _Shadow2Smooth: 0.02
+    - _Shadow2Threshold: -1
+    - _ShadowEdge: 0.03
     - _ShnIntense: 0
     - _ShnOverlap: 0
     - _ShnRange: 0.15
     - _ShnSmooth: 0
+    - _Smooth: 0.02
+    - _SpecSmooth: 0.02
+    - _SpecThreshold: 0.5
     - _Steps: 4.7
     - _StpSmooth: 0.324
+    - _Threshold: 0.1
     m_Colors:
+    - _BaseColor: {r: 1, g: 1, b: 1, a: 1}
     - _Color: {r: 0.6698113, g: 0.56015, b: 0.42653078, a: 1}
+    - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
+    - _OutlineColor: {r: 0, g: 0, b: 0, a: 1}
+    - _RimColor: {r: 1, g: 1, b: 1, a: 1}
+    - _Shadow2Color: {r: 0.37999994, g: 0.31999996, b: 0.54999995, a: 1}
+    - _ShadowColor: {r: 0.62, g: 0.54999995, b: 0.78, a: 1}
     - _ShnColor: {r: 1, g: 1, b: 0, a: 1}
+    - _SpecColor: {r: 1, g: 1, b: 1, a: 1}
   m_BuildTextureStacks: []
   m_AllowLocking: 1

@@ -8,7 +8,7 @@ Material:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: Bitllot_Material
-  m_Shader: {fileID: 4800000, guid: d08e232c8d873c84fa777f5f959a3af7, type: 3}
+  m_Shader: {fileID: 4800000, guid: e124b1e2b49706b42b6d00d7f8a37c4d, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords: []
@@ -31,21 +31,27 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
-    - _Glossiness: 64
-    - _OutlineWidth: 1.5
-    - _RimSize: 0.257
-    - _RimSmooth: 0.247
+    - _AmbientStrength: 0.25
+    - _CastToCore: 0
+    - _Glossiness: 32
+    - _OutlineWidth: 0
+    - _RimSize: 0
+    - _RimSmooth: 0.05
+    - _Shadow2Smooth: 0.02
+    - _Shadow2Threshold: -1
+    - _ShadowEdge: 0.03
     - _Smooth: 0.02
     - _SpecSmooth: 0.02
     - _SpecThreshold: 0.5
-    - _Threshold: 0
+    - _Threshold: 0.1
     m_Colors:
-    - _BaseColor: {r: 0, g: 0, b: 0, a: 1}
+    - _BaseColor: {r: 1, g: 1, b: 1, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
     - _OutlineColor: {r: 0, g: 0, b: 0, a: 1}
     - _RimColor: {r: 1, g: 1, b: 1, a: 1}
-    - _ShadowColor: {r: 0.45, g: 0.39999998, b: 0.6, a: 1}
-    - _SpecColor: {r: 0, g: 0, b: 0, a: 1}
+    - _Shadow2Color: {r: 0.37999994, g: 0.31999996, b: 0.54999995, a: 1}
+    - _ShadowColor: {r: 0.62, g: 0.54999995, b: 0.78, a: 1}
+    - _SpecColor: {r: 1, g: 1, b: 1, a: 1}
   m_BuildTextureStacks: []
   m_AllowLocking: 1
 --- !u!114 &3841731290222898143
