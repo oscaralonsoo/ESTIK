@@ -5,9 +5,6 @@ public class MainMenuUI : MonoBehaviour
 {
     [SerializeField] GameObject mainPanel;
     [SerializeField] GameObject levelsPanel;
-    [SerializeField] GameObject optionsPanel;
-    [SerializeField] GameObject quitButton;
-    [SerializeField] OptionsUI options;
 
     bool switching;
 
@@ -15,18 +12,9 @@ public class MainMenuUI : MonoBehaviour
     {
 #if UNITY_WEBGL || UNITY_IOS || UNITY_ANDROID
         quitButton.SetActive(false);
-#endif
-        options.ApplySaved();
-        options.Closed += ShowMain;   
-
+#endif  
         levelsPanel.SetActive(false);
-        optionsPanel.SetActive(false);
         mainPanel.SetActive(true);
-    }
-
-    void OnDestroy()
-    {
-        if (options != null) options.Closed -= ShowMain;
     }
     void Switch(GameObject target, System.Action open)
     {
@@ -34,7 +22,6 @@ public class MainMenuUI : MonoBehaviour
 
         GameObject current = mainPanel.activeSelf ? mainPanel
                            : levelsPanel.activeSelf ? levelsPanel
-                           : optionsPanel.activeSelf ? optionsPanel
                            : null;
 
         if (current == target) return;
@@ -58,6 +45,5 @@ public class MainMenuUI : MonoBehaviour
 
     public void ShowMain() => Switch(mainPanel, () => mainPanel.SetActive(true));
     public void ShowLevels() => Switch(levelsPanel, () => levelsPanel.SetActive(true));
-    public void ShowOptions() => Switch(optionsPanel, options.Open);
     public void Quit() => Application.Quit();
 }
