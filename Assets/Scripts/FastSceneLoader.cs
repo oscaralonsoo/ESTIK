@@ -9,7 +9,6 @@ public class FastSceneLoader : MonoBehaviour
     public static FastSceneLoader Instance { get; private set; }
 
     [Header("SETTINGS")]
-    [SerializeField] private string nextSceneName;
     [SerializeField] private float transitionTime = 0.5f;
     [SerializeField] private float maxScale = 30f;
 
@@ -34,8 +33,6 @@ public class FastSceneLoader : MonoBehaviour
             Debug.LogError($"[FastSceneLoader] Missing reference on {gameObject.name}!");
             return;
         }
-
-        // Configurar pivot y anclaje al centro exacto
         RectTransform imageRect = image.rectTransform;
         imageRect.anchorMin = new Vector2(0.5f, 0.5f);
         imageRect.anchorMax = new Vector2(0.5f, 0.5f);
@@ -65,14 +62,13 @@ public class FastSceneLoader : MonoBehaviour
     public void LoadNextLevel()
     {
         if (isTransitioning) return;
-        StartCoroutine(ExitSceneRoutine(nextSceneName));
+        StartCoroutine(ExitSceneRoutine(LevelLoader.Next));
     }
 
     public void RestartLevel()
     {
         if (isTransitioning) return;
-        string currentScene = SceneManager.GetActiveScene().name;
-        StartCoroutine(ExitSceneRoutine(currentScene));
+        StartCoroutine(ExitSceneRoutine(LevelLoader.Reload));
     }
 
     private IEnumerator EnterSceneRoutine()
@@ -110,7 +106,7 @@ public class FastSceneLoader : MonoBehaviour
         image.gameObject.SetActive(false);
     }
 
-    private IEnumerator ExitSceneRoutine(string targetSceneName)
+    private IEnumerator ExitSceneRoutine(System.Action loadScene)
     {
         isTransitioning = true;
 
@@ -141,10 +137,6 @@ public class FastSceneLoader : MonoBehaviour
             imageRect.localScale = Vector3.one * maxScale;
         }
 
-        AsyncOperation op = SceneManager.LoadSceneAsync(targetSceneName);
-        while (!op.isDone)
-        {
-            yield return null;
-        }
+        loadScene();
     }
 }

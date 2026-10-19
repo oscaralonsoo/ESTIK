@@ -12,7 +12,9 @@ public class GameUI : MonoBehaviour
     [SerializeField] GameObject winPanel;
     [SerializeField] GameObject losePanel;
 
-    [Header("Efecto de Victoria")]
+    [Header("Victoria")]
+    [Tooltip("Opcional: boton 'Siguiente nivel' del panel de victoria. Se oculta en el ultimo nivel de la partida.")]
+    [SerializeField] GameObject nextLevelButton;
     [SerializeField] UIStarRewardFX starRewardFX;
 
     bool gameEnded, paused, leaving;
@@ -102,6 +104,9 @@ public class GameUI : MonoBehaviour
         if (gameEnded) return;
         gameEnded = true;
         SaveLevelData.SetStars(LevelLoader.CurrentLevel, stars);
+
+        if (nextLevelButton != null)
+            nextLevelButton.SetActive(LevelLoader.HasNext);
 
         Open(winPanel);
 

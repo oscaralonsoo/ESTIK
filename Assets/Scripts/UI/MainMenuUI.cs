@@ -1,27 +1,25 @@
-using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 public class MainMenuUI : MonoBehaviour
 {
     [SerializeField] GameObject mainPanel;
-    [SerializeField] GameObject levelsPanel;
+    [SerializeField] GameObject modePanel;
 
     bool switching;
 
     void Start()
     {
-//#if UNITY_WEBGL || UNITY_IOS || UNITY_ANDROID
-//        quitButton.SetActive(false);
-//#endif  
-        levelsPanel.SetActive(false);
+        modePanel.SetActive(false);
         mainPanel.SetActive(true);
     }
+
     void Switch(GameObject target, System.Action open)
     {
         if (switching) return;
 
         GameObject current = mainPanel.activeSelf ? mainPanel
-                           : levelsPanel.activeSelf ? levelsPanel
+                           : modePanel.activeSelf ? modePanel
                            : null;
 
         if (current == target) return;
@@ -44,6 +42,8 @@ public class MainMenuUI : MonoBehaviour
     }
 
     public void ShowMain() => Switch(mainPanel, () => mainPanel.SetActive(true));
-    public void ShowLevels() => Switch(levelsPanel, () => levelsPanel.SetActive(true));
+
+    public void ShowModes() => Switch(modePanel, () => modePanel.SetActive(true));
+
     public void Quit() => Application.Quit();
 }
