@@ -10,9 +10,9 @@ public class MainMenuUI : MonoBehaviour
 
     void Start()
     {
-#if UNITY_WEBGL || UNITY_IOS || UNITY_ANDROID
-        quitButton.SetActive(false);
-#endif  
+//#if UNITY_WEBGL || UNITY_IOS || UNITY_ANDROID
+//        quitButton.SetActive(false);
+//#endif  
         levelsPanel.SetActive(false);
         mainPanel.SetActive(true);
     }
