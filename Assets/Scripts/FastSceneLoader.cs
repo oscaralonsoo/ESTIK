@@ -6,18 +6,24 @@ using UnityEngine.UI;
 
 public class FastSceneLoader : MonoBehaviour
 {
+    public static FastSceneLoader Instance { get; private set; }
+
+    [Header("SETTINGS")]
     [SerializeField] private string nextSceneName;
     [SerializeField] private float transitionTime = 0.5f;
     [SerializeField] private float maxScale = 30f;
 
-    private AsyncOperation asyncOperation;
     private Camera mainCam;
     private Image image;
     private BallController ballController;
     private bool initialized = true;
+    private bool isTransitioning = false;
 
     private void Awake()
     {
+        if (Instance == null) Instance = this;
+        else { Destroy(gameObject); return; }
+
         image = GetComponentInChildren<Image>(true);
         ballController = FindAnyObjectByType<BallController>();
         mainCam = Camera.main;
@@ -29,8 +35,14 @@ public class FastSceneLoader : MonoBehaviour
             return;
         }
 
+        // Configurar pivot y anclaje al centro exacto
+        RectTransform imageRect = image.rectTransform;
+        imageRect.anchorMin = new Vector2(0.5f, 0.5f);
+        imageRect.anchorMax = new Vector2(0.5f, 0.5f);
+        imageRect.pivot = new Vector2(0.5f, 0.5f);
+
         image.gameObject.SetActive(true);
-        image.rectTransform.localScale = Vector3.one * maxScale;
+        imageRect.localScale = Vector3.one * maxScale;
     }
 
     private IEnumerator Start()
@@ -39,40 +51,42 @@ public class FastSceneLoader : MonoBehaviour
         {
             yield return StartCoroutine(EnterSceneRoutine());
         }
-
-        StartCoroutine(PreloadNextScene());
     }
 
     private void Update()
     {
-        if (Keyboard.current != null && Keyboard.current.jKey.wasPressedThisFrame)
+        if (Keyboard.current != null)
         {
-            TriggerInstantChange();
+            if (Keyboard.current.jKey.wasPressedThisFrame) LoadNextLevel();
+            if (Keyboard.current.rKey.wasPressedThisFrame) RestartLevel();
         }
     }
 
-    private IEnumerator PreloadNextScene()
+    public void LoadNextLevel()
     {
-        asyncOperation = SceneManager.LoadSceneAsync(nextSceneName);
-        asyncOperation.allowSceneActivation = false;
-
-        while (asyncOperation.progress < 0.9f)
-        {
-            yield return null;
-        }
+        if (isTransitioning) return;
+        StartCoroutine(ExitSceneRoutine(nextSceneName));
     }
 
-    public void TriggerInstantChange()
+    public void RestartLevel()
     {
-        StartCoroutine(ExitSceneRoutine());
+        if (isTransitioning) return;
+        string currentScene = SceneManager.GetActiveScene().name;
+        StartCoroutine(ExitSceneRoutine(currentScene));
     }
 
     private IEnumerator EnterSceneRoutine()
     {
         yield return new WaitForEndOfFrame();
-        yield return null;
+        yield return new WaitForFixedUpdate();
 
         RectTransform imageRect = image.rectTransform;
+
+        if (ballController != null && mainCam != null)
+        {
+            imageRect.position = mainCam.WorldToScreenPoint(ballController.transform.position);
+        }
+
         float elapsed = 0f;
 
         while (elapsed < transitionTime)
@@ -96,8 +110,10 @@ public class FastSceneLoader : MonoBehaviour
         image.gameObject.SetActive(false);
     }
 
-    private IEnumerator ExitSceneRoutine()
+    private IEnumerator ExitSceneRoutine(string targetSceneName)
     {
+        isTransitioning = true;
+
         if (initialized)
         {
             RectTransform imageRect = image.rectTransform;
@@ -125,9 +141,10 @@ public class FastSceneLoader : MonoBehaviour
             imageRect.localScale = Vector3.one * maxScale;
         }
 
-        if (asyncOperation != null)
+        AsyncOperation op = SceneManager.LoadSceneAsync(targetSceneName);
+        while (!op.isDone)
         {
-            asyncOperation.allowSceneActivation = true;
+            yield return null;
         }
     }
 }

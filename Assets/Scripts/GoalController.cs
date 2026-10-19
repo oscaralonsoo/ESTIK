@@ -3,12 +3,7 @@ using UnityEngine;
 
 public class GoalController : MonoBehaviour
 {
-    private FastSceneLoader loader;
-
-    private void Awake()
-    {
-        loader = FindAnyObjectByType<FastSceneLoader>();
-    }
+    [SerializeField] private float timeToChange = 1f;
 
     private void OnTriggerEnter(Collider other)
     {
@@ -20,7 +15,7 @@ public class GoalController : MonoBehaviour
 
     private IEnumerator TriggerChangeCoroutine()
     {
-        yield return new WaitForSeconds(1f);
-        loader.TriggerInstantChange();
+        yield return new WaitForSeconds(timeToChange);
+        FastSceneLoader.Instance.LoadNextLevel();
     }
 }

@@ -11,6 +11,19 @@ public class CameraFollow : MonoBehaviour
     [SerializeField] private float followSpeed = 5f;
     [SerializeField] private float rotationSpeed = 5f;
 
+    private void Start()
+    {
+        Vector3 targetPosition = target.position + offset;
+
+        transform.position = targetPosition;
+
+        Quaternion targetRotation = Quaternion.LookRotation(
+            target.position - transform.position
+        );
+
+        transform.rotation = targetRotation;
+    }
+
     private void LateUpdate()
     {
         if (target == null)
