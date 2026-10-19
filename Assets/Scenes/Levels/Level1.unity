@@ -314,7 +314,7 @@ GameObject:
   - component: {fileID: 231986404}
   - component: {fileID: 231986403}
   - component: {fileID: 231986402}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Terrain
   m_TagString: Floor
   m_Icon: {fileID: 0}
@@ -401,10 +401,10 @@ MeshRenderer:
   m_SmallMeshCulling: 1
   m_ForceMeshLod: -1
   m_MeshLodSelectionBias: 0
-  m_RenderingLayerMask: 1
+  m_RenderingLayerMask: 2
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 15303, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 8368722655750445499, guid: 93a868dccb5f7fd45a9e4f4bf681dcd2, type: 3}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -608,7 +608,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a1058c7993c14498da6a328de7aa67, type: 3}
   m_Name: 
   m_EditorClassIdentifier: '::'
-  nextSceneName: Oscar-Hockey
   transitionTime: 0.5
   maxScale: 30
 --- !u!1 &782948274

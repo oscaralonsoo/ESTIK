@@ -1,16 +1,22 @@
 
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Rendering.Universal;
 
 public class DribblingTrainingController : MonoBehaviour
 {
+    [Header("Decals fade")]
+    [SerializeField, Min(0f)] private float fadeInDuration = 0.5f;
+    [SerializeField, Min(0f)] private float fadeOutDuration = 0.5f;
+
     private class LimitData
     {
         public GameObject limit;
         public Collider trigger;
         public DecalProjector decal;
         public bool ballInside;
+        public Coroutine fadeRoutine;
     }
 
     private class GateData
@@ -19,10 +25,11 @@ public class DribblingTrainingController : MonoBehaviour
         public Collider trigger;
         public DecalProjector decal;
         public bool ballInside;
+        public Coroutine fadeRoutine;
         public List<LimitData> limits = new List<LimitData>();
     }
 
-    private List<GateData> dribblingGates = new List<GateData>();
+    private readonly List<GateData> dribblingGates = new List<GateData>();
     private int currentGateIndex = 0;
 
     private GameObject ball;
@@ -30,25 +37,24 @@ public class DribblingTrainingController : MonoBehaviour
 
     private void Start()
     {
-        Debug.Log("[Dribbling] Iniciando entrenamiento...");
 
         ball = GameObject.FindGameObjectWithTag("Ball");
 
-        if (ball == null)
-        {
-            Debug.LogError("[Dribbling] No se encontró ningún objeto con tag Ball.");
-            return;
-        }
+        if (ball == null) return;
 
         ballColliders = ball.GetComponentsInChildren<Collider>();
 
         foreach (Transform child in transform)
         {
+            Transform limitsParent = child.Find("DribblingLimit");
+
             Collider gateTrigger = null;
 
             foreach (Collider col in child.GetComponentsInChildren<Collider>(true))
             {
-                if (col.isTrigger && !col.transform.IsChildOf(child.Find("DribblingLimit")))
+                if (col.isTrigger &&
+                    (limitsParent == null ||
+                     !col.transform.IsChildOf(limitsParent)))
                 {
                     gateTrigger = col;
                     break;
@@ -57,9 +63,11 @@ public class DribblingTrainingController : MonoBehaviour
 
             DecalProjector decal = null;
 
-            foreach (DecalProjector dp in child.GetComponentsInChildren<DecalProjector>(true))
+            foreach (DecalProjector dp in
+                     child.GetComponentsInChildren<DecalProjector>(true))
             {
-                if (!dp.transform.IsChildOf(child.Find("DribblingLimit")))
+                if (limitsParent == null ||
+                    !dp.transform.IsChildOf(limitsParent))
                 {
                     decal = dp;
                     break;
@@ -74,8 +82,8 @@ public class DribblingTrainingController : MonoBehaviour
                 ballInside = false
             };
 
-            // Buscar los límites dentro de DribblingLimit
-            Transform limitsParent = child.Find("DribblingLimit");
+            if (decal != null)
+                SetOpacity(decal, 0f);
 
             if (limitsParent != null)
             {
@@ -83,7 +91,8 @@ public class DribblingTrainingController : MonoBehaviour
                 {
                     Collider limitTrigger = null;
 
-                    foreach (Collider col in limitTransform.GetComponentsInChildren<Collider>(true))
+                    foreach (Collider col in
+                             limitTransform.GetComponentsInChildren<Collider>(true))
                     {
                         if (col.isTrigger)
                         {
@@ -106,22 +115,12 @@ public class DribblingTrainingController : MonoBehaviour
                     data.limits.Add(limitData);
 
                     if (limitDecal != null)
-                        limitDecal.gameObject.SetActive(false);
+                        SetOpacity(limitDecal, 0f);
 
-                    Debug.Log("[Dribbling] Límite encontrado: " + limitTransform.name);
                 }
-            }
-            else
-            {
-                Debug.LogWarning("[Dribbling] No se encontró DribblingLimit en " + child.name);
             }
 
             dribblingGates.Add(data);
-
-            if (decal != null)
-                decal.gameObject.SetActive(false);
-
-            Debug.Log("[Dribbling] Gate encontrado: " + child.name);
         }
 
         UpdateCurrentDecal();
@@ -134,40 +133,30 @@ public class DribblingTrainingController : MonoBehaviour
 
         GateData currentGate = dribblingGates[currentGateIndex];
 
-        // Detectar entrada y salida del gate principal
         bool isInsideGate = IsBallInside(currentGate.trigger);
 
         if (isInsideGate && !currentGate.ballInside)
         {
             currentGate.ballInside = true;
-            Debug.Log("[Dribbling] OnTriggerEnter: " + currentGate.gate.name);
         }
 
         if (!isInsideGate && currentGate.ballInside)
         {
             currentGate.ballInside = false;
 
-            Debug.Log("[Dribbling] OnTriggerExit: " + currentGate.gate.name);
+            FadeDecal(currentGate, 0f, fadeOutDuration);
 
-            if (currentGate.decal != null)
-                currentGate.decal.gameObject.SetActive(false);
-
-            // Ocultar los dos límites del gate completado
             foreach (LimitData limit in currentGate.limits)
             {
-                if (limit.decal != null)
-                    limit.decal.gameObject.SetActive(false);
-
+                FadeDecal(limit, 0f, fadeOutDuration);
                 limit.ballInside = false;
             }
 
             currentGateIndex++;
-
             UpdateCurrentDecal();
             return;
         }
 
-        // Detectar entrada y salida de los límites laterales
         foreach (LimitData limit in currentGate.limits)
         {
             if (limit.trigger == null)
@@ -178,11 +167,6 @@ public class DribblingTrainingController : MonoBehaviour
             if (isInsideLimit && !limit.ballInside)
             {
                 limit.ballInside = true;
-
-                Debug.LogWarning(
-                    "[Dribbling] OnTriggerEnter en límite: "
-                    + limit.limit.name + " del gate "
-                    + currentGate.gate.name);
             }
 
             if (!isInsideLimit && limit.ballInside)
@@ -190,6 +174,7 @@ public class DribblingTrainingController : MonoBehaviour
                 limit.ballInside = false;
 
                 FastSceneLoader.Instance.RestartLevel();
+                return;
             }
         }
     }
@@ -215,25 +200,73 @@ public class DribblingTrainingController : MonoBehaviour
     {
         if (currentGateIndex >= dribblingGates.Count)
         {
-            Debug.Log("[Dribbling] ¡Entrenamiento completado!");
             return;
         }
 
         GateData gate = dribblingGates[currentGateIndex];
 
-        if (gate.decal != null)
-        {
-            gate.decal.gameObject.SetActive(true);
-            Debug.Log("[Dribbling] Decal activado: " + gate.decal.name);
-        }
+        FadeDecal(gate, 1f, fadeInDuration);
 
         foreach (LimitData limit in gate.limits)
         {
-            if (limit.decal != null)
-            {
-                limit.decal.gameObject.SetActive(true);
-                Debug.Log("[Dribbling] Límite activado: " + limit.decal.name);
-            }
+            FadeDecal(limit, 1f, fadeInDuration);
         }
+    }
+
+    private void FadeDecal(GateData gate, float targetOpacity, float duration)
+    {
+        if (gate.decal == null)
+            return;
+
+        if (gate.fadeRoutine != null)
+            StopCoroutine(gate.fadeRoutine);
+
+        gate.fadeRoutine = StartCoroutine(
+            FadeOpacity(gate.decal, targetOpacity, duration));
+    }
+
+    private void FadeDecal(LimitData limit, float targetOpacity, float duration)
+    {
+        if (limit.decal == null)
+            return;
+
+        if (limit.fadeRoutine != null)
+            StopCoroutine(limit.fadeRoutine);
+
+        limit.fadeRoutine = StartCoroutine(
+            FadeOpacity(limit.decal, targetOpacity, duration));
+    }
+
+    private IEnumerator FadeOpacity(
+        DecalProjector decal, float targetOpacity, float duration)
+    {
+        float startOpacity = decal.fadeFactor;
+        float elapsed = 0f;
+
+        if (duration <= 0f)
+        {
+            SetOpacity(decal, targetOpacity);
+            yield break;
+        }
+
+        while (elapsed < duration)
+        {
+            elapsed += Time.deltaTime;
+
+            float t = Mathf.Clamp01(elapsed / duration);
+            float opacity = Mathf.Lerp(startOpacity, targetOpacity, t);
+
+            SetOpacity(decal, opacity);
+
+            yield return null;
+        }
+
+        SetOpacity(decal, targetOpacity);
+    }
+
+    private void SetOpacity(DecalProjector decal, float opacity)
+    {
+        if (decal != null)
+            decal.fadeFactor = Mathf.Clamp01(opacity);
     }
 }
