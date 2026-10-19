@@ -157,13 +157,14 @@ MonoBehaviour:
   maxDragDistance: 0.15
   maxAerealDragDistance: 0.2
   shootAngle: 20
-  tracePrefab: {fileID: 7351039736315092712, guid: 64da30ad526402d4bbced2371f8209cd, type: 3}
-  slowmo: 1
+  tracePrefab: {fileID: 2832149820851652839, guid: cea40a733ecaf3342ba41d69d2cd71b0, type: 3}
   slowMotionScale: 0.1
   slowmoJoinTransitionDuration: 0.5
   slowmoLeaveTransitionDuration: 0
   draging: 0
   aerealShot: 0
+  slowmo: 0
+  grounded: 0
   remainingShots: 1000
   currentShootSpeed: 0
   currentShootAngle: 0

@@ -13,7 +13,7 @@ public class BallController : MonoBehaviour
     [SerializeField] private GameObject tracePrefab;
 
     [Header("SLOWMO PROPERTIES")]
-    [SerializeField] private bool slowmo = true;
+
     [SerializeField] private float slowMotionScale = 0.2f;
     [SerializeField] private float slowmoJoinTransitionDuration = 0.5f;
     [SerializeField] private float slowmoLeaveTransitionDuration = 0f;
@@ -22,6 +22,8 @@ public class BallController : MonoBehaviour
     bool initialized = true;
     [SerializeField] private bool draging = false;
     [SerializeField] private bool aerealShot = false;
+    [SerializeField] private bool slowmo = false;
+    [SerializeField] private bool grounded = false;
     [SerializeField] private int remainingShots = 1000;
     [SerializeField] private float currentShootSpeed = 0f;
     [SerializeField] private float currentShootAngle = 0f;
@@ -33,12 +35,8 @@ public class BallController : MonoBehaviour
 
     private DesaturationSlowmo postProcessSlowmo;
     private TraceBehaviour traceBehaviour;
+    private Camera camera;
 
-
-    private void Awake()
-    {
-       
-    }
 
     void Start()
     {
@@ -57,62 +55,64 @@ public class BallController : MonoBehaviour
         trace.SetActive(false);
         traceBehaviour = trace.GetComponentInChildren<TraceBehaviour>();
         if (!traceBehaviour) initialized = false;
+
+        camera = Camera.main;
+        if (!camera) initialized = false;
     }
 
     void Update()
     {
-        if (!initialized || Mouse.current == null || ballRigidbody == null || remainingShots <= 0)
+        if (!initialized || Pointer.current == null || ballRigidbody == null)
             return;
 
-        if (Mouse.current.leftButton.wasPressedThisFrame)
+        if (Pointer.current.press.wasPressedThisFrame && remainingShots > 0 && grounded)
         {
             draging = true;
         }
 
         if (draging)
         {
-            Vector3 ballScreenPos3D = Camera.main.WorldToScreenPoint(ballRigidbody.position);
+            Vector3 ballScreenPos3D = camera.WorldToScreenPoint(ballRigidbody.position);
             Vector2 ballScreenPos = new Vector2(ballScreenPos3D.x, ballScreenPos3D.y);
             dragStartPosition = ballScreenPos / Screen.height;
 
-            Vector2 rawPos = Mouse.current.position.ReadValue();
+            Vector2 rawPos = Pointer.current.position.ReadValue();
             dragCurrentPosition = rawPos / Screen.height;
             ShowTrace();
-        }
-
-        if (Mouse.current.leftButton.wasReleasedThisFrame && draging)
-        {
-            Vector3 ballScreenPos3D = Camera.main.WorldToScreenPoint(ballRigidbody.position);
-            Vector2 ballScreenPos = new Vector2(ballScreenPos3D.x, ballScreenPos3D.y);
-            dragStartPosition = ballScreenPos / Screen.height;
-
-            Vector2 rawPos = Mouse.current.position.ReadValue();
-            dragEndPosition = rawPos / Screen.height;
-
-            Shoot();
-            OnShoot();
-        }
-
-        if (slowmo)
-        {
-            float targetTimeScale = draging ? slowMotionScale : 1.0f;
-            float currentTransitionDuration = draging ? slowmoJoinTransitionDuration : slowmoLeaveTransitionDuration;
-            float changeSpeed = currentTransitionDuration > 0f ? (1f / currentTransitionDuration) * Time.unscaledDeltaTime : 1000f;
-            Time.timeScale = Mathf.MoveTowards(Time.timeScale, targetTimeScale, changeSpeed);
-            Time.fixedDeltaTime = 0.02f * Time.timeScale;
-
-            if (draging) postProcessSlowmo.ActivatePostProcess(); else postProcessSlowmo.DeactivatePostProcess();
         }
         else
         {
             Time.timeScale = 1.0f;
             Time.fixedDeltaTime = 0.02f;
         }
+
+        if (Pointer.current.press.wasReleasedThisFrame && draging)
+        {
+            Vector3 ballScreenPos3D = camera.WorldToScreenPoint(ballRigidbody.position);
+            Vector2 ballScreenPos = new Vector2(ballScreenPos3D.x, ballScreenPos3D.y);
+            dragStartPosition = ballScreenPos / Screen.height;
+
+            Vector2 rawPos = Pointer.current.position.ReadValue();
+            dragEndPosition = rawPos / Screen.height;
+
+            Shoot();
+            OnShoot();
+        }
+
+        slowmo = draging || (aerealShot && remainingShots != 0);
+
+        float targetTimeScale = slowmo ? slowMotionScale : 1.0f;
+        float currentTransitionDuration = draging ? slowmoJoinTransitionDuration : slowmoLeaveTransitionDuration;
+        float changeSpeed = currentTransitionDuration > 0f ? (1f / currentTransitionDuration) * Time.unscaledDeltaTime : 1000f;
+        Time.timeScale = Mathf.MoveTowards(Time.timeScale, targetTimeScale, changeSpeed);
+        Time.fixedDeltaTime = 0.02f * Time.timeScale;
+
+        if (slowmo) postProcessSlowmo.ActivatePostProcess(); else postProcessSlowmo.DeactivatePostProcess();
     }
 
     private Vector3 GetCameraRelativeDirection(Vector2 dragDirection)
     {
-        Transform camTransform = Camera.main.transform;
+        Transform camTransform = camera.transform;
 
         Vector3 camForward = camTransform.forward;
         camForward.y = 0f;
@@ -184,10 +184,14 @@ public class BallController : MonoBehaviour
             float aerialPercentage = Mathf.InverseLerp(maxDragDistance, maxAerealDragDistance, dragDir.magnitude);
             aerialPercentage = Mathf.Sqrt(aerialPercentage);
             currentShootAngle = Mathf.Lerp(0f, Mathf.Abs(shootAngle), aerialPercentage);
+
+            if (aerialPercentage > 0f) traceBehaviour.SetColor(1);
+            else traceBehaviour.SetColor(0);
         }
         else
         {
             currentShootAngle = 0f;
+            traceBehaviour.SetColor(0);
         }
 
         Vector3 shootDir = GetCameraRelativeDirection(dragDir);
@@ -226,9 +230,25 @@ public class BallController : MonoBehaviour
 
     #endregion
 
+
+    private void OnCollisionEnter(Collision other)
+    {
+        if (other.collider.CompareTag("Floor"))
+        {
+            grounded = true;
+        }
+    }
+    private void OnCollisionExit(Collision other)
+    {
+        if(other.collider.CompareTag("Floor"))
+        {
+            grounded = false;
+        }
+    }
+
     private void OnTriggerEnter(Collider other)
     {
-        if(other.gameObject.tag == "Area")
+        if (other.CompareTag("Area"))
         {
             aerealShot = true;
             remainingShots = 1;
@@ -236,7 +256,7 @@ public class BallController : MonoBehaviour
     }
     private void OnTriggerExit(Collider other)
     {
-        if(other.gameObject.tag == "Area")
+        if(other.CompareTag("Area"))
         {
             aerealShot = false;
         }
