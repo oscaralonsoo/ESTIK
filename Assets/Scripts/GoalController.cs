@@ -1,23 +1,26 @@
-
+using System.Collections;
 using UnityEngine;
 
 public class GoalController : MonoBehaviour
 {
-    private GameManager gameManager;
+    private FastSceneLoader loader;
 
     private void Awake()
     {
-        gameManager = FindAnyObjectByType<GameManager>();
+        loader = FindAnyObjectByType<FastSceneLoader>();
     }
 
     private void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("Ball"))
         {
-            if (gameManager != null)
-            {
-
-            }
+            StartCoroutine(TriggerChangeCoroutine());
         }
+    }
+
+    private IEnumerator TriggerChangeCoroutine()
+    {
+        yield return new WaitForSeconds(1f);
+        loader.TriggerInstantChange();
     }
 }
