@@ -230,7 +230,7 @@ public class BallController : MonoBehaviour
     #endregion
 
 
-    private void OnCollisionEnter(Collision other)
+    private void OnCollisionStay(Collision other)
     {
         if (other.collider.CompareTag("Floor"))
         {
