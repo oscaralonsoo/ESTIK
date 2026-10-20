@@ -36,6 +36,8 @@ public class BallController : MonoBehaviour
     private TraceBehaviour traceBehaviour;
     private Camera camera;
 
+    private const string SkinKey = "SelectedBallSkin";
+
 
     void Start()
     {
@@ -54,6 +56,10 @@ public class BallController : MonoBehaviour
         trace.SetActive(false);
         traceBehaviour = trace.GetComponentInChildren<TraceBehaviour>();
         if (!traceBehaviour) initialized = false;
+
+        //SKIN
+        LoadSavedSkin();
+
 
         camera = Camera.main;
         if (!camera) initialized = false;
@@ -169,6 +175,42 @@ public class BallController : MonoBehaviour
         currentShootSpeed = 0f;
     }
 
+    private void LoadSavedSkin()
+    {
+        string savedSkinName = PlayerPrefs.GetString(SkinKey, "");
+
+        if (string.IsNullOrEmpty(savedSkinName))
+            return;
+
+        MeshRenderer meshRenderer = GetComponentInChildren<MeshRenderer>();
+
+        if (meshRenderer == null)
+        {
+            Debug.LogWarning("No se encontró el MeshRenderer de la bola.");
+            return;
+        }
+
+        Material[] materials = Resources.FindObjectsOfTypeAll<Material>();
+        Material savedMaterial = null;
+
+        foreach (Material material in materials)
+        {
+            if (material.name == savedSkinName)
+            {
+                savedMaterial = material;
+                break;
+            }
+        }
+
+        if (savedMaterial == null)
+        {
+            Debug.LogWarning("No se encontró el material guardado: " + savedSkinName);
+            return;
+        }
+
+        meshRenderer.material = savedMaterial;
+    }
+
     #region Trace
     private void ShowTrace()
     {
@@ -260,4 +302,40 @@ public class BallController : MonoBehaviour
             aerealShot = false;
         }
     }
+
+/*    public bool IsAiming => draging;
+
+    public float CurrentShootSpeed => currentShootSpeed;
+
+    public float MaxShootSpeed => shootSpeed;
+
+    public Vector2 DragDirection => dragStartPosition - dragCurrentPosition;
+
+    public int ShotCount { get; private set; }
+
+    public Vector3 LastShootDirection { get; private set; }
+
+    public Vector3 BallPosition => ballRigidbody != null
+        ? ballRigidbody.position
+        : transform.position;
+
+    public Vector3 ShootDirection
+    {
+        get
+        {
+            if (camera == null)
+                return Vector3.zero;
+
+            Vector3 direction = GetCameraRelativeDirection(DragDirection);
+
+            if (currentShootAngle > 0f && direction.sqrMagnitude > 0.0001f)
+            {
+                Vector3 rightAxis = Vector3.Cross(Vector3.up, direction);
+                direction = Quaternion.AngleAxis(-currentShootAngle, rightAxis)
+                    * direction;
+            }
+
+            return direction.normalized;
+        }
+    }*/
 }

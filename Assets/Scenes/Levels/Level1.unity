@@ -616,6 +616,63 @@ Light:
   m_LightUnit: 1
   m_LuxAtDistance: 1
   m_EnableSpotReflector: 1
+--- !u!1 &341683540
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 341683541}
+  - component: {fileID: 341683542}
+  m_Layer: 0
+  m_Name: Stick
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 0
+--- !u!4 &341683541
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 341683540}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -6.47859, y: -2.86, z: 51.94253}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 782948275}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &341683542
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 341683540}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 399f7629095ad74499a34fd2d1276691, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::StickController
+  ballController: {fileID: 1868522577}
+  stickPrefab: {fileID: 8638264024020307336, guid: 3765d05533e34284e8780eaa5f912628, type: 3}
+  baseDistance: 0.75
+  maxPullbackDistance: 0
+  horizontalOffset: 2.2
+  heightOffset: 2.83
+  pullbackRotationAngle: 35
+  pullbackSideAngle: 10
+  rotationAngle: 0
+  rotationSpeed: 0
+  hitDuration: 0.12
+  hitRotationAngle: 16.8
+  hitOvershoot: 0.15
 --- !u!1 &360430594
 GameObject:
   m_ObjectHideFlags: 0
@@ -702,6 +759,7 @@ Transform:
   - {fileID: 70137799}
   - {fileID: 1496656045}
   - {fileID: 1546459347}
+  - {fileID: 341683541}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &838454929
@@ -1294,6 +1352,17 @@ Camera:
   m_OcclusionCulling: 1
   m_StereoConvergence: 10
   m_StereoSeparation: 0.022
+--- !u!114 &1868522577 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 3610039185142173143, guid: 5e73398fff4312c40ae2d8abd8430912, type: 3}
+  m_PrefabInstance: {fileID: 853308227}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 976c54e39eed6a8478d45f8b2e3ae799, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: '::'
 --- !u!1 &1957560759
 GameObject:
   m_ObjectHideFlags: 0
