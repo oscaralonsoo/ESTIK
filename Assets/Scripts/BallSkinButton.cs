@@ -9,12 +9,15 @@ public class BallSkinButton : MonoBehaviour
 
         if (skinController == null) return;
 
-        MeshRenderer meshRenderer =
-            GetComponentInChildren<MeshRenderer>(true);
+        Transform[] children = GetComponentsInChildren<Transform>(true);
 
-        if (meshRenderer == null) return;
-        
-
-        skinController.SelectSkin(meshRenderer.sharedMaterial);
+        foreach (Transform child in children)
+        {
+            if (child.CompareTag("Ball"))
+            {
+                skinController.SelectSkin(child.name);
+                return;
+            }
+        }
     }
 }
