@@ -146,6 +146,10 @@ public class BallController : MonoBehaviour
         {
             float aerialPercentage = Mathf.InverseLerp(maxDragDistance, maxAerealDragDistance, dragDir.magnitude);
             currentShootAngle = Mathf.Lerp(0f, Mathf.Abs(shootAngle), aerialPercentage);
+            if (camera.TryGetComponent<CameraFollow>(out CameraFollow cameraFollow))
+            {
+                cameraFollow.LockCamera();
+            }
         }
         else
         {
@@ -277,15 +281,15 @@ public class BallController : MonoBehaviour
     {
         if (other.CompareTag("Area"))
         {
-            aerealShot = true;
-            remainingShots = 1;
-        }
-    }
-    private void OnTriggerExit(Collider other)
-    {
-        if(other.CompareTag("Area"))
-        {
-            aerealShot = false;
+            if (remainingShots != 0) {
+                
+                aerealShot = true;
+                remainingShots = 1;
+                if (camera.TryGetComponent<CameraFollow>(out CameraFollow cameraFollow))
+                {
+                    cameraFollow.SetShooting(true);
+                }
+            }
         }
     }
 

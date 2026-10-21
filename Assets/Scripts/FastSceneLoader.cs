@@ -50,15 +50,6 @@ public class FastSceneLoader : MonoBehaviour
         }
     }
 
-    private void Update()
-    {
-        if (Keyboard.current != null)
-        {
-            if (Keyboard.current.jKey.wasPressedThisFrame) LoadNextLevel();
-            if (Keyboard.current.rKey.wasPressedThisFrame) RestartLevel();
-        }
-    }
-
     public void LoadNextLevel()
     {
         if (isTransitioning) return;
