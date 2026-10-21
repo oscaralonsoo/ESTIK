@@ -9,8 +9,6 @@ public class NumberLevelController : MonoBehaviour
     {
         level = GetComponent<TMP_Text>();
 
-        int nivel = PlayerPrefs.GetInt("Nivel", 1);
-
-        level.text = nivel.ToString();
+        level.text = LevelLoader.CurrentLevel.ToString();
     }
 }
