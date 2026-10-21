@@ -10,14 +10,15 @@ public enum PlayMode
 
 public static class LevelLoader
 {
-    const int MenuSceneIndex = 0; 
-    const int FirstLevelSceneIndex = 1;  
-    const int LevelCount = 10; 
+    const int MenuSceneIndex = 0;
+    const int FirstLevelSceneIndex = 1;
+    const int LevelCount = 10;
     public static PlayMode Mode { get; private set; } = PlayMode.Normal;
 
     static readonly List<int> queue = new List<int>();
     static int position;
     static int lastLevelOfPreviousRun = -1;
+
     public static int CurrentLevel
     {
         get { EnsureRun(); return queue[position]; }
@@ -27,44 +28,45 @@ public static class LevelLoader
     {
         get { EnsureRun(); return position + 1 < queue.Count; }
     }
-    public static void StartRun(PlayMode mode)
+
+    public static AsyncOperation StartRun(PlayMode mode)
     {
         Mode = mode;
         BuildQueue();
         position = 0;
-        LoadCurrent();
+        return LoadCurrent();
     }
 
-    public static void Next()
+    public static AsyncOperation Next()
     {
         if (!HasNext)
         {
-            LoadMenu();
-            return;
+            return LoadMenu();
         }
 
         position++;
-        LoadCurrent();
+        return LoadCurrent();
     }
 
-    public static void Reload()
+    public static AsyncOperation Reload()
     {
         Time.timeScale = 1f;
-        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+        return SceneManager.LoadSceneAsync(SceneManager.GetActiveScene().buildIndex);
     }
 
-    public static void LoadMenu()
+    public static AsyncOperation LoadMenu()
     {
         queue.Clear();
         Time.timeScale = 1f;
-        SceneManager.LoadScene(MenuSceneIndex);
+        return SceneManager.LoadSceneAsync(MenuSceneIndex);
     }
 
-    static void LoadCurrent()
+    static AsyncOperation LoadCurrent()
     {
         Time.timeScale = 1f;
-        SceneManager.LoadScene(FirstLevelSceneIndex + queue[position] - 1);
+        return SceneManager.LoadSceneAsync(FirstLevelSceneIndex + queue[position] - 1);
     }
+
     static void EnsureRun()
     {
         if (queue.Count > 0) return;

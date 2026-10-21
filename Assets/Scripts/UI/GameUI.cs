@@ -65,7 +65,7 @@ public class GameUI : MonoBehaviour
 
         void Go()
         {
-            Time.timeScale = 1f;
+            Time.timeScale = 1f; // Despausa el juego antes de iniciar la transición
             action();
         }
 
@@ -143,7 +143,7 @@ public class GameUI : MonoBehaviour
         t.localScale = Vector3.one;
     }
 
-    public void Restart() => Leave(LevelLoader.Reload);
-    public void NextLevel() => Leave(LevelLoader.Next);
-    public void GoToMenu() => Leave(LevelLoader.LoadMenu);
+    public void Restart() => Leave(() => FastSceneLoader.Instance.RestartLevel());
+    public void NextLevel() => Leave(() => FastSceneLoader.Instance.LoadNextLevel());
+    public void GoToMenu() => Leave(() => FastSceneLoader.Instance.GoToMenu());
 }

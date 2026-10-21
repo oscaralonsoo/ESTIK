@@ -1,18 +1,15 @@
+
 using UnityEngine;
 
 public class BallSkinController : MonoBehaviour
 {
-    private const string SkinKey = "SelectedBallSkin";
+    private const string SkinKey = "SelectedBall";
 
-    private Material selectedSkin;
-
-    public void SelectSkin(Material skin)
+    public void SelectSkin(string skinName)
     {
-        if (skin == null) return;
+        if (string.IsNullOrEmpty(skinName)) return;
 
-        selectedSkin = skin;
-
-        PlayerPrefs.SetString(SkinKey, skin.name);
+        PlayerPrefs.SetString(SkinKey, skinName);
         PlayerPrefs.Save();
     }
 
@@ -20,4 +17,5 @@ public class BallSkinController : MonoBehaviour
     {
         return PlayerPrefs.GetString(SkinKey, "");
     }
+
 }

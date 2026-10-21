@@ -11,6 +11,8 @@ public class CameraFollow : MonoBehaviour
     [SerializeField] private float followSpeed = 5f;
     [SerializeField] private float rotationSpeed = 5f;
 
+    private bool locked = false;
+
     private void Start()
     {
         Vector3 targetPosition = target.position + offset;
@@ -26,7 +28,7 @@ public class CameraFollow : MonoBehaviour
 
     private void LateUpdate()
     {
-        if (target == null)
+        if (target == null || locked)
             return;
 
         Vector3 targetPosition = target.position + offset;
@@ -46,5 +48,10 @@ public class CameraFollow : MonoBehaviour
             targetRotation,
             rotationSpeed * Time.deltaTime
         );
+    }
+
+    public void LockCamera()
+    {
+        locked = true;
     }
 }

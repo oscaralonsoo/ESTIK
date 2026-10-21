@@ -1,7 +1,6 @@
 using System.Collections;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class FastSceneLoader : MonoBehaviour
@@ -33,6 +32,7 @@ public class FastSceneLoader : MonoBehaviour
             Debug.LogError($"[FastSceneLoader] Missing reference on {gameObject.name}!");
             return;
         }
+
         RectTransform imageRect = image.rectTransform;
         imageRect.anchorMin = new Vector2(0.5f, 0.5f);
         imageRect.anchorMax = new Vector2(0.5f, 0.5f);
@@ -71,6 +71,12 @@ public class FastSceneLoader : MonoBehaviour
         StartCoroutine(ExitSceneRoutine(LevelLoader.Reload));
     }
 
+    public void GoToMenu()
+    {
+        if (isTransitioning) return;
+        StartCoroutine(ExitSceneRoutine(LevelLoader.LoadMenu));
+    }
+
     private IEnumerator EnterSceneRoutine()
     {
         yield return new WaitForEndOfFrame();
@@ -106,7 +112,7 @@ public class FastSceneLoader : MonoBehaviour
         image.gameObject.SetActive(false);
     }
 
-    private IEnumerator ExitSceneRoutine(System.Action loadScene)
+    private IEnumerator ExitSceneRoutine(System.Func<AsyncOperation> loadSceneAsync)
     {
         isTransitioning = true;
 
@@ -137,6 +143,13 @@ public class FastSceneLoader : MonoBehaviour
             imageRect.localScale = Vector3.one * maxScale;
         }
 
-        loadScene();
+        AsyncOperation op = loadSceneAsync();
+        if (op != null)
+        {
+            while (!op.isDone)
+            {
+                yield return null;
+            }
+        }
     }
 }

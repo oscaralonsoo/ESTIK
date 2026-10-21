@@ -36,7 +36,7 @@ public class BallController : MonoBehaviour
     private TraceBehaviour traceBehaviour;
     private Camera camera;
 
-    private const string SkinKey = "SelectedBallSkin";
+    private const string SkinKey = "SelectedBall";
 
 
     void Start()
@@ -179,36 +179,22 @@ public class BallController : MonoBehaviour
     {
         string savedSkinName = PlayerPrefs.GetString(SkinKey, "");
 
-        if (string.IsNullOrEmpty(savedSkinName))
-            return;
+        if (string.IsNullOrEmpty(savedSkinName)) savedSkinName = "BallDefault";
 
-        MeshRenderer meshRenderer = GetComponentInChildren<MeshRenderer>();
+        GameObject prefab = Resources.Load<GameObject>(savedSkinName);
 
-        if (meshRenderer == null)
+        if (prefab == null)
         {
-            Debug.LogWarning("No se encontró el MeshRenderer de la bola.");
-            return;
+            savedSkinName = "BallDefault";
+            prefab = Resources.Load<GameObject>(savedSkinName);
         }
 
-        Material[] materials = Resources.FindObjectsOfTypeAll<Material>();
-        Material savedMaterial = null;
-
-        foreach (Material material in materials)
+        foreach (Transform child in transform)
         {
-            if (material.name == savedSkinName)
-            {
-                savedMaterial = material;
-                break;
-            }
+            Destroy(child.gameObject);
         }
 
-        if (savedMaterial == null)
-        {
-            Debug.LogWarning("No se encontró el material guardado: " + savedSkinName);
-            return;
-        }
-
-        meshRenderer.material = savedMaterial;
+        Instantiate(prefab, transform);
     }
 
     #region Trace
