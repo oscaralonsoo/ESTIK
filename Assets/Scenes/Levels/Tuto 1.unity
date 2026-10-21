@@ -714,11 +714,6 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 3711905928230151870, guid: 7b6280cb6b0ff75479d8b8175cc6f6c4, type: 3}
   m_PrefabInstance: {fileID: 290156935}
   m_PrefabAsset: {fileID: 0}
---- !u!4 &297880779 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 3190110144580108033, guid: afd7502102afe3e4a8c2ca4e28f5c1a4, type: 3}
-  m_PrefabInstance: {fileID: 110499536}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &306383533
 GameObject:
   m_ObjectHideFlags: 0
@@ -732,7 +727,7 @@ GameObject:
   - component: {fileID: 306383535}
   - component: {fileID: 306383534}
   - component: {fileID: 306383538}
-  m_Layer: 0
+  m_Layer: 4
   m_Name: Agua
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3268,7 +3263,7 @@ GameObject:
   - component: {fileID: 1015981013}
   - component: {fileID: 1015981015}
   - component: {fileID: 1015981014}
-  m_Layer: 0
+  m_Layer: 4
   m_Name: Agua
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4326,6 +4321,11 @@ PrefabInstance:
 Transform:
   m_CorrespondingSourceObject: {fileID: 3711905928230151870, guid: 7b6280cb6b0ff75479d8b8175cc6f6c4, type: 3}
   m_PrefabInstance: {fileID: 1287032397}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &1292529040 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 2138785747565131568, guid: afd7502102afe3e4a8c2ca4e28f5c1a4, type: 3}
+  m_PrefabInstance: {fileID: 110499536}
   m_PrefabAsset: {fileID: 0}
 --- !u!4 &1315952709 stripped
 Transform:
@@ -7230,7 +7230,7 @@ PrefabInstance:
     - target: {fileID: 6461522594297584201, guid: 702dad000acc5ce44b531e4be744f874, type: 3}
       propertyPath: goal
       value: 
-      objectReference: {fileID: 297880779}
+      objectReference: {fileID: 1292529040}
     - target: {fileID: 6461522594297584201, guid: 702dad000acc5ce44b531e4be744f874, type: 3}
       propertyPath: target
       value: 
