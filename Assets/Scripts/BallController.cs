@@ -146,6 +146,10 @@ public class BallController : MonoBehaviour
         {
             float aerialPercentage = Mathf.InverseLerp(maxDragDistance, maxAerealDragDistance, dragDir.magnitude);
             currentShootAngle = Mathf.Lerp(0f, Mathf.Abs(shootAngle), aerialPercentage);
+            if (camera.TryGetComponent<CameraFollow>(out CameraFollow cameraFollow))
+            {
+                cameraFollow.LockCamera();
+            }
         }
         else
         {
@@ -279,6 +283,10 @@ public class BallController : MonoBehaviour
         {
             aerealShot = true;
             remainingShots = 1;
+            if (camera.TryGetComponent<CameraFollow>(out CameraFollow cameraFollow))
+            {
+                cameraFollow.SetShooting(true);
+            }
         }
     }
     private void OnTriggerExit(Collider other)
