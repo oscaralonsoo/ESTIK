@@ -22,6 +22,9 @@ public class CameraFollow : MonoBehaviour
 
     private void Start()
     {
+        target = FindAnyObjectByType<BallController>().transform;
+        goal = FindAnyObjectByType<GoalController>().transform;
+
         if (target == null) return;
 
         transform.position = GetDesiredPosition();

@@ -289,13 +289,6 @@ public class BallController : MonoBehaviour
             }
         }
     }
-    private void OnTriggerExit(Collider other)
-    {
-        if(other.CompareTag("Area"))
-        {
-            aerealShot = false;
-        }
-    }
 
 /*    public bool IsAiming => draging;
 
