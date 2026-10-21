@@ -11,7 +11,7 @@ public enum PlayMode
 public static class LevelLoader
 {
     const int MenuSceneIndex = 0;
-    const int FirstLevelSceneIndex = 1;
+    const int FirstLevelSceneIndex = 0;
     const int LevelCount = 10;
     public static PlayMode Mode { get; private set; } = PlayMode.Normal;
 
