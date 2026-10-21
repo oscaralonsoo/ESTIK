@@ -1,49 +1,26 @@
 using UnityEngine;
-using UnityEngine.Serialization;
 
-public class MainMenuUI : MonoBehaviour
+public class MainMenuManager : MonoBehaviour
 {
-    [SerializeField] GameObject mainPanel;
-    [SerializeField] GameObject modePanel;
-
-    bool switching;
+    public OrbitCamera orbitCamera;
+    public CameraFollow cameraController;
+    public GameObject menuCanvas;
+    public GameObject ball;
 
     void Start()
     {
-        modePanel.SetActive(false);
-        mainPanel.SetActive(true);
+        // Estado de menú
+        orbitCamera.enabled = true;
+        cameraController.enabled = false;
+        if (ball) ball.SetActive(false);
     }
 
-    void Switch(GameObject target, System.Action open)
+    public void OnPlayPressed()
     {
-        if (switching) return;
+        orbitCamera.enabled = false;
+        cameraController.enabled = true;
 
-        GameObject current = mainPanel.activeSelf ? mainPanel
-                           : modePanel.activeSelf ? modePanel
-                           : null;
-
-        if (current == target) return;
-        if (current == null) { open(); return; }
-
-        switching = true;
-        void Next()
-        {
-            switching = false;
-            open();
-        }
-
-        var anim = current.GetComponent<PanelAnimator>();
-        if (anim != null) anim.Hide(Next);
-        else
-        {
-            current.SetActive(false);
-            Next();
-        }
+        menuCanvas.SetActive(false);
+        if (ball) ball.SetActive(true);
     }
-
-    public void ShowMain() => Switch(mainPanel, () => mainPanel.SetActive(true));
-
-    public void ShowModes() => Switch(modePanel, () => modePanel.SetActive(true));
-
-    public void Quit() => Application.Quit();
 }
