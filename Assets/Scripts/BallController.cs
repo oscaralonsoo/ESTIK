@@ -281,11 +281,14 @@ public class BallController : MonoBehaviour
     {
         if (other.CompareTag("Area"))
         {
-            aerealShot = true;
-            remainingShots = 1;
-            if (camera.TryGetComponent<CameraFollow>(out CameraFollow cameraFollow))
-            {
-                cameraFollow.SetShooting(true);
+            if (remainingShots != 0) {
+                
+                aerealShot = true;
+                remainingShots = 1;
+                if (camera.TryGetComponent<CameraFollow>(out CameraFollow cameraFollow))
+                {
+                    cameraFollow.SetShooting(true);
+                }
             }
         }
     }
