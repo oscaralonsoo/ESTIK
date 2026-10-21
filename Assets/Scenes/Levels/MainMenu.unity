@@ -6389,46 +6389,14 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 898737750318594997, guid: 7cf6830b40dba8545a2cf307ce66ef6d, type: 3}
-      propertyPath: m_fontSize
-      value: 100
-      objectReference: {fileID: 0}
-    - target: {fileID: 898737750318594997, guid: 7cf6830b40dba8545a2cf307ce66ef6d, type: 3}
-      propertyPath: m_fontAsset
-      value: 
-      objectReference: {fileID: 11400000, guid: 024deb3353921ef4191b7226d452e2da, type: 2}
-    - target: {fileID: 898737750318594997, guid: 7cf6830b40dba8545a2cf307ce66ef6d, type: 3}
-      propertyPath: m_fontStyle
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 898737750318594997, guid: 7cf6830b40dba8545a2cf307ce66ef6d, type: 3}
-      propertyPath: m_fontSizeBase
-      value: 100
-      objectReference: {fileID: 0}
-    - target: {fileID: 898737750318594997, guid: 7cf6830b40dba8545a2cf307ce66ef6d, type: 3}
-      propertyPath: m_sharedMaterial
-      value: 
-      objectReference: {fileID: -5421240511664332930, guid: 024deb3353921ef4191b7226d452e2da, type: 2}
-    - target: {fileID: 898737750318594997, guid: 7cf6830b40dba8545a2cf307ce66ef6d, type: 3}
-      propertyPath: m_hasFontAssetChanged
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4130764934860945580, guid: 7cf6830b40dba8545a2cf307ce66ef6d, type: 3}
-      propertyPath: m_TargetGraphic
-      value: 
+    - target: {fileID: 2322667288469913318, guid: 7cf6830b40dba8545a2cf307ce66ef6d, type: 3}
+      propertyPath: m_Color.a
+      value: 0.4
       objectReference: {fileID: 0}
     - target: {fileID: 4130764934860945580, guid: 7cf6830b40dba8545a2cf307ce66ef6d, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
-      objectReference: {fileID: 2100933323}
-    - target: {fileID: 4130764934860945580, guid: 7cf6830b40dba8545a2cf307ce66ef6d, type: 3}
-      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: OnPlayPressed
-      objectReference: {fileID: 0}
-    - target: {fileID: 4130764934860945580, guid: 7cf6830b40dba8545a2cf307ce66ef6d, type: 3}
-      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
-      value: MainMenuManager, Assembly-CSharp
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 797531120}
     - target: {fileID: 5495302015331094800, guid: 7cf6830b40dba8545a2cf307ce66ef6d, type: 3}
       propertyPath: m_Name
       value: MainMenuCanvas
@@ -6513,18 +6481,22 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 7872785348323801351, guid: 7cf6830b40dba8545a2cf307ce66ef6d, type: 3}
-      propertyPath: m_Sprite
+    - target: {fileID: 6311122401626375641, guid: 7cf6830b40dba8545a2cf307ce66ef6d, type: 3}
+      propertyPath: ball
       value: 
-      objectReference: {fileID: 0}
-    m_RemovedComponents:
-    - {fileID: 7872785348323801351, guid: 7cf6830b40dba8545a2cf307ce66ef6d, type: 3}
+      objectReference: {fileID: 1834837396}
+    - target: {fileID: 6311122401626375641, guid: 7cf6830b40dba8545a2cf307ce66ef6d, type: 3}
+      propertyPath: orbitCamera
+      value: 
+      objectReference: {fileID: 549808902}
+    - target: {fileID: 6311122401626375641, guid: 7cf6830b40dba8545a2cf307ce66ef6d, type: 3}
+      propertyPath: cameraController
+      value: 
+      objectReference: {fileID: 549808897}
+    m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 5495302015331094800, guid: 7cf6830b40dba8545a2cf307ce66ef6d, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 2100933323}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 7cf6830b40dba8545a2cf307ce66ef6d, type: 3}
 --- !u!1001 &2068044176
 PrefabInstance:
@@ -6650,27 +6622,6 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 3711905928230151870, guid: 7b6280cb6b0ff75479d8b8175cc6f6c4, type: 3}
   m_PrefabInstance: {fileID: 2077495436}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &2100933318 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 5495302015331094800, guid: 7cf6830b40dba8545a2cf307ce66ef6d, type: 3}
-  m_PrefabInstance: {fileID: 2060779169}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &2100933323
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2100933318}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9ed3a1ebb55f5dc44a36c24037e884f6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::MainMenuManager
-  orbitCamera: {fileID: 549808902}
-  cameraController: {fileID: 549808897}
-  menuCanvas: {fileID: 2100933318}
-  ball: {fileID: 1834837396}
 --- !u!1001 &2139162651
 PrefabInstance:
   m_ObjectHideFlags: 0
