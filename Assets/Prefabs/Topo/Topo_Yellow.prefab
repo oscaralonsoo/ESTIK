@@ -12,6 +12,8 @@ GameObject:
   - component: {fileID: 6019372711162989553}
   - component: {fileID: 7383765937637256753}
   - component: {fileID: 8157710340472463438}
+  - component: {fileID: 109849558763160094}
+  - component: {fileID: 3798762834829567956}
   m_Layer: 0
   m_Name: Body
   m_TagString: Untagged
@@ -123,6 +125,50 @@ CapsuleCollider:
   m_Direction: 1
   m_Center: {x: 0.10145903, y: -31.370216, z: -0.6950855}
 --- !u!65 &8157710340472463438
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 92914942684966833}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 59.788258, y: 31.131277, z: 60.058487}
+  m_Center: {x: 0.024837255, y: -48.784153, z: -0.10791719}
+--- !u!136 &109849558763160094
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 92914942684966833}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 26.86162
+  m_Height: 65.51338
+  m_Direction: 1
+  m_Center: {x: 0.10145903, y: -31.370216, z: -0.6950855}
+--- !u!65 &3798762834829567956
 BoxCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1334,7 +1380,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1225856491111876089}
-  - component: {fileID: 6506650661151551377}
+  - component: {fileID: 4150044584257843464}
+  - component: {fileID: 245986862517914482}
   m_Layer: 0
   m_Name: Topo_Yellow
   m_TagString: Untagged
@@ -1359,7 +1406,7 @@ Transform:
   - {fileID: 1888670037169790003}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!95 &6506650661151551377
+--- !u!95 &4150044584257843464
 Animator:
   serializedVersion: 7
   m_ObjectHideFlags: 0
@@ -1370,7 +1417,7 @@ Animator:
   m_Enabled: 1
   m_Avatar: {fileID: 9000000, guid: 39564a6c69e92014ab7e0fac3a6ec010, type: 3}
   m_Controller: {fileID: 9100000, guid: a8df75b5339916f4eb89d61a4e54a7fe, type: 2}
-  m_CullingMode: 1
+  m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
   m_LinearVelocityBlending: 0
@@ -1381,6 +1428,29 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &245986862517914482
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7894144651264632427}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 17faa6626dd977547a121f612fdf6f1a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::MoleEmergeParticles
+  dirtParticles: {fileID: 0}
+  holePoint: {fileID: 1017792800404634713}
+  dirtColor: {r: 0.4, g: 0.27, b: 0.15, a: 1}
+  burstCount: 45
+  coneAngle: 50
+  coneRadius: 0.2
+  speedRange: {x: 4, y: 9}
+  sizeRange: {x: 0.08, y: 0.28}
+  lifetimeRange: {x: 0.9, y: 1.5}
+  gravity: 0.75
+  drag: 1.8
 --- !u!1 &8561708927118057730
 GameObject:
   m_ObjectHideFlags: 0
@@ -1488,7 +1558,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1888670037169790003}
   m_Layer: 0
-  m_Name: Mesh
+  m_Name: group1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1630,7 +1700,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4056040486673105130}
   m_Layer: 0
-  m_Name: Base_Bone
+  m_Name: Base
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

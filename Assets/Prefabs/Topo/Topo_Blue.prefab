@@ -519,6 +519,8 @@ GameObject:
   - component: {fileID: 8897475911496971960}
   - component: {fileID: 2719713695782487958}
   - component: {fileID: 5530074920124464159}
+  - component: {fileID: 3174870815218323313}
+  - component: {fileID: 4720057570415811217}
   m_Layer: 0
   m_Name: Body
   m_TagString: Untagged
@@ -630,6 +632,50 @@ CapsuleCollider:
   m_Direction: 1
   m_Center: {x: 0.10145903, y: -31.370216, z: -0.6950855}
 --- !u!65 &5530074920124464159
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2573474879403165426}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 59.788258, y: 31.131277, z: 60.058487}
+  m_Center: {x: 0.024837255, y: -48.784153, z: -0.10791719}
+--- !u!136 &3174870815218323313
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2573474879403165426}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 26.86162
+  m_Height: 65.51338
+  m_Direction: 1
+  m_Center: {x: 0.10145903, y: -31.370216, z: -0.6950855}
+--- !u!65 &4720057570415811217
 BoxCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -883,7 +929,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6517973931664544874}
   m_Layer: 0
-  m_Name: Mesh
+  m_Name: group1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1316,7 +1362,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2266404671300903005}
   m_Layer: 0
-  m_Name: Base_Bone
+  m_Name: Base
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1702,7 +1748,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8138634519370129086}
-  - component: {fileID: 6708374089777088462}
+  - component: {fileID: 7328670515362468581}
+  - component: {fileID: 8244932081526975001}
   m_Layer: 0
   m_Name: Topo_Blue
   m_TagString: Untagged
@@ -1727,7 +1774,7 @@ Transform:
   - {fileID: 6517973931664544874}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!95 &6708374089777088462
+--- !u!95 &7328670515362468581
 Animator:
   serializedVersion: 7
   m_ObjectHideFlags: 0
@@ -1738,7 +1785,7 @@ Animator:
   m_Enabled: 1
   m_Avatar: {fileID: 9000000, guid: 39564a6c69e92014ab7e0fac3a6ec010, type: 3}
   m_Controller: {fileID: 9100000, guid: a8df75b5339916f4eb89d61a4e54a7fe, type: 2}
-  m_CullingMode: 1
+  m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
   m_LinearVelocityBlending: 0
@@ -1749,3 +1796,26 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &8244932081526975001
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8013350981894117331}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 17faa6626dd977547a121f612fdf6f1a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::MoleEmergeParticles
+  dirtParticles: {fileID: 0}
+  holePoint: {fileID: 6923616073385816174}
+  dirtColor: {r: 0.4, g: 0.27, b: 0.15, a: 1}
+  burstCount: 45
+  coneAngle: 50
+  coneRadius: 0.2
+  speedRange: {x: 4, y: 9}
+  sizeRange: {x: 0.08, y: 0.28}
+  lifetimeRange: {x: 0.9, y: 1.5}
+  gravity: 0.75
+  drag: 1.8
