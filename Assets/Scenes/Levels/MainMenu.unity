@@ -353,6 +353,18 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5462822538917040230, guid: afd7502102afe3e4a8c2ca4e28f5c1a4, type: 3}
+      propertyPath: m_SortMode
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 5462822538917040230, guid: afd7502102afe3e4a8c2ca4e28f5c1a4, type: 3}
+      propertyPath: m_SortingOrder
+      value: 50
+      objectReference: {fileID: 0}
+    - target: {fileID: 5462822538917040230, guid: afd7502102afe3e4a8c2ca4e28f5c1a4, type: 3}
+      propertyPath: m_UseCustomVertexStreams
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 7267431994516729389, guid: afd7502102afe3e4a8c2ca4e28f5c1a4, type: 3}
       propertyPath: m_Name
       value: Porteria
@@ -6386,9 +6398,17 @@ PrefabInstance:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 2322667288469913318, guid: 7cf6830b40dba8545a2cf307ce66ef6d, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 65c8e34d7ce578b43abae7fed21bc29c, type: 3}
+    - target: {fileID: 2322667288469913318, guid: 7cf6830b40dba8545a2cf307ce66ef6d, type: 3}
       propertyPath: m_Color.a
-      value: 0.4
+      value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 4011578214624299088, guid: 7cf6830b40dba8545a2cf307ce66ef6d, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 797531120}
     - target: {fileID: 4130764934860945580, guid: 7cf6830b40dba8545a2cf307ce66ef6d, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
@@ -6489,6 +6509,54 @@ PrefabInstance:
       propertyPath: cameraController
       value: 
       objectReference: {fileID: 549808897}
+    - target: {fileID: 6922831409598027909, guid: 7cf6830b40dba8545a2cf307ce66ef6d, type: 3}
+      propertyPath: m_PreserveAspect
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6926192445654106290, guid: 7cf6830b40dba8545a2cf307ce66ef6d, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 797531120}
+    - target: {fileID: 7394515847801801466, guid: 7cf6830b40dba8545a2cf307ce66ef6d, type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 7394515847801801466, guid: 7cf6830b40dba8545a2cf307ce66ef6d, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 7394515847801801466, guid: 7cf6830b40dba8545a2cf307ce66ef6d, type: 3}
+      propertyPath: m_AnchorMin.x
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 7394515847801801466, guid: 7cf6830b40dba8545a2cf307ce66ef6d, type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 7394515847801801466, guid: 7cf6830b40dba8545a2cf307ce66ef6d, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 400
+      objectReference: {fileID: 0}
+    - target: {fileID: 7394515847801801466, guid: 7cf6830b40dba8545a2cf307ce66ef6d, type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 190
+      objectReference: {fileID: 0}
+    - target: {fileID: 7394515847801801466, guid: 7cf6830b40dba8545a2cf307ce66ef6d, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7394515847801801466, guid: 7cf6830b40dba8545a2cf307ce66ef6d, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7394515847801801466, guid: 7cf6830b40dba8545a2cf307ce66ef6d, type: 3}
+      propertyPath: m_LocalScale.z
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7394515847801801466, guid: 7cf6830b40dba8545a2cf307ce66ef6d, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: -49
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
