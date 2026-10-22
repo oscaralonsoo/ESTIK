@@ -38,11 +38,19 @@ public class BallController : MonoBehaviour
 
     private const string SkinKey = "SelectedBall";
 
+    private void Awake()
+    {
+        initialized = true;
+        
+        //TRACE
+        GameObject trace = Instantiate(tracePrefab);
+        trace.SetActive(false);
+        traceBehaviour = trace.GetComponentInChildren<TraceBehaviour>();
+        if (!traceBehaviour) initialized = false;
+    }
 
     void Start()
     {
-        initialized = true;
-
         //POST PROCESSING
         postProcessSlowmo = FindAnyObjectByType<DesaturationSlowmo>();
         if (!postProcessSlowmo) initialized = false;
@@ -51,16 +59,8 @@ public class BallController : MonoBehaviour
         ballRigidbody = GetComponent<Rigidbody>();
         if (!ballRigidbody) initialized = false;
 
-        //TRACE
-        GameObject trace = Instantiate(tracePrefab);
-        trace.SetActive(false);
-        traceBehaviour = trace.GetComponentInChildren<TraceBehaviour>();
-        if (!traceBehaviour) initialized = false;
-
         //SKIN
         LoadSavedSkin();
-
-
         camera = Camera.main;
         if (!camera) initialized = false;
     }
