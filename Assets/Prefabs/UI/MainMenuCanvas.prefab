@@ -200,7 +200,7 @@ GameObject:
   - component: {fileID: 7160806111936508545}
   - component: {fileID: 1254381799111165227}
   - component: {fileID: 5612648485801901768}
-  - component: {fileID: 8901569171309032760}
+  - component: {fileID: 716862459875972568}
   m_Layer: 5
   m_Name: CustomBallPanel
   m_TagString: Untagged
@@ -300,7 +300,7 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 611038465223939967}
   m_CullTransparentMesh: 1
---- !u!114 &8901569171309032760
+--- !u!114 &716862459875972568
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -312,7 +312,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 154db6fc21d0c27418b4fe67500de246, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PanelAnimator
-  window: {fileID: 4258463023005866037}
+  window: {fileID: 0}
   style: 0
   animateScale: 1
   enterDuration: 0.35
@@ -390,8 +390,8 @@ MonoBehaviour:
   m_ChildAlignment: 4
   m_StartCorner: 0
   m_StartAxis: 0
-  m_CellSize: {x: 150, y: 150}
-  m_Spacing: {x: 200, y: 200}
+  m_CellSize: {x: 250, y: 250}
+  m_Spacing: {x: 55, y: 55}
   m_Constraint: 2
   m_ConstraintCount: 2
 --- !u!1 &1418967917034046137
@@ -868,7 +868,7 @@ RectTransform:
   m_GameObject: {fileID: 2654150282623377396}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1.495, y: 1.495, z: 1.495}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 6917611800322230036}
@@ -1014,7 +1014,7 @@ RectTransform:
   m_GameObject: {fileID: 3580460152537807453}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1.495, y: 1.495, z: 1.495}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 3666802129106800669}
@@ -1272,7 +1272,7 @@ RectTransform:
   m_GameObject: {fileID: 4376118036021443537}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1.495, y: 1.495, z: 1.495}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 7183982593211575144}
@@ -1688,7 +1688,7 @@ RectTransform:
   m_GameObject: {fileID: 5175360661051313443}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1.495, y: 1.495, z: 1.495}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 6583279865543872900}
@@ -1855,9 +1855,9 @@ Canvas:
   m_GameObject: {fileID: 5495302015331094800}
   m_Enabled: 1
   serializedVersion: 3
-  m_RenderMode: 0
+  m_RenderMode: 1
   m_Camera: {fileID: 0}
-  m_PlaneDistance: 100
+  m_PlaneDistance: 10
   m_PixelPerfect: 0
   m_ReceivesEvents: 1
   m_OverrideSorting: 0
@@ -2076,7 +2076,7 @@ RectTransform:
   m_GameObject: {fileID: 5580886142389487195}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0.015921593}
-  m_LocalScale: {x: 1.495, y: 1.495, z: 1.495}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 3110482094355238342}
@@ -2678,7 +2678,7 @@ RectTransform:
   m_GameObject: {fileID: 6748415121168183630}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0.015921593}
-  m_LocalScale: {x: 1.495, y: 1.495, z: 1.495}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 5542435845956230251}
