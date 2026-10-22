@@ -1,8 +1,8 @@
 using UnityEngine;
 
-public class Tutorial2Activator : MonoBehaviour
+public class DragTutorialActivator : MonoBehaviour
 {
-    [SerializeField] Tutorial1 tutorial;
+    [SerializeField] DragTutorial tutorial;
 
     private void OnTriggerEnter(Collider other)
     {

@@ -1,19 +1,18 @@
-using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
 
-public class Tutorial1 : MonoBehaviour
+public class DragTutorial : MonoBehaviour
 {
     [SerializeField] private TraceBehaviour indicator;
     [SerializeField] private BallController ball;
     [SerializeField] private GoalController goal;
     [SerializeField] private Image drag;
 
-    [SerializeField] private float dragDistance = 1f;
+    [SerializeField] private float dragDistance = 150f;
     [SerializeField] private float animationTime = 2f;
     [SerializeField] private bool aereal = false;
-    [SerializeField] private float dragOffset = 0;
+    [SerializeField] private float dragOffset = 0f;
 
     private Camera mainCamera = null;
     private Vector3 startPositionDrag = Vector3.zero;
@@ -28,7 +27,7 @@ public class Tutorial1 : MonoBehaviour
 
         if (indicator == null)
             indicator = FindAnyObjectByType<TraceBehaviour>(FindObjectsInactive.Include);
-        
+
         if (goal == null)
             goal = FindAnyObjectByType<GoalController>(FindObjectsInactive.Include);
 
@@ -43,6 +42,7 @@ public class Tutorial1 : MonoBehaviour
         startPositionDrag.y -= dragOffset;
     }
 
+
     void Update()
     {
         if (Pointer.current != null && Pointer.current.press.wasPressedThisFrame)
@@ -54,40 +54,51 @@ public class Tutorial1 : MonoBehaviour
         transform.position = mainCamera.transform.position + mainCamera.transform.forward.normalized * 5f;
         transform.rotation = mainCamera.transform.rotation;
 
-        timer = Mathf.PingPong(Time.unscaledTime, animationTime);
-        float progress = timer / animationTime;
+        float maxProgress = aereal ? 1.5f : 1.0f;
+        float totalDuration = animationTime * maxProgress;
 
-        float positionY = startPositionDrag.y - progress * dragDistance;
-        drag.rectTransform.localPosition = new Vector3(startPositionDrag.x, positionY, startPositionDrag.z);
+        timer = Mathf.PingPong(Time.unscaledTime, totalDuration);
 
-        float currentShootAngle = 0;
+        float currentProgress = timer / animationTime;
 
-        Vector3 direction = goal.transform.position - ball.transform.position;
-        direction.y = 0f;
+        indicator.SetFillAmount(currentProgress);
 
-        if (aereal)
+        Vector3 directionToGoal = goal.transform.position - ball.transform.position;
+        directionToGoal.y = 0f;
+
+        float currentShootAngle = 0f;
+
+        if (aereal && currentProgress > 1.0f)
         {
-            progress *= 1.5f;
-            float aerialPercentage = Mathf.InverseLerp(1, 1.5f, progress);
-            currentShootAngle = Mathf.Lerp(0f, Mathf.Abs(30), aerialPercentage);
+            float aerialPercentage = Mathf.InverseLerp(1.0f, 1.5f, currentProgress);
+            currentShootAngle = Mathf.Lerp(0f, 30f, aerialPercentage);
         }
 
+        Vector3 finalIndicatorDirection = directionToGoal;
         if (currentShootAngle > 0f)
         {
-            Vector3 rightAxis = Vector3.Cross(Vector3.up, direction);
-            direction = Quaternion.AngleAxis(-currentShootAngle, rightAxis) * direction;
+            Vector3 rightAxis = Vector3.Cross(Vector3.up, directionToGoal);
+            finalIndicatorDirection = Quaternion.AngleAxis(-currentShootAngle, rightAxis) * directionToGoal;
             indicator.SetColor(1);
         }
-        else indicator.SetColor(0);
-        indicator.SetFillAmount(progress);
+        else
+        {
+            indicator.SetColor(0);
+        }
 
+        if (finalIndicatorDirection != Vector3.zero)
+            indicator.transform.rotation = Quaternion.LookRotation(finalIndicatorDirection);
 
-        if (direction != Vector3.zero)
-            indicator.transform.rotation = Quaternion.LookRotation(direction);
         indicator.transform.position = ball.transform.position;
+
+        Vector2 ballScreenPos = mainCamera.WorldToScreenPoint(ball.transform.position);
+        Vector2 goalScreenPos = mainCamera.WorldToScreenPoint(goal.transform.position);
+        Vector2 screenDirectionAway = (ballScreenPos - goalScreenPos).normalized;
+
+        Vector3 dragMovement = (Vector3)(screenDirectionAway * (currentProgress * dragDistance));
+        drag.rectTransform.localPosition = startPositionDrag + dragMovement;
 
         Time.timeScale = 0.01f;
         Time.fixedDeltaTime = 0.02f * Time.timeScale;
-
     }
 }
