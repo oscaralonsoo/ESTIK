@@ -9,13 +9,12 @@ public class DragTutorial : MonoBehaviour
     [SerializeField] private GoalController goal;
     [SerializeField] private Image drag;
 
-    [SerializeField] private float dragDistance = 150f;
+    [SerializeField] private float dragOffset = 0.5f;   // Distancia inicial en el mundo detrás de la pelota
+    [SerializeField] private float dragDistance = 1.5f; // Distancia final en el mundo detrás de la pelota
     [SerializeField] private float animationTime = 2f;
     [SerializeField] private bool aereal = false;
-    [SerializeField] private float dragOffset = 0f;
 
     private Camera mainCamera = null;
-    private Vector3 startPositionDrag = Vector3.zero;
     private float timer = 0f;
 
     void Start()
@@ -23,13 +22,13 @@ public class DragTutorial : MonoBehaviour
         mainCamera = Camera.main;
 
         if (ball == null)
-            ball = FindAnyObjectByType<BallController>(FindObjectsInactive.Include);
+            ball = FindFirstObjectByType<BallController>(FindObjectsInactive.Include);
 
         if (indicator == null)
-            indicator = FindAnyObjectByType<TraceBehaviour>(FindObjectsInactive.Include);
+            indicator = FindFirstObjectByType<TraceBehaviour>(FindObjectsInactive.Include);
 
         if (goal == null)
-            goal = FindAnyObjectByType<GoalController>(FindObjectsInactive.Include);
+            goal = FindFirstObjectByType<GoalController>(FindObjectsInactive.Include);
 
         if (!mainCamera || !indicator || !ball || !goal || !drag)
         {
@@ -38,10 +37,19 @@ public class DragTutorial : MonoBehaviour
         }
 
         indicator.gameObject.SetActive(true);
-        startPositionDrag = drag.rectTransform.localPosition;
-        startPositionDrag.y -= dragOffset;
     }
 
+    void OnDisable()
+    {
+        // Restaurar el tiempo normal cuando el tutorial se oculta
+        Time.timeScale = 1f;
+        Time.fixedDeltaTime = 0.02f;
+
+        if (indicator != null)
+        {
+            indicator.gameObject.SetActive(false);
+        }
+    }
 
     void Update()
     {
@@ -51,18 +59,18 @@ public class DragTutorial : MonoBehaviour
             return;
         }
 
+        // Mantener la UI del Canvas alineada a la cámara
         transform.position = mainCamera.transform.position + mainCamera.transform.forward.normalized * 5f;
         transform.rotation = mainCamera.transform.rotation;
 
+        // 1. Manejo del progreso y rango aéreo
         float maxProgress = aereal ? 1.5f : 1.0f;
         float totalDuration = animationTime * maxProgress;
 
         timer = Mathf.PingPong(Time.unscaledTime, totalDuration);
-
         float currentProgress = timer / animationTime;
 
-        indicator.SetFillAmount(currentProgress);
-
+        // 2. Lógica del Indicador 3D hacia la portería
         Vector3 directionToGoal = goal.transform.position - ball.transform.position;
         directionToGoal.y = 0f;
 
@@ -90,14 +98,37 @@ public class DragTutorial : MonoBehaviour
             indicator.transform.rotation = Quaternion.LookRotation(finalIndicatorDirection);
 
         indicator.transform.position = ball.transform.position;
+        indicator.SetFillAmount(currentProgress);
 
-        Vector2 ballScreenPos = mainCamera.WorldToScreenPoint(ball.transform.position);
-        Vector2 goalScreenPos = mainCamera.WorldToScreenPoint(goal.transform.position);
-        Vector2 screenDirectionAway = (ballScreenPos - goalScreenPos).normalized;
+        // 3. POSICIONES DEL DRAG EN EL MUNDO (Detrás de la pelota)
+        Vector3 directionAwayFromGoal = (ball.transform.position - goal.transform.position);
+        directionAwayFromGoal.y = 0f;
+        directionAwayFromGoal.Normalize();
 
-        Vector3 dragMovement = (Vector3)(screenDirectionAway * (currentProgress * dragDistance));
-        drag.rectTransform.localPosition = startPositionDrag + dragMovement;
+        // Calcular puntos 3D de inicio y fin en la línea de la portería
+        Vector3 worldStart = ball.transform.position + (directionAwayFromGoal * dragOffset);
+        Vector3 worldEnd = ball.transform.position + (directionAwayFromGoal * dragDistance);
 
+        // 4. CONVERSIÓN A PANTALLA (WorldToScreenPoint)
+        Vector3 screenStart3D = mainCamera.WorldToScreenPoint(worldStart);
+        Vector3 screenEnd3D = mainCamera.WorldToScreenPoint(worldEnd);
+
+        // Interpolar en pantalla según el progreso actual
+        Vector3 targetScreenPos = Vector3.Lerp(screenStart3D, screenEnd3D, currentProgress / maxProgress);
+
+        // Convertir la posición de pantalla a espacio local del Canvas (RectTransform)
+        RectTransform canvasRect = drag.canvas.GetComponent<RectTransform>();
+        Vector2 localPoint;
+        RectTransformUtility.ScreenPointToLocalPointInRectangle(
+            canvasRect,
+            targetScreenPos,
+            drag.canvas.renderMode == RenderMode.ScreenSpaceOverlay ? null : mainCamera,
+            out localPoint
+        );
+
+        drag.rectTransform.localPosition = localPoint;
+
+        // Pausa del juego
         Time.timeScale = 0.01f;
         Time.fixedDeltaTime = 0.02f * Time.timeScale;
     }
