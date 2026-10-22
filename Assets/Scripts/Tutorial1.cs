@@ -1,3 +1,4 @@
+using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
@@ -6,10 +7,13 @@ public class Tutorial1 : MonoBehaviour
 {
     [SerializeField] private TraceBehaviour indicator;
     [SerializeField] private BallController ball;
+    [SerializeField] private GoalController goal;
     [SerializeField] private Image drag;
 
     [SerializeField] private float dragDistance = 1f;
     [SerializeField] private float animationTime = 2f;
+    [SerializeField] private bool aereal = false;
+    [SerializeField] private float dragOffset = 0;
 
     private Camera mainCamera = null;
     private Vector3 startPositionDrag = Vector3.zero;
@@ -24,8 +28,11 @@ public class Tutorial1 : MonoBehaviour
 
         if (indicator == null)
             indicator = FindAnyObjectByType<TraceBehaviour>(FindObjectsInactive.Include);
+        
+        if (goal == null)
+            goal = FindAnyObjectByType<GoalController>(FindObjectsInactive.Include);
 
-        if (!mainCamera || !indicator || !ball || !drag)
+        if (!mainCamera || !indicator || !ball || !goal || !drag)
         {
             gameObject.SetActive(false);
             return;
@@ -33,11 +40,7 @@ public class Tutorial1 : MonoBehaviour
 
         indicator.gameObject.SetActive(true);
         startPositionDrag = drag.rectTransform.localPosition;
-    }
-
-    private void OnEnable()
-    {
-        ball.draging = true;
+        startPositionDrag.y -= dragOffset;
     }
 
     void Update()
@@ -57,9 +60,34 @@ public class Tutorial1 : MonoBehaviour
         float positionY = startPositionDrag.y - progress * dragDistance;
         drag.rectTransform.localPosition = new Vector3(startPositionDrag.x, positionY, startPositionDrag.z);
 
+        float currentShootAngle = 0;
 
-        indicator.transform.position = ball.transform.position;
+        Vector3 direction = goal.transform.position - ball.transform.position;
+        direction.y = 0f;
+
+        if (aereal)
+        {
+            progress *= 1.5f;
+            float aerialPercentage = Mathf.InverseLerp(1, 1.5f, progress);
+            currentShootAngle = Mathf.Lerp(0f, Mathf.Abs(30), aerialPercentage);
+        }
+
+        if (currentShootAngle > 0f)
+        {
+            Vector3 rightAxis = Vector3.Cross(Vector3.up, direction);
+            direction = Quaternion.AngleAxis(-currentShootAngle, rightAxis) * direction;
+            indicator.SetColor(1);
+        }
+        else indicator.SetColor(0);
         indicator.SetFillAmount(progress);
-        
+
+
+        if (direction != Vector3.zero)
+            indicator.transform.rotation = Quaternion.LookRotation(direction);
+        indicator.transform.position = ball.transform.position;
+
+        Time.timeScale = 0.01f;
+        Time.fixedDeltaTime = 0.02f * Time.timeScale;
+
     }
 }

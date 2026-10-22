@@ -164,6 +164,7 @@ public class BallController : MonoBehaviour
             shootDir = Quaternion.AngleAxis(-currentShootAngle, rightAxis) * shootDir;
         }
 
+
         ballRigidbody.WakeUp();
         ballRigidbody.linearVelocity = shootDir * currentShootSpeed;
     }
