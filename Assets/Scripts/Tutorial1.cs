@@ -35,6 +35,11 @@ public class Tutorial1 : MonoBehaviour
         startPositionDrag = drag.rectTransform.localPosition;
     }
 
+    private void OnEnable()
+    {
+        ball.draging = true;
+    }
+
     void Update()
     {
         if (Pointer.current != null && Pointer.current.press.wasPressedThisFrame)

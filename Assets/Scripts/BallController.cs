@@ -13,13 +13,13 @@ public class BallController : MonoBehaviour
     [SerializeField] private GameObject tracePrefab;
 
     [Header("SLOWMO PROPERTIES")]
-    [SerializeField] private float slowMotionScale = 0.2f;
+    [SerializeField] public float slowMotionScale = 0.2f;
     [SerializeField] private float slowmoJoinTransitionDuration = 0.5f;
     [SerializeField] private float slowmoLeaveTransitionDuration = 0f;
 
     [Header("DEBUG")]
     bool initialized = true;
-    [SerializeField] private bool draging = false;
+    [SerializeField] public bool draging = false;
     [SerializeField] private bool aerealShot = false;
     [SerializeField] private bool slowmo = false;
     [SerializeField] private bool grounded = false;
