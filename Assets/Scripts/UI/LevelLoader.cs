@@ -131,6 +131,33 @@ public static class LevelLoader
         return SceneManager.LoadSceneAsync(mainLevelScenes[levelIndex]);
     }
 
+    public static AsyncOperation LoadSpecificLevel(string sceneName)
+    {
+        int tutorialIndex = tutorialScenes.IndexOf(sceneName);
+        if (tutorialIndex >= 0)
+        {
+            IsInTutorial = true;
+            position = tutorialIndex;
+            Time.timeScale = 1f;
+            return SceneManager.LoadSceneAsync(sceneName);
+        }
+
+        int mainIndex = mainLevelScenes.IndexOf(sceneName);
+        if (mainIndex >= 0)
+        {
+            IsInTutorial = false;
+            BuildQueue();
+            position = queue.IndexOf(mainIndex);
+            if (position < 0) position = 0;
+            Time.timeScale = 1f;
+            return SceneManager.LoadSceneAsync(sceneName);
+        }
+
+        Debug.LogWarning($"[LevelLoader] La escena '{sceneName}' no está registrada en las listas.");
+        Time.timeScale = 1f;
+        return SceneManager.LoadSceneAsync(sceneName);
+    }
+
     static void EnsureRun()
     {
         if (queue.Count > 0) return;

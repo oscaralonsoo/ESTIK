@@ -9,8 +9,8 @@ public class DragTutorial : MonoBehaviour
     [SerializeField] private GoalController goal;
     [SerializeField] private Image drag;
 
-    [SerializeField] private float dragOffset = 0.5f;   // Distancia inicial en el mundo detrás de la pelota
-    [SerializeField] private float dragDistance = 1.5f; // Distancia final en el mundo detrás de la pelota
+    [SerializeField] private float dragOffset = 0.5f;
+    [SerializeField] private float dragDistance = 1.5f;
     [SerializeField] private float animationTime = 2f;
     [SerializeField] private bool aereal = false;
 

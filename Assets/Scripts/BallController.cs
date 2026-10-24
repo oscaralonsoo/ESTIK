@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
+using System.Collections;
 
 public class BallController : MonoBehaviour
 {
@@ -149,6 +150,7 @@ public class BallController : MonoBehaviour
             if (camera.TryGetComponent<CameraFollow>(out CameraFollow cameraFollow))
             {
                 cameraFollow.LockCamera();
+                StartCoroutine(FailShoot());
             }
         }
         else
@@ -292,6 +294,12 @@ public class BallController : MonoBehaviour
                 }
             }
         }
+    }
+
+    private IEnumerator FailShoot()
+    {
+        yield return new WaitForSeconds(2f);
+        FastSceneLoader.Instance.RestartLevel();
     }
 
 /*    public bool IsAiming => draging;

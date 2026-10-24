@@ -50,6 +50,12 @@ public class FastSceneLoader : MonoBehaviour
         }
     }
 
+    public void StartPlaying()
+    {
+        if (isTransitioning) return;
+        StartCoroutine(ExitSceneRoutine(() => LevelLoader.StartGame(PlayMode.Normal)));
+    }
+
     public void LoadNextLevel()
     {
         if (isTransitioning) return;
@@ -66,6 +72,12 @@ public class FastSceneLoader : MonoBehaviour
     {
         if (isTransitioning) return;
         StartCoroutine(ExitSceneRoutine(LevelLoader.LoadMenu));
+    }
+
+    public void SetTutorialPlayed()
+    {
+        PlayerPrefs.SetInt("HasCompletedTutorial", 1);
+        PlayerPrefs.Save();
     }
 
     private IEnumerator EnterSceneRoutine()
