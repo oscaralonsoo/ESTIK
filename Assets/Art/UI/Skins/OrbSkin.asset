@@ -1,0 +1,19 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 25ba584376538a94093595c067e025d2, type: 3}
+  m_Name: OrbSkin
+  m_EditorClassIdentifier: Assembly-CSharp::SkinData
+  id: glow
+  displayName: Orb
+  ballMaterial: {fileID: 2100000, guid: c3d058b4973f64045abc478704a5bcb3, type: 2}
+  ballPrefab: {fileID: 70572593172112771, guid: 4863d92852b74c24bbfe37350e61d66b, type: 3}
+  unlockedByDefault: 1

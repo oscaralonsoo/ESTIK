@@ -1,23 +1,39 @@
+
 using UnityEngine;
 
-public class BallSkinButton : MonoBehaviour
+public class BallSkinApplier : MonoBehaviour
 {
-    public void SelectSkin()
+    [SerializeField] SkinCatalog catalog;
+    [SerializeField] Renderer ballRenderer;
+    [SerializeField] SkinCarousel carousel;
+
+    void OnEnable()
     {
-        BallSkinController skinController =
-            FindAnyObjectByType<BallSkinController>();
+        Apply();
+        if (carousel != null) carousel.SelectionChanged += OnSelectionChanged;
+    }
 
-        if (skinController == null) return;
+    void OnDisable()
+    {
+        if (carousel != null) carousel.SelectionChanged -= OnSelectionChanged;
+    }
 
-        Transform[] children = GetComponentsInChildren<Transform>(true);
+    void OnSelectionChanged(SkinData skin) => Apply();
 
-        foreach (Transform child in children)
+    public void Apply()
+    {
+        if (catalog == null || ballRenderer == null)
         {
-            if (child.CompareTag("Ball"))
-            {
-                skinController.SelectSkin(child.name);
-                return;
-            }
+            Debug.LogError("BallSkinApplier: faltan referencias", this);
+            return;
         }
+
+        var skin = System.Array.Find(catalog.skins, s => s.id == SkinService.EquippedId);
+
+        if (skin == null || !SkinService.IsUnlocked(skin))
+            skin = catalog.skins[0];
+
+        if (skin.ballMaterial != null)
+            ballRenderer.sharedMaterial = skin.ballMaterial;
     }
 }
