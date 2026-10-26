@@ -63,7 +63,7 @@ public class BallController : MonoBehaviour
         //SKIN
         LoadSavedSkin();
         mainCamera = Camera.main;
-        if (!GetComponent<Camera>()) initialized = false;
+        if (mainCamera == null) initialized = false;
     }
 
     void Update()
@@ -78,7 +78,7 @@ public class BallController : MonoBehaviour
 
         if (draging)
         {
-            Vector3 ballScreenPos3D = GetComponent<Camera>().WorldToScreenPoint(ballRigidbody.position);
+            Vector3 ballScreenPos3D = mainCamera.WorldToScreenPoint(ballRigidbody.position);
             Vector2 ballScreenPos = new Vector2(ballScreenPos3D.x, ballScreenPos3D.y);
             dragStartPosition = ballScreenPos / Screen.height;
 
@@ -94,7 +94,7 @@ public class BallController : MonoBehaviour
 
         if (Pointer.current.press.wasReleasedThisFrame && draging)
         {
-            Vector3 ballScreenPos3D = GetComponent<Camera>().WorldToScreenPoint(ballRigidbody.position);
+            Vector3 ballScreenPos3D = mainCamera.WorldToScreenPoint(ballRigidbody.position);
             Vector2 ballScreenPos = new Vector2(ballScreenPos3D.x, ballScreenPos3D.y);
             dragStartPosition = ballScreenPos / Screen.height;
 
@@ -118,7 +118,7 @@ public class BallController : MonoBehaviour
 
     private Vector3 GetCameraRelativeDirection(Vector2 dragDirection)
     {
-        Transform camTransform = GetComponent<Camera>().transform;
+        Transform camTransform = mainCamera.transform;
 
         Vector3 camForward = camTransform.forward;
         camForward.y = 0f;
@@ -147,7 +147,7 @@ public class BallController : MonoBehaviour
         {
             float aerialPercentage = Mathf.InverseLerp(maxDragDistance, maxAerealDragDistance, dragDir.magnitude);
             currentShootAngle = Mathf.Lerp(0f, Mathf.Abs(shootAngle), aerialPercentage);
-            if (GetComponent<Camera>().TryGetComponent<CameraFollow>(out CameraFollow cameraFollow))
+            if (mainCamera.TryGetComponent<CameraFollow>(out CameraFollow cameraFollow))
             {
                 cameraFollow.LockCamera();
                 StartCoroutine(FailShoot());
@@ -288,7 +288,7 @@ public class BallController : MonoBehaviour
                 
                 aerealShot = true;
                 remainingShots = 1;
-                if (GetComponent<Camera>().TryGetComponent<CameraFollow>(out CameraFollow cameraFollow))
+                if (mainCamera.TryGetComponent<CameraFollow>(out CameraFollow cameraFollow))
                 {
                     cameraFollow.SetShooting(true);
                 }
