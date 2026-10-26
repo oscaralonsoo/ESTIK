@@ -27,7 +27,7 @@ RectTransform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 70572593172112771}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 150}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -107,7 +107,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a21e062c9ebce2f48847a354b5c1114d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SkinCarouselItem
-  button: {fileID: 9106315955639921502}
   ball: {fileID: 6968702387929430119}
   ballRenderer: {fileID: 7181597198500532094}
   lockIcon: {fileID: 0}
@@ -126,7 +125,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3610265761855600692, guid: b84c49507be7fac4eb842281da93daf0, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -75.1076
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3610265761855600692, guid: b84c49507be7fac4eb842281da93daf0, type: 3}
       propertyPath: m_LocalPosition.y
@@ -134,7 +133,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3610265761855600692, guid: b84c49507be7fac4eb842281da93daf0, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -220.1335
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3610265761855600692, guid: b84c49507be7fac4eb842281da93daf0, type: 3}
       propertyPath: m_LocalRotation.w

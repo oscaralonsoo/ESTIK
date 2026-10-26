@@ -1,4 +1,3 @@
-// SkinCarousel.cs
 using System;
 using System.Linq;
 using UnityEngine;
@@ -16,12 +15,10 @@ public class SkinCarousel : MonoBehaviour, IBeginDragHandler, IDragHandler, IEnd
 
     [Header("Layout")]
     [SerializeField] float spacing = 260f;
-    [SerializeField]
-    AnimationCurve scaleByDistance = new AnimationCurve(
-        new Keyframe(0f, 1f), new Keyframe(1f, 0.55f), new Keyframe(2f, 0.4f));
-    [SerializeField]
-    AnimationCurve alphaByDistance = new AnimationCurve(
-        new Keyframe(0f, 1f), new Keyframe(1f, 1f), new Keyframe(2f, 0f));
+    [SerializeField] float centerScale = 1.6f;
+    [SerializeField] float sideScale = 0.6f;
+    [SerializeField, Range(0f, 1f)] float sideBrightness = 0.3f;
+    [SerializeField] float fadeEnd = 1.4f;   // distancia a la que la bola ya mide 0
 
     [Header("Feel")]
     [SerializeField] float smoothTime = 0.12f;
@@ -51,7 +48,6 @@ public class SkinCarousel : MonoBehaviour, IBeginDragHandler, IDragHandler, IEnd
 
         _canvas = GetComponentInParent<Canvas>().rootCanvas;
 
-        // Las flechas primero, para que nada las deje sin registrar
         if (prevButton != null) prevButton.onClick.AddListener(() => SelectIndex(_targetIndex - 1));
         if (nextButton != null) nextButton.onClick.AddListener(() => SelectIndex(_targetIndex + 1));
 
@@ -79,7 +75,6 @@ public class SkinCarousel : MonoBehaviour, IBeginDragHandler, IDragHandler, IEnd
 
     void Start()
     {
-        // Sincroniza la bola de la partida con la skin con la que se abre el panel
         if (_items != null) SelectionChanged?.Invoke(Current);
     }
 
@@ -90,7 +85,6 @@ public class SkinCarousel : MonoBehaviour, IBeginDragHandler, IDragHandler, IEnd
                                     Mathf.Infinity, Time.unscaledDeltaTime);
         Layout();
 
-        // Mientras arrastras, el item central pasa a ser el seleccionado en cuanto cruza la mitad
         if (_dragging)
         {
             int nearest = Mathf.Clamp(Mathf.RoundToInt(_pos), 0, Count - 1);
@@ -126,7 +120,7 @@ public class SkinCarousel : MonoBehaviour, IBeginDragHandler, IDragHandler, IEnd
         _targetIndex = index;
         RefreshUI();
 
-        SkinService.Equip(Current);          // solo equipa si está desbloqueada
+        SkinService.Equip(Current);
         SelectionChanged?.Invoke(Current);
     }
 
@@ -146,10 +140,18 @@ public class SkinCarousel : MonoBehaviour, IBeginDragHandler, IDragHandler, IEnd
             float d = i - _pos;
             float abs = Mathf.Abs(d);
 
+            float t = Mathf.SmoothStep(0f, 1f, Mathf.Clamp01(abs));                      // centro -> vecina
+            float fade = 1f - Mathf.SmoothStep(0f, 1f, Mathf.InverseLerp(1f, fadeEnd, abs)); // vecina -> fuera
+
+            float scale = Mathf.Lerp(centerScale, sideScale, t) * fade;
+            float brightness = Mathf.Lerp(1f, sideBrightness, t);
+            bool visible = abs < fadeEnd && scale > 0.01f;
+
             var rt = _items[i].Rect;
             rt.anchoredPosition = new Vector2(d * spacing, 0);
-            rt.localScale = Vector3.one * scaleByDistance.Evaluate(abs);
-            _items[i].SetAlpha(alphaByDistance.Evaluate(abs));
+            rt.localScale = Vector3.one;           // la escala va en la bola, no en la raíz
+            _items[i].SetScale(scale);
+            _items[i].SetVisual(brightness, visible);
         }
 
         int nearest = Mathf.Clamp(Mathf.RoundToInt(_pos), 0, Count - 1);
