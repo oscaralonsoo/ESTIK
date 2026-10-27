@@ -116,7 +116,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: -247.5}
+  m_AnchoredPosition: {x: 0, y: -162.5}
   m_SizeDelta: {x: 0, y: -505}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!223 &1856303267398921108
@@ -209,60 +209,16 @@ MonoBehaviour:
   enterDuration: 0.35
   slideDistance: 120
   dropHeight: 300
-  startScale: 0.6
+  startScale: 0.85
   overshoot: 1.7
   exitDuration: 0.25
-  exitSlide: 40
-  exitScale: 0.85
-  buttonsAppear: 1
+  exitSlide: 60
+  exitScale: 0.92
+  buttonsAppear: 0
   buttonRise: 30
   buttonStagger: 0.07
   maxCascadeWindow: 0.55
   exitButtonStagger: 0.03
---- !u!1 &1926399343369522469
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 3742221057832219081}
-  - component: {fileID: 5936411563981282961}
-  m_Layer: 0
-  m_Name: BallSkinManager
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &3742221057832219081
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1926399343369522469}
-  serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 5975637612432942076}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &5936411563981282961
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1926399343369522469}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f675ee2c25c17a14cbb404c75b09d70d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::BallSkinController
 --- !u!1 &2250994134252876921
 GameObject:
   m_ObjectHideFlags: 0
@@ -297,7 +253,6 @@ RectTransform:
   - {fileID: 1901631344336621939}
   - {fileID: 1882651222474438423}
   - {fileID: 6775002008004295191}
-  - {fileID: 3742221057832219081}
   m_Father: {fileID: 5570120825145384207}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
@@ -588,8 +543,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 75}
+  m_SizeDelta: {x: 0, y: -750}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &4860646258047782860
 MonoBehaviour:
@@ -606,78 +561,17 @@ MonoBehaviour:
   catalog: {fileID: 11400000, guid: 7286aebfec3f0bc43bd7b0143242a2c3, type: 2}
   itemPrefab: {fileID: 8322444503948794263, guid: 792287f7b0b09c24684b491384583513, type: 3}
   content: {fileID: 8311800715221045795}
-  prevButton: {fileID: 3233281471966203533}
-  nextButton: {fileID: 3610404905668533305}
-  spacing: 260
-  scaleByDistance:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0
-      value: 1
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0
-      outWeight: 0
-    - serializedVersion: 3
-      time: 1
-      value: 0.55
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0
-      outWeight: 0
-    - serializedVersion: 3
-      time: 2
-      value: 0.4
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0
-      outWeight: 0
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
-  alphaByDistance:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0
-      value: 1
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0
-      outWeight: 0
-    - serializedVersion: 3
-      time: 1
-      value: 1
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0
-      outWeight: 0
-    - serializedVersion: 3
-      time: 2
-      value: 0
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0
-      outWeight: 0
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
+  prevButton: {fileID: 3610404905668533305}
+  nextButton: {fileID: 3233281471966203533}
+  spacing: 200
+  centerScale: 2
+  sideScale: 1
+  sideBrightness: 0.3
+  fadeEnd: 1.4
   smoothTime: 0.12
   inertia: 0.15
   overscroll: 0.35
+  centerTolerance: 0.01
 --- !u!222 &1844333903297194344
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -699,14 +593,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 0.68235296}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 0}
+  m_Sprite: {fileID: 21300000, guid: edc39a441b1dc77439a4882b7e16addd, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -1164,7 +1058,7 @@ GameObject:
   - component: {fileID: 2458697726542324291}
   - component: {fileID: 3233281471966203533}
   m_Layer: 5
-  m_Name: PrevButton
+  m_Name: NextButton
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1186,8 +1080,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 400, y: 0}
-  m_SizeDelta: {x: 200, y: 200}
+  m_AnchoredPosition: {x: 425, y: 75}
+  m_SizeDelta: {x: 180, y: 180}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &2929483876385592259
 CanvasRenderer:
@@ -1670,8 +1564,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: -241.5}
-  m_SizeDelta: {x: 300, y: 125}
+  m_AnchoredPosition: {x: 0, y: -314}
+  m_SizeDelta: {x: 400, y: 150}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &6492229495779574886
 CanvasRenderer:
@@ -1780,7 +1674,7 @@ GameObject:
   - component: {fileID: 5328327584733851701}
   - component: {fileID: 3610404905668533305}
   m_Layer: 5
-  m_Name: NextButton
+  m_Name: PreviousButton
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1802,8 +1696,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -400, y: 0}
-  m_SizeDelta: {x: 200, y: 200}
+  m_AnchoredPosition: {x: -425, y: 75}
+  m_SizeDelta: {x: 180, y: 180}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &8416110014069150764
 CanvasRenderer:
@@ -1886,7 +1780,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 5328327584733851701}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 3018219390420710114}
+        m_TargetAssemblyTypeName: 
+        m_MethodName: 
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: 
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &7423005180510816815
 GameObject:
   m_ObjectHideFlags: 0
@@ -2004,7 +1910,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: FastSceneLoader, Assembly-CSharp
-        m_MethodName: LoadNextLevel
+        m_MethodName: StartPlaying
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

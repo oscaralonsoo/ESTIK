@@ -27,13 +27,25 @@ public class PanelAnimator : MonoBehaviour
     [Header("Botones")]
     [SerializeField] ButtonsAppear buttonsAppear = ButtonsAppear.CascadeUp;
     [SerializeField] float buttonRise = 30f;
-    [SerializeField] float buttonStagger = 0.07f;   
-    [SerializeField] float maxCascadeWindow = 0.55f;      
+    [SerializeField] float buttonStagger = 0.07f;
+    [SerializeField] float maxCascadeWindow = 0.55f;
     [SerializeField] float exitButtonStagger = 0.03f;
+
+    // Un frame largo (por ejemplo al instanciar contenido la primera vez que se abre
+    // el panel) no debe "comerse" la animacion.
+    const float MaxFrameTime = 1f / 30f;
+
+    /// <summary>
+    /// 0 = panel invisible, 1 = totalmente visible. Sirve para que contenido 3D
+    /// (que el CanvasGroup no puede desvanecer) siga la misma transicion.
+    /// </summary>
+    public float Visibility { get; private set; } = 1f;
 
     Vector2 restPos;
     CanvasGroup group;
     bool inited, hiding;
+
+    static float FrameTime => Mathf.Min(Time.unscaledDeltaTime, MaxFrameTime);
 
     float EnterTime
     {
@@ -48,6 +60,8 @@ public class PanelAnimator : MonoBehaviour
             }
         }
     }
+
+    // ---------------- CICLO DE VIDA ----------------
 
     void Init()
     {
@@ -73,27 +87,19 @@ public class PanelAnimator : MonoBehaviour
         if (!inited || window == null) return;
         window.anchoredPosition = restPos;
         window.localScale = Vector3.one;
-        group.alpha = 1f;
+        SetAlpha(1f);
         group.interactable = true;
         group.blocksRaycasts = true;
         hiding = false;
     }
 
-    public void Hide(System.Action onDone = null)
+    void SetAlpha(float a)
     {
-        if (hiding) return;
-
-        if (window == null || !gameObject.activeInHierarchy)
-        {
-            gameObject.SetActive(false);
-            onDone?.Invoke();
-            return;
-        }
-
-        hiding = true;
-        StopAllCoroutines();
-        StartCoroutine(HideRoutine(onDone));
+        Visibility = a;
+        group.alpha = a;
     }
+
+    // ---------------- ENTRADA ----------------
 
     IEnumerator Play()
     {
@@ -103,16 +109,19 @@ public class PanelAnimator : MonoBehaviour
 
         SetupButtons(0.08f);
         ApplyEnter(0f);
+        yield return null;
 
-        for (float t = 0f; t < dur; t += Time.unscaledDeltaTime)
+        float t = 0f;
+        while (t < dur)
         {
-            ApplyEnter(t / dur);
+            t += FrameTime;
+            ApplyEnter(Mathf.Min(t, dur) / dur);
             yield return null;
         }
 
         window.anchoredPosition = restPos;
         window.localScale = Vector3.one;
-        group.alpha = 1f;
+        SetAlpha(1f);
         group.blocksRaycasts = true;
     }
 
@@ -161,7 +170,25 @@ public class PanelAnimator : MonoBehaviour
 
         window.anchoredPosition = pos;
         window.localScale = animateScale ? scale : Vector3.one;
-        group.alpha = alpha;
+        SetAlpha(alpha);
+    }
+
+    // ---------------- SALIDA ----------------
+
+    public void Hide(System.Action onDone = null)
+    {
+        if (hiding) return;
+
+        if (window == null || !gameObject.activeInHierarchy)
+        {
+            gameObject.SetActive(false);
+            onDone?.Invoke();
+            return;
+        }
+
+        hiding = true;
+        StopAllCoroutines();
+        StartCoroutine(HideRoutine(onDone));
     }
 
     IEnumerator HideRoutine(System.Action onDone)
@@ -187,24 +214,13 @@ public class PanelAnimator : MonoBehaviour
             : 0f;
         float total = Mathf.Max(exitDuration, buttonsTime);
 
-        bool slides = style == PanelStyle.Slide || style == PanelStyle.Drop;
-
-        for (float t = 0f; t < total; t += Time.unscaledDeltaTime)
+        // Se aplica siempre el ultimo frame (alpha 0) antes de desactivar,
+        // para que no quede un "pop" con el panel a medio desvanecer.
+        float t = 0f;
+        while (t < total)
         {
-            float k = Mathf.Clamp01(t / exitDuration);
-            float e = k * k;
-            float f = Mathf.Clamp01(t / total);
-
-            window.anchoredPosition = slides ? restPos + Vector2.down * exitSlide * e : restPos;
-
-            if (animateScale)
-            {
-                window.localScale = style == PanelStyle.Unfold
-                    ? new Vector3(Mathf.Lerp(1f, 0.9f, e), Mathf.Lerp(1f, 0.05f, e), 1f)
-                    : Vector3.one * Mathf.Lerp(1f, exitScale, e);
-            }
-
-            group.alpha = 1f - f * f;
+            t += FrameTime;
+            ApplyExit(Mathf.Min(t, total), total);
             yield return null;
         }
 
@@ -213,18 +229,42 @@ public class PanelAnimator : MonoBehaviour
         cb?.Invoke();
     }
 
+    void ApplyExit(float t, float total)
+    {
+        bool slides = style == PanelStyle.Slide || style == PanelStyle.Drop;
+
+        float k = Mathf.Clamp01(t / exitDuration);
+        float e = k * k;
+        float f = Mathf.Clamp01(t / total);
+
+        window.anchoredPosition = slides ? restPos + Vector2.down * exitSlide * e : restPos;
+
+        if (animateScale)
+        {
+            window.localScale = style == PanelStyle.Unfold
+                ? new Vector3(Mathf.Lerp(1f, 0.9f, e), Mathf.Lerp(1f, 0.05f, e), 1f)
+                : Vector3.one * Mathf.Lerp(1f, exitScale, e);
+        }
+
+        SetAlpha(1f - f * f);
+    }
+
+    // ---------------- BOTONES ----------------
+
+    static bool IsBackButton(string objectName)
+    {
+        string n = objectName.ToLower();
+        return n.Contains("back") || n.Contains("atras") || n.Contains("close") || n.Contains("return");
+    }
+
     void SetupButtons(float delayStart)
     {
         var uiButtons = window.GetComponentsInChildren<Button>(true);
         if (uiButtons.Length == 0) return;
 
         int cascadeCount = 0;
-        for (int i = 0; i < uiButtons.Length; i++)
-        {
-            string name = uiButtons[i].gameObject.name.ToLower();
-            bool isBackButton = name.Contains("back") || name.Contains("atras") || name.Contains("close") || name.Contains("return");
-            if (!isBackButton) cascadeCount++;
-        }
+        foreach (var b in uiButtons)
+            if (!IsBackButton(b.gameObject.name)) cascadeCount++;
 
         float actualStagger = cascadeCount > 1
             ? Mathf.Min(buttonStagger, maxCascadeWindow / (cascadeCount - 1))
@@ -238,10 +278,8 @@ public class PanelAnimator : MonoBehaviour
 
             if (buttonsAppear == ButtonsAppear.WithPanel) continue;
 
-            string btnName = uiButtons[i].gameObject.name.ToLower();
-            bool isBackButton = btnName.Contains("back") || btnName.Contains("atras") || btnName.Contains("close") || btnName.Contains("return");
-
-            float delay = isBackButton ? 0f : delayStart + (cascadeIndex++) * actualStagger;
+            bool isBack = IsBackButton(uiButtons[i].gameObject.name);
+            float delay = isBack ? 0f : delayStart + (cascadeIndex++) * actualStagger;
 
             Vector2 offset = buttonsAppear == ButtonsAppear.CascadeUp
                 ? new Vector2(0f, -buttonRise)
@@ -250,6 +288,8 @@ public class PanelAnimator : MonoBehaviour
             feedback.Appear(delay, offset);
         }
     }
+
+    // ---------------- EASINGS ----------------
 
     static float EaseOutCubic(float x) => 1f - Mathf.Pow(1f - Mathf.Clamp01(x), 3f);
 

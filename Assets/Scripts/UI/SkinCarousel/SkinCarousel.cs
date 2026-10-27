@@ -1,4 +1,3 @@
-
 using System;
 using System.Linq;
 using UnityEngine;
@@ -15,6 +14,7 @@ public class SkinCarousel : MonoBehaviour,
     [SerializeField] Button prevButton;
     [SerializeField] Button nextButton;
     BallSkinController ballSkinController;
+    PanelAnimator _panel;
 
     [Header("Layout")]
     [SerializeField] float spacing = 260f;
@@ -50,9 +50,11 @@ public class SkinCarousel : MonoBehaviour,
 
     void Awake()
     {
-
         ballSkinController = FindAnyObjectByType<BallSkinController>();
 
+        // Para que las bolas 3D sigan la transicion de entrada/salida del panel
+        // (el CanvasGroup no puede desvanecer mallas 3D).
+        _panel = GetComponentInParent<PanelAnimator>(true);
 
         if (catalog == null || itemPrefab == null || content == null)
         {
@@ -306,6 +308,9 @@ public class SkinCarousel : MonoBehaviour,
         if (_items == null)
             return;
 
+        // 0 = panel invisible, 1 = totalmente visible.
+        float panelVis = _panel != null ? _panel.Visibility : 1f;
+
         for (int i = 0; i < _items.Length; i++)
         {
             float d = i - _pos;
@@ -327,7 +332,7 @@ public class SkinCarousel : MonoBehaviour,
                 centerScale,
                 sideScale,
                 t
-            ) * fade;
+            ) * fade * panelVis;
 
             float brightness = Mathf.Lerp(
                 1f,
