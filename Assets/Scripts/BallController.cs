@@ -185,7 +185,6 @@ public class BallController : MonoBehaviour
     private void LoadSavedSkin()
     {
         string savedSkinName = PlayerPrefs.GetString(SkinKey, "");
-
         if (string.IsNullOrEmpty(savedSkinName)) savedSkinName = "BallDefault";
 
         GameObject prefab = Resources.Load<GameObject>(savedSkinName);

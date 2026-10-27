@@ -1,10 +1,12 @@
+
 using System;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-public class SkinCarousel : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler
+public class SkinCarousel : MonoBehaviour,
+    IBeginDragHandler, IDragHandler, IEndDragHandler
 {
     [Header("Refs")]
     [SerializeField] SkinCatalog catalog;
@@ -12,49 +14,85 @@ public class SkinCarousel : MonoBehaviour, IBeginDragHandler, IDragHandler, IEnd
     [SerializeField] RectTransform content;
     [SerializeField] Button prevButton;
     [SerializeField] Button nextButton;
+    BallSkinController ballSkinController;
 
     [Header("Layout")]
     [SerializeField] float spacing = 260f;
     [SerializeField] float centerScale = 1.6f;
     [SerializeField] float sideScale = 0.6f;
     [SerializeField, Range(0f, 1f)] float sideBrightness = 0.3f;
-    [SerializeField] float fadeEnd = 1.4f;   // distancia a la que la bola ya mide 0
+    [SerializeField] float fadeEnd = 1.4f;
 
     [Header("Feel")]
     [SerializeField] float smoothTime = 0.12f;
     [SerializeField] float inertia = 0.15f;
     [SerializeField] float overscroll = 0.35f;
 
+    [Header("Selection")]
+    [SerializeField] float centerTolerance = 0.01f;
+
     public event Action<SkinData> SelectionChanged;
+
     public SkinData Current => catalog.skins[_targetIndex];
 
     SkinCarouselItem[] _items;
     Canvas _canvas;
+
     float _pos, _vel, _dragVel;
+
     int _targetIndex;
     int _lastNearest = -1;
+    int _lastSavedIndex = -1;
+
     bool _dragging;
 
     int Count => catalog.skins.Length;
 
     void Awake()
     {
+
+        ballSkinController = FindAnyObjectByType<BallSkinController>();
+
+
         if (catalog == null || itemPrefab == null || content == null)
         {
-            Debug.LogError("SkinCarousel: faltan referencias en el Inspector", this);
+            Debug.LogError(
+                "SkinCarousel: faltan referencias en el Inspector",
+                this
+            );
             enabled = false;
             return;
         }
 
-        _canvas = GetComponentInParent<Canvas>().rootCanvas;
+        if (Count == 0)
+        {
+            Debug.LogError("SkinCarousel: el catalogo esta vacio", this);
+            enabled = false;
+            return;
+        }
 
-        if (prevButton != null) prevButton.onClick.AddListener(() => SelectIndex(_targetIndex - 1));
-        if (nextButton != null) nextButton.onClick.AddListener(() => SelectIndex(_targetIndex + 1));
+        Canvas parentCanvas = GetComponentInParent<Canvas>();
+
+        if (parentCanvas == null)
+        {
+            Debug.LogError("SkinCarousel: no se encuentra un Canvas padre", this);
+            enabled = false;
+            return;
+        }
+
+        _canvas = parentCanvas.rootCanvas;
+
+        if (prevButton != null)
+            prevButton.onClick.AddListener(() => SelectIndex(_targetIndex - 1));
+
+        if (nextButton != null)
+            nextButton.onClick.AddListener(() => SelectIndex(_targetIndex + 1));
 
         _items = new SkinCarouselItem[Count];
+
         for (int i = 0; i < Count; i++)
         {
-            var item = Instantiate(itemPrefab, content);
+            SkinCarouselItem item = Instantiate(itemPrefab, content);
             item.Init(catalog.skins[i], i);
             _items[i] = item;
         }
@@ -62,104 +100,271 @@ public class SkinCarousel : MonoBehaviour, IBeginDragHandler, IDragHandler, IEnd
 
     void OnEnable()
     {
-        if (_items == null) return;
+        if (_items == null || Count == 0)
+            return;
 
-        int start = Array.FindIndex(catalog.skins, s => s.id == SkinService.EquippedId);
+        int start = Array.FindIndex(
+            catalog.skins,
+            s => s.id == SkinService.EquippedId
+        );
+
         _targetIndex = Mathf.Max(0, start);
+
         _pos = _targetIndex;
-        _vel = 0;
+        _vel = 0f;
+        _dragVel = 0f;
         _lastNearest = -1;
+        _lastSavedIndex = -1;
+
         Layout();
         RefreshUI();
+
+        // Guardar inmediatamente la skin central inicial.
+        SaveSkinForIndex(_targetIndex);
     }
 
     void Start()
     {
-        if (_items != null) SelectionChanged?.Invoke(Current);
+        if (_items == null || Count == 0)
+            return;
+
+        SelectionChanged?.Invoke(Current);
     }
 
     void Update()
     {
         if (!_dragging)
-            _pos = Mathf.SmoothDamp(_pos, _targetIndex, ref _vel, smoothTime,
-                                    Mathf.Infinity, Time.unscaledDeltaTime);
+        {
+            _pos = Mathf.SmoothDamp(
+                _pos,
+                _targetIndex,
+                ref _vel,
+                smoothTime,
+                Mathf.Infinity,
+                Time.unscaledDeltaTime
+            );
+        }
+
         Layout();
+
+        // Detectar qué bola está realmente en el centro
+        // y tiene el tamaño de seleccionada.
+        DetectLargeSelectedBall();
 
         if (_dragging)
         {
-            int nearest = Mathf.Clamp(Mathf.RoundToInt(_pos), 0, Count - 1);
-            if (nearest != _targetIndex) SelectIndex(nearest);
+            int nearest = Mathf.Clamp(
+                Mathf.RoundToInt(_pos),
+                0,
+                Count - 1
+            );
+
+            if (nearest != _targetIndex)
+                SelectIndex(nearest);
         }
     }
 
-    // ---------- Input ----------
-    public void OnBeginDrag(PointerEventData e) { _dragging = true; _dragVel = 0; }
+    // ---------------- INPUT ----------------
+
+    public void OnBeginDrag(PointerEventData e)
+    {
+        _dragging = true;
+        _dragVel = 0f;
+    }
 
     public void OnDrag(PointerEventData e)
     {
-        float deltaIdx = -e.delta.x / _canvas.scaleFactor / spacing;
-        _pos = Mathf.Clamp(_pos + deltaIdx, -overscroll, Count - 1 + overscroll);
+        if (spacing <= 0f)
+            return;
 
-        float instant = deltaIdx / Mathf.Max(Time.unscaledDeltaTime, 0.0001f);
+        float deltaIdx =
+            -e.delta.x / _canvas.scaleFactor / spacing;
+
+        _pos = Mathf.Clamp(
+            _pos + deltaIdx,
+            -overscroll,
+            Count - 1 + overscroll
+        );
+
+        float instant = deltaIdx /
+            Mathf.Max(Time.unscaledDeltaTime, 0.0001f);
+
         _dragVel = Mathf.Lerp(_dragVel, instant, 0.5f);
     }
 
     public void OnEndDrag(PointerEventData e)
     {
         _dragging = false;
-        _vel = 0;
-        SelectIndex(Mathf.RoundToInt(_pos + _dragVel * inertia));
+        _vel = 0f;
+
+        SelectIndex(
+            Mathf.RoundToInt(_pos + _dragVel * inertia)
+        );
     }
 
-    // ---------- Selección ----------
+    // ---------------- SELECCION ----------------
+
     public void SelectIndex(int index)
     {
+        if (Count == 0)
+            return;
+
         index = Mathf.Clamp(index, 0, Count - 1);
-        if (index == _targetIndex) return;
 
-        _targetIndex = index;
-        RefreshUI();
+        if (index != _targetIndex)
+        {
+            _targetIndex = index;
 
-        SkinService.Equip(Current);
-        SelectionChanged?.Invoke(Current);
+            RefreshUI();
+
+            SkinData selectedSkin = Current;
+
+            SkinService.Equip(selectedSkin);
+
+            SelectionChanged?.Invoke(selectedSkin);
+        }
+
+        // Se comprueba también aunque el índice no haya cambiado.
+        DetectLargeSelectedBall();
+    }
+
+    // Detecta la bola central que tiene el tamaño máximo.
+    void DetectLargeSelectedBall()
+    {
+        if (_items == null || _items.Length == 0)
+            return;
+
+        int centerIndex = Mathf.Clamp(
+            Mathf.RoundToInt(_pos),
+            0,
+            Count - 1
+        );
+
+        // La bola debe estar centrada y haber alcanzado
+        // prácticamente el tamaño centerScale.
+        float distance = Mathf.Abs(_pos - centerIndex);
+
+        if (distance > centerTolerance)
+            return;
+
+        float actualScale = Mathf.Lerp(
+            centerScale,
+            sideScale,
+            Mathf.SmoothStep(0f, 1f, Mathf.Clamp01(distance))
+        );
+
+        if (actualScale < centerScale - centerTolerance)
+            return;
+
+        SaveSkinForIndex(centerIndex);
+    }
+
+    void SaveSkinForIndex(int index)
+    {
+        if (index < 0 || index >= Count)
+            return;
+
+        if (ballSkinController == null)
+        {
+            Debug.LogWarning(
+                "SkinCarousel: BallSkinController no esta asignado en el Inspector.",
+                this
+            );
+            return;
+        }
+
+        if (_lastSavedIndex == index)
+            return;
+
+        SkinData skin = catalog.skins[index];
+
+        if (skin == null)
+            return;
+
+        // Guardar el nombre de la skin seleccionada.
+        ballSkinController.SelectSkin(skin.displayName);
+
+        _lastSavedIndex = index;
     }
 
     void RefreshUI()
     {
-        if (prevButton != null) prevButton.interactable = _targetIndex > 0;
-        if (nextButton != null) nextButton.interactable = _targetIndex < Count - 1;
+        if (prevButton != null)
+            prevButton.interactable = _targetIndex > 0;
+
+        if (nextButton != null)
+            nextButton.interactable = _targetIndex < Count - 1;
+
         for (int i = 0; i < _items.Length; i++)
             _items[i].SetSelected(i == _targetIndex);
     }
 
-    // ---------- Layout ----------
+    // ---------------- LAYOUT ----------------
+
     void Layout()
     {
+        if (_items == null)
+            return;
+
         for (int i = 0; i < _items.Length; i++)
         {
             float d = i - _pos;
             float abs = Mathf.Abs(d);
 
-            float t = Mathf.SmoothStep(0f, 1f, Mathf.Clamp01(abs));                      // centro -> vecina
-            float fade = 1f - Mathf.SmoothStep(0f, 1f, Mathf.InverseLerp(1f, fadeEnd, abs)); // vecina -> fuera
+            float t = Mathf.SmoothStep(
+                0f,
+                1f,
+                Mathf.Clamp01(abs)
+            );
 
-            float scale = Mathf.Lerp(centerScale, sideScale, t) * fade;
-            float brightness = Mathf.Lerp(1f, sideBrightness, t);
+            float fade = 1f - Mathf.SmoothStep(
+                0f,
+                1f,
+                Mathf.InverseLerp(1f, fadeEnd, abs)
+            );
+
+            float scale = Mathf.Lerp(
+                centerScale,
+                sideScale,
+                t
+            ) * fade;
+
+            float brightness = Mathf.Lerp(
+                1f,
+                sideBrightness,
+                t
+            );
+
             bool visible = abs < fadeEnd && scale > 0.01f;
 
             var rt = _items[i].Rect;
-            rt.anchoredPosition = new Vector2(d * spacing, 0);
-            rt.localScale = Vector3.one;           // la escala va en la bola, no en la raíz
+
+            rt.anchoredPosition = new Vector2(
+                d * spacing,
+                0f
+            );
+
+            rt.localScale = Vector3.one;
+
             _items[i].SetScale(scale);
             _items[i].SetVisual(brightness, visible);
         }
 
-        int nearest = Mathf.Clamp(Mathf.RoundToInt(_pos), 0, Count - 1);
+        int nearest = Mathf.Clamp(
+            Mathf.RoundToInt(_pos),
+            0,
+            Count - 1
+        );
+
         if (nearest != _lastNearest)
         {
             _lastNearest = nearest;
-            foreach (var it in _items.OrderByDescending(x => Mathf.Abs(x.Index - nearest)))
-                it.Rect.SetAsLastSibling();
+
+            foreach (var item in _items.OrderByDescending(
+                x => Mathf.Abs(x.Index - nearest)))
+            {
+                item.Rect.SetAsLastSibling();
+            }
         }
     }
 }
