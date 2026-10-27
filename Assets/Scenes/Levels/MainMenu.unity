@@ -119,6 +119,28 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
+--- !u!114 &24499180 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 6588274063616438242, guid: 7cf6830b40dba8545a2cf307ce66ef6d, type: 3}
+  m_PrefabInstance: {fileID: 2060779169}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9085046f02f69544eb97fd06b6048fe2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Toggle
+--- !u!114 &48581427 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 238945184645943988, guid: 7cf6830b40dba8545a2cf307ce66ef6d, type: 3}
+  m_PrefabInstance: {fileID: 2060779169}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9085046f02f69544eb97fd06b6048fe2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Toggle
 --- !u!1001 &83599360
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -6859,6 +6881,28 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 3711905928230151870, guid: 7b6280cb6b0ff75479d8b8175cc6f6c4, type: 3}
   m_PrefabInstance: {fileID: 2036810881}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &2037324716 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 5495302015331094800, guid: 7cf6830b40dba8545a2cf307ce66ef6d, type: 3}
+  m_PrefabInstance: {fileID: 2060779169}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &2037324722
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2037324716}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fed61e4f40aaa3447b30d03f0da957e2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::AudioMixerController
+  audioMixer: {fileID: 24100000, guid: 26334b540b17f884d8f0904207b27d93, type: 2}
+  musicToggle: {fileID: 48581427}
+  sfxToggle: {fileID: 24499180}
+  musicParam: MusicVolume
+  sfxParam: SfxVolume
 --- !u!1001 &2051313113
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -7036,7 +7080,10 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 5495302015331094800, guid: 7cf6830b40dba8545a2cf307ce66ef6d, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 2037324722}
   m_SourcePrefab: {fileID: 100100000, guid: 7cf6830b40dba8545a2cf307ce66ef6d, type: 3}
 --- !u!1001 &2068044176
 PrefabInstance:
