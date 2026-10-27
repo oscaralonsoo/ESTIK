@@ -6,6 +6,7 @@ public class SkinData : ScriptableObject
     public string id;
     public string displayName;
     public Material ballMaterial;
-    public GameObject ballPrefab;   
+    public GameObject effectPrefab;
+    public GameObject ballPrefab;
     public bool unlockedByDefault = true;
 }

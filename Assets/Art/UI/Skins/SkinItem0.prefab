@@ -27,7 +27,7 @@ RectTransform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4332879513980298779}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 150}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -111,6 +111,11 @@ MonoBehaviour:
   ballRenderer: {fileID: 2631674353709987416}
   lockIcon: {fileID: 0}
   spinSpeed: 40
+  prefabScaleMultiplier: 1
+  ignoreChildPrefixes:
+  - Trail
+  particlesSortingOrder: 9
+  shellSortingOrder: 11
 --- !u!1001 &1549322972465494389
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -125,7 +130,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3610265761855600692, guid: 6956533860ac96e41b3d3be36ca351b0, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -3.04467
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3610265761855600692, guid: 6956533860ac96e41b3d3be36ca351b0, type: 3}
       propertyPath: m_LocalPosition.y
@@ -133,7 +138,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3610265761855600692, guid: 6956533860ac96e41b3d3be36ca351b0, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -371.2358
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3610265761855600692, guid: 6956533860ac96e41b3d3be36ca351b0, type: 3}
       propertyPath: m_LocalRotation.w

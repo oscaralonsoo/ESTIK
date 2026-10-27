@@ -1,10 +1,17 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 [RequireComponent(typeof(RectTransform))]
 public class SkinCarouselItem : MonoBehaviour
 {
-    static readonly int BaseColorId = Shader.PropertyToID("_BaseColor"); // URP
-    static readonly int ColorId = Shader.PropertyToID("_Color");     // Built-in
+    static readonly int BaseColorId = Shader.PropertyToID("_BaseColor"); 
+    static readonly int ColorId = Shader.PropertyToID("_Color");       
+    struct Tint
+    {
+        public Renderer renderer;
+        public int colorId;
+        public Color baseColor;
+    }
 
     [Header("Refs")]
     [SerializeField] Transform ball;
@@ -14,24 +21,39 @@ public class SkinCarouselItem : MonoBehaviour
     [Header("Feel")]
     [SerializeField] float spinSpeed = 40f;
 
+    [Header("Prefab visual")]
+    [SerializeField] float prefabScaleMultiplier = 1f;
+    [SerializeField] string[] ignoreChildPrefixes = { "Trail" };
+
+    [Header("Sorting (particulas antes, cascara despues)")]
+    [SerializeField] int particlesSortingOrder = 10;
+    [SerializeField] int shellSortingOrder = 11;
+
     public RectTransform Rect { get; private set; }
     public int Index { get; private set; }
 
+    readonly List<Tint> _tints = new List<Tint>();
     MaterialPropertyBlock _mpb;
-    int _colorId;
-    Color _baseColor = Color.white;
     Vector3 _baseBallScale = Vector3.one;
-    bool _selected;
-    bool _valid;
     float _lastBrightness = -1f;
+
+    GameObject _visualInstance;
+    Renderer[] _visualRenderers;
+
+    bool _valid;
+    bool _selected;
+    bool _usePrefabVisual;
+    bool _visualShown = true;
 
     void Awake()
     {
         Rect = (RectTransform)transform;
         _mpb = new MaterialPropertyBlock();
 
-        if (ballRenderer == null) ballRenderer = GetComponentInChildren<Renderer>(true);
-        if (ball == null && ballRenderer != null) ball = ballRenderer.transform;
+        if (ballRenderer == null)
+            ballRenderer = GetComponentInChildren<Renderer>(true);
+        if (ball == null && ballRenderer != null)
+            ball = ballRenderer.transform;
 
         _valid = ball != null && ballRenderer != null;
         if (!_valid)
@@ -39,7 +61,14 @@ public class SkinCarouselItem : MonoBehaviour
             Debug.LogError("SkinCarouselItem: el prefab necesita una bola 3D hija con MeshRenderer", this);
             return;
         }
+
         _baseBallScale = ball.localScale;
+    }
+
+    void Update()
+    {
+        if (_valid && _selected)
+            ball.Rotate(0f, spinSpeed * Time.unscaledDeltaTime, 0f, Space.Self);
     }
 
     public void Init(SkinData data, int index)
@@ -47,22 +76,213 @@ public class SkinCarouselItem : MonoBehaviour
         Index = index;
         if (!_valid) return;
 
-        if (data.ballMaterial != null)
-        {
-            ballRenderer.sharedMaterial = data.ballMaterial;
-
-            var m = data.ballMaterial;
-            if (m.HasProperty(BaseColorId)) { _colorId = BaseColorId; _baseColor = m.GetColor(BaseColorId); }
-            else if (m.HasProperty(ColorId)) { _colorId = ColorId; _baseColor = m.GetColor(ColorId); }
-            else _colorId = 0;
-        }
-        else
-            Debug.LogWarning($"Skin '{data.id}' no tiene Ball Material asignado", data);
+        ApplyBallMaterial(data);
+        SpawnPrefabVisual(data);
+        BuildTints();
 
         if (lockIcon != null)
             lockIcon.SetActive(!SkinService.IsUnlocked(data));
     }
 
+    void ApplyBallMaterial(SkinData data)
+    {
+        if (data.ballMaterial != null)
+            ballRenderer.sharedMaterial = data.ballMaterial;
+        else
+            Debug.LogWarning($"Skin '{data.id}' no tiene Ball Material asignado", data);
+    }
+    void SpawnPrefabVisual(SkinData data)
+    {
+        DestroyVisual();
+
+        GameObject source = data.ballPrefab != null ? data.ballPrefab : data.effectPrefab;
+        if (source == null) return;
+
+        bool wholePrefab = data.ballPrefab != null;
+
+        _visualInstance = Instantiate(source, ball);
+        _visualInstance.name = "Visual_" + data.id;
+
+        Transform t = _visualInstance.transform;
+        t.localPosition = Vector3.zero;
+        t.localRotation = Quaternion.identity;
+        t.localScale = Vector3.one;
+
+        DisableGameplay(_visualInstance);
+        HideIgnoredChildren(t);
+        SetLayerRecursive(t, ball.gameObject.layer);
+
+        if (wholePrefab)
+        {
+            t.localScale = Vector3.one * FitScaleToBall(t);
+            _usePrefabVisual = true;
+            ballRenderer.enabled = false;
+        }
+        else
+        {
+            t.localScale = Vector3.one * prefabScaleMultiplier;
+        }
+
+        SetupParticles(_visualInstance);
+
+        _visualRenderers = _visualInstance.GetComponentsInChildren<Renderer>(true);
+        SetupSorting(_visualRenderers);
+    }
+
+    void DestroyVisual()
+    {
+        if (_visualInstance != null)
+            Destroy(_visualInstance);
+
+        _visualInstance = null;
+        _visualRenderers = null;
+        _usePrefabVisual = false;
+    }
+
+    static void DisableGameplay(GameObject root)
+    {
+        foreach (var mb in root.GetComponentsInChildren<MonoBehaviour>(true))
+            mb.enabled = false;
+
+        foreach (var c in root.GetComponentsInChildren<Collider>(true))
+            c.enabled = false;
+
+        foreach (var rb in root.GetComponentsInChildren<Rigidbody>(true))
+        {
+            rb.isKinematic = true;
+            rb.detectCollisions = false;
+        }
+
+        foreach (var tr in root.GetComponentsInChildren<TrailRenderer>(true))
+            tr.gameObject.SetActive(false);
+    }
+
+    void HideIgnoredChildren(Transform root)
+    {
+        foreach (var child in root.GetComponentsInChildren<Transform>(true))
+        {
+            if (child != root && IsIgnored(child.name))
+                child.gameObject.SetActive(false);
+        }
+    }
+
+    bool IsIgnored(string childName)
+    {
+        foreach (var prefix in ignoreChildPrefixes)
+        {
+            if (!string.IsNullOrEmpty(prefix) && childName.StartsWith(prefix))
+                return true;
+        }
+        return false;
+    }
+
+    static void SetLayerRecursive(Transform root, int layer)
+    {
+        foreach (var tr in root.GetComponentsInChildren<Transform>(true))
+            tr.gameObject.layer = layer;
+    }
+    float FitScaleToBall(Transform visualRoot)
+    {
+        Bounds? meshBounds = null;
+
+        foreach (var mr in visualRoot.GetComponentsInChildren<MeshRenderer>(false))
+        {
+            if (meshBounds == null)
+            {
+                meshBounds = mr.bounds;
+            }
+            else
+            {
+                var b = meshBounds.Value;
+                b.Encapsulate(mr.bounds);
+                meshBounds = b;
+            }
+        }
+
+        if (meshBounds == null || meshBounds.Value.size.x <= 0.0001f)
+            return prefabScaleMultiplier;
+
+        float ratio = ballRenderer.bounds.size.x / meshBounds.Value.size.x;
+        return ratio * prefabScaleMultiplier;
+    }
+
+    static void SetupParticles(GameObject root)
+    {
+        foreach (var ps in root.GetComponentsInChildren<ParticleSystem>(true))
+        {
+            var main = ps.main;
+            main.scalingMode = ParticleSystemScalingMode.Hierarchy;
+            main.useUnscaledTime = true;
+            main.simulationSpace = ParticleSystemSimulationSpace.Local;
+            ps.Clear(true);
+            ps.Play(true);
+        }
+    }
+    void SetupSorting(Renderer[] renderers)
+    {
+        foreach (var r in renderers)
+        {
+            r.sortingLayerID = ballRenderer.sortingLayerID;
+
+            if (r is ParticleSystemRenderer psr)
+            {
+                psr.sortingOrder = particlesSortingOrder;
+                psr.sortingFudge = 0f;
+            }
+            else if (r is MeshRenderer)
+            {
+                r.sortingOrder = shellSortingOrder;
+            }
+        }
+    }
+
+    void BuildTints()
+    {
+        _tints.Clear();
+        _lastBrightness = -1f;
+
+        if (!_usePrefabVisual)
+        {
+            AddTint(ballRenderer);
+            return;
+        }
+
+        foreach (var mr in _visualInstance.GetComponentsInChildren<MeshRenderer>(false))
+            AddTint(mr);
+    }
+
+    void AddTint(Renderer r)
+    {
+        Material m = r.sharedMaterial;
+        if (m == null) return;
+
+        int id;
+        if (m.HasProperty(BaseColorId)) id = BaseColorId;
+        else if (m.HasProperty(ColorId)) id = ColorId;
+        else return;
+
+        _tints.Add(new Tint
+        {
+            renderer = r,
+            colorId = id,
+            baseColor = m.GetColor(id)
+        });
+    }
+
+    void ApplyBrightness(float brightness)
+    {
+        foreach (var tint in _tints)
+        {
+            if (tint.renderer == null) continue;
+
+            Color c = tint.baseColor * brightness;
+            c.a = tint.baseColor.a;
+
+            tint.renderer.GetPropertyBlock(_mpb);
+            _mpb.SetColor(tint.colorId, c);
+            tint.renderer.SetPropertyBlock(_mpb);
+        }
+    }
     public void SetSelected(bool selected)
     {
         _selected = selected;
@@ -70,32 +290,35 @@ public class SkinCarouselItem : MonoBehaviour
             ball.localRotation = Quaternion.identity;
     }
 
-    /// Escala la bola 3D directamente (1 = tamaño del prefab)
     public void SetScale(float s)
     {
         if (!_valid) return;
         ball.localScale = _baseBallScale * s;
     }
 
-    /// brightness: 1 = color original, 0 = negro
     public void SetVisual(float brightness, bool visible)
     {
         if (!_valid) return;
 
-        if (ballRenderer.enabled != visible) ballRenderer.enabled = visible;
-        if (!visible || _colorId == 0 || Mathf.Approximately(brightness, _lastBrightness)) return;
-        _lastBrightness = brightness;
+        bool ballShouldShow = visible && !_usePrefabVisual;
+        if (ballRenderer.enabled != ballShouldShow)
+            ballRenderer.enabled = ballShouldShow;
 
-        var c = _baseColor * brightness;
-        c.a = _baseColor.a;
-        ballRenderer.GetPropertyBlock(_mpb);
-        _mpb.SetColor(_colorId, c);
-        ballRenderer.SetPropertyBlock(_mpb);
+        SetVisualShown(visible);
+
+        if (!visible || _tints.Count == 0 || Mathf.Approximately(brightness, _lastBrightness))
+            return;
+
+        _lastBrightness = brightness;
+        ApplyBrightness(brightness);
     }
 
-    void Update()
+    void SetVisualShown(bool visible)
     {
-        if (_valid && _selected)
-            ball.Rotate(0f, spinSpeed * Time.unscaledDeltaTime, 0f, Space.Self);
+        if (_visualRenderers == null || _visualShown == visible) return;
+        _visualShown = visible;
+
+        foreach (var r in _visualRenderers)
+            if (r != null) r.enabled = visible;
     }
 }
