@@ -27,7 +27,7 @@ RectTransform:
   m_GameObject: {fileID: 70572593172112771}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 0.5, y: 0.5, z: 0.5}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 3586345391931874995}
@@ -83,6 +83,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: NeonBall
       objectReference: {fileID: 0}
+    - target: {fileID: 1120667944314918408, guid: f8ad58b500219574086a20fc87cba645, type: 3}
+      propertyPath: m_Parameters.widthMultiplier
+      value: 0.8
+      objectReference: {fileID: 0}
+    - target: {fileID: 1120667944314918408, guid: f8ad58b500219574086a20fc87cba645, type: 3}
+      propertyPath: m_Parameters.widthCurve.m_Curve.Array.data[1].time
+      value: 0.49609375
+      objectReference: {fileID: 0}
     - target: {fileID: 3610265761855600692, guid: f8ad58b500219574086a20fc87cba645, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -122,6 +130,10 @@ PrefabInstance:
     - target: {fileID: 3610265761855600692, guid: f8ad58b500219574086a20fc87cba645, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6978483021676260187, guid: f8ad58b500219574086a20fc87cba645, type: 3}
+      propertyPath: m_Parameters.widthMultiplier
+      value: 0.6
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
