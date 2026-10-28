@@ -1,0 +1,20 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 25ba584376538a94093595c067e025d2, type: 3}
+  m_Name: IceSkin
+  m_EditorClassIdentifier: Assembly-CSharp::SkinData
+  id: glow
+  displayName: Orb
+  ballMaterial: {fileID: 2100000, guid: 82daa554935d4614388c8ce96e1c913d, type: 2}
+  effectPrefab: {fileID: 230849494136239213, guid: dee8026883e301641abdfd21969451f6, type: 3}
+  ballPrefab: {fileID: 230849494136239213, guid: dee8026883e301641abdfd21969451f6, type: 3}
+  unlockedByDefault: 1
