@@ -20,25 +20,19 @@ public class GoalController : MonoBehaviour
         {
             goalTriggered = true;
 
+            Vector3 hitPosition = other.ClosestPoint(transform.position);
+
             if (goalParticles != null)
             {
-                goalParticles.transform.position =
-                    other.ClosestPoint(transform.position);
-
+                goalParticles.transform.position = hitPosition;
                 goalParticles.Stop(true, ParticleSystemStopBehavior.StopEmittingAndClear);
                 goalParticles.Play();
             }
 
-            // 1. Hacemos que el marcador aparezca un poco antes de que lleguen los puntos
-            if (PointsManager.Instance != null)
-            {
-                PointsManager.Instance.ShowScore();
-            }
-
-            // 2. Lanzamos el efecto visual de los puntos desde la posición de la bola
+            // Llama a la secuencia en el PointCollector pasándole la posición del impacto
             if (pointCollector != null)
             {
-                pointCollector.SpawnPointsEffect(other.transform.position);
+                pointCollector.SpawnPointsEffect(hitPosition);
             }
 
             StartCoroutine(TriggerChangeCoroutine());
@@ -48,6 +42,10 @@ public class GoalController : MonoBehaviour
     private IEnumerator TriggerChangeCoroutine()
     {
         yield return new WaitForSeconds(timeToChange);
-        FastSceneLoader.Instance.LoadNextLevel();
+
+        if (FastSceneLoader.Instance != null)
+        {
+            FastSceneLoader.Instance.LoadNextLevel();
+        }
     }
 }
