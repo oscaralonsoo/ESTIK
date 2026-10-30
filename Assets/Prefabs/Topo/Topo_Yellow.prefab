@@ -1565,6 +1565,10 @@ MonoBehaviour:
   lifetimeRange: {x: 0.15, y: 2}
   gravity: 0.75
   drag: 1.8
+  maxColliderRadius: 1.5
+  colliderExpandDuration: 0.5
+  repelForce: 25
+  upwardLift: 2
 --- !u!1 &8561708927118057730
 GameObject:
   m_ObjectHideFlags: 0

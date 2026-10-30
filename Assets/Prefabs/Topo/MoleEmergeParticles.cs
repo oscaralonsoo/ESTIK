@@ -6,7 +6,7 @@ public class MoleEmergeParticles : MonoBehaviour
     [SerializeField] private ParticleSystem dirtParticles;
     [SerializeField] private Transform holePoint;
 
-    [Header("Ajustes de Partículas")]
+    [Header("Ajustes de Partï¿½culas")]
     [SerializeField] private Color dirtColor = new Color(0.40f, 0.27f, 0.15f, 1f);
     [SerializeField] private int burstCount = 40;
     [SerializeField] private float coneAngle = 50f;
@@ -20,7 +20,8 @@ public class MoleEmergeParticles : MonoBehaviour
     [Header("Ajustes del Trigger Collider")]
     [SerializeField] private float maxColliderRadius = 1.5f;
     [SerializeField] private float colliderExpandDuration = 0.5f;
-    [SerializeField] private float repelForce = 10f;
+    [SerializeField] private float repelForce = 10f; // Velocidad directa deseada
+    [SerializeField] private float upwardLift = 2f;  // Cuï¿½nto se levanta extra hacia arriba del suelo
 
     private void Awake()
     {
@@ -49,26 +50,14 @@ public class MoleEmergeParticles : MonoBehaviour
 
         SphereCollider sphereCollider = triggerObj.AddComponent<SphereCollider>();
         sphereCollider.isTrigger = true;
-        sphereCollider.radius = 0.05f;
+        sphereCollider.radius = maxColliderRadius;
 
         MoleTriggerHandler triggerHandler = triggerObj.AddComponent<MoleTriggerHandler>();
         triggerHandler.repelForce = repelForce;
+        triggerHandler.upwardLift = upwardLift;
         triggerHandler.originTransform = particleTransform;
 
-        float elapsed = 0f;
-
-        while (elapsed < colliderExpandDuration)
-        {
-            elapsed += Time.deltaTime;
-            float t = Mathf.Clamp01(elapsed / colliderExpandDuration);
-
-            float currentRadius = Mathf.Lerp(0.05f, maxColliderRadius, Mathf.Sin(t * Mathf.PI * 0.5f));
-            sphereCollider.radius = currentRadius;
-
-            yield return null;
-        }
-
-        yield return new WaitForSeconds(0.2f);
+        yield return new WaitForSeconds(colliderExpandDuration);
 
         if (triggerObj != null)
         {
@@ -79,6 +68,7 @@ public class MoleEmergeParticles : MonoBehaviour
     private class MoleTriggerHandler : MonoBehaviour
     {
         public float repelForce;
+        public float upwardLift;
         public Transform originTransform;
 
         private void OnTriggerEnter(Collider other)
@@ -92,7 +82,11 @@ public class MoleEmergeParticles : MonoBehaviour
                     if (pushDir.y < 0.2f) pushDir.y = 0.2f;
                     pushDir.Normalize();
 
-                    rb.AddForce(pushDir * repelForce, ForceMode.Impulse);
+                    // Calculamos la velocidad base y le sumamos el empuje hacia arriba configurable
+                    Vector3 targetVelocity = pushDir * repelForce;
+                    targetVelocity.y += upwardLift;
+
+                    rb.linearVelocity = targetVelocity;
                 }
             }
         }
@@ -200,7 +194,7 @@ public class MoleEmergeParticles : MonoBehaviour
                 float[] phase = new float[3];
                 for (int k = 0; k < 3; k++)
                 {
-                    amp[k] = 0.01f + (float)rng.NextDouble() * 0.02f; 
+                    amp[k] = 0.01f + (float)rng.NextDouble() * 0.02f;
                     phase[k] = (float)rng.NextDouble() * Mathf.PI * 2f;
                 }
 
