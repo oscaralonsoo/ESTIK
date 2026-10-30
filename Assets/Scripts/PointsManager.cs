@@ -12,9 +12,6 @@ public class PointsManager : MonoBehaviour
     [SerializeField] private bool alwaysShowScore = false;
 
     [Header("Animación y Tiempos del Texto")]
-    [SerializeField] private float punchScaleMultiplier = 1.3f;
-    [SerializeField] private float punchDuration = 0.15f;
-    [SerializeField] private float showScaleDuration = 0.2f;
     [SerializeField] private float hideDelay = 1.0f;
 
     [Header("Configuración Dinámica por Precio")]
