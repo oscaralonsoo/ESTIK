@@ -242,6 +242,7 @@ GameObject:
   - component: {fileID: 2138785747565131568}
   - component: {fileID: 1039919485646305553}
   - component: {fileID: 6829195703039156624}
+  - component: {fileID: 2333795420770974812}
   m_Layer: 0
   m_Name: Goal
   m_TagString: Untagged
@@ -276,7 +277,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 34fbc1c27133a9e49b6973a1d49dbb7b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GoalController
-  timeToChange: 1
+  timeToChange: 1.5
   goalParticles: {fileID: 3814208825789338790}
 --- !u!65 &6829195703039156624
 BoxCollider:
@@ -299,6 +300,29 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 9.295672, y: 5, z: 1.9607582}
   m_Center: {x: -0.042187214, y: 0, z: 0.072135925}
+--- !u!114 &2333795420770974812
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3198556928524027338}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b1242d35e2e28d24f8345a487cd299f1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PointCollector
+  point2DPrefab: {fileID: 9090323118063016019, guid: 43e45ba96e0ab454795435b3adfb3cd6, type: 3}
+  targetUIPoint: {fileID: 0}
+  minPoints: 5
+  maxPoints: 10
+  spreadRadius: 1.5
+  duration: 0.6
+  spawnDelay: 0.05
+  spawnScaleDuration: 0.1
+  curveHeight: 3
+  sortingLayerName: Default
+  sortingOrder: 100
 --- !u!1 &3385435492987486059
 GameObject:
   m_ObjectHideFlags: 0
@@ -5228,7 +5252,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 1.339289, y: 1.339289, z: 1.339289}
   m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 6566410883898689210}
