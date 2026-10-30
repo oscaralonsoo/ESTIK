@@ -1,10 +1,12 @@
+using System.Collections;
 using UnityEngine;
+
 public class MoleEmergeParticles : MonoBehaviour
 {
     [SerializeField] private ParticleSystem dirtParticles;
     [SerializeField] private Transform holePoint;
 
-    [Header("Ajustes")]
+    [Header("Ajustes de Partículas")]
     [SerializeField] private Color dirtColor = new Color(0.40f, 0.27f, 0.15f, 1f);
     [SerializeField] private int burstCount = 40;
     [SerializeField] private float coneAngle = 50f;
@@ -14,11 +16,18 @@ public class MoleEmergeParticles : MonoBehaviour
     [SerializeField] private Vector2 lifetimeRange = new Vector2(0.9f, 1.5f);
     [SerializeField] private float gravity = 0.8f;
     [SerializeField] private float drag = 1.5f;
+
+    [Header("Ajustes del Trigger Collider")]
+    [SerializeField] private float maxColliderRadius = 1.5f;
+    [SerializeField] private float colliderExpandDuration = 0.5f;
+    [SerializeField] private float repelForce = 10f;
+
     private void Awake()
     {
         if (dirtParticles == null)
             dirtParticles = CreateDirtParticles();
     }
+
     public void PlayEmerge()
     {
         Transform t = dirtParticles.transform;
@@ -28,6 +37,65 @@ public class MoleEmergeParticles : MonoBehaviour
             dirtParticles.Play();
 
         dirtParticles.Emit(burstCount);
+
+        StartCoroutine(ExpandTriggerCollider(t));
+    }
+
+    private IEnumerator ExpandTriggerCollider(Transform particleTransform)
+    {
+        GameObject triggerObj = new GameObject("EmergeTrigger");
+        triggerObj.transform.SetParent(particleTransform, false);
+        triggerObj.transform.localPosition = Vector3.zero;
+
+        SphereCollider sphereCollider = triggerObj.AddComponent<SphereCollider>();
+        sphereCollider.isTrigger = true;
+        sphereCollider.radius = 0.05f;
+
+        MoleTriggerHandler triggerHandler = triggerObj.AddComponent<MoleTriggerHandler>();
+        triggerHandler.repelForce = repelForce;
+        triggerHandler.originTransform = particleTransform;
+
+        float elapsed = 0f;
+
+        while (elapsed < colliderExpandDuration)
+        {
+            elapsed += Time.deltaTime;
+            float t = Mathf.Clamp01(elapsed / colliderExpandDuration);
+
+            float currentRadius = Mathf.Lerp(0.05f, maxColliderRadius, Mathf.Sin(t * Mathf.PI * 0.5f));
+            sphereCollider.radius = currentRadius;
+
+            yield return null;
+        }
+
+        yield return new WaitForSeconds(0.2f);
+
+        if (triggerObj != null)
+        {
+            Destroy(triggerObj);
+        }
+    }
+
+    private class MoleTriggerHandler : MonoBehaviour
+    {
+        public float repelForce;
+        public Transform originTransform;
+
+        private void OnTriggerEnter(Collider other)
+        {
+            if (other.CompareTag("Ball"))
+            {
+                Rigidbody rb = other.GetComponent<Rigidbody>();
+                if (rb != null)
+                {
+                    Vector3 pushDir = (other.transform.position - originTransform.position).normalized;
+                    if (pushDir.y < 0.2f) pushDir.y = 0.2f;
+                    pushDir.Normalize();
+
+                    rb.AddForce(pushDir * repelForce, ForceMode.Impulse);
+                }
+            }
+        }
     }
 
     private ParticleSystem CreateDirtParticles()
@@ -59,7 +127,7 @@ public class MoleEmergeParticles : MonoBehaviour
 
         var emission = ps.emission;
         emission.enabled = true;
-        emission.rateOverTime = 0f; 
+        emission.rateOverTime = 0f;
 
         var shape = ps.shape;
         shape.enabled = true;
@@ -132,7 +200,7 @@ public class MoleEmergeParticles : MonoBehaviour
                 float[] phase = new float[3];
                 for (int k = 0; k < 3; k++)
                 {
-                    amp[k] = 0.01f + (float)rng.NextDouble() * 0.02f;
+                    amp[k] = 0.01f + (float)rng.NextDouble() * 0.02f; 
                     phase[k] = (float)rng.NextDouble() * Mathf.PI * 2f;
                 }
 
