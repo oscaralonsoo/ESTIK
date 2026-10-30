@@ -3,6 +3,7 @@ using System.Linq;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
+using TMPro;
 
 public class SkinCarousel : MonoBehaviour,
     IBeginDragHandler, IDragHandler, IEndDragHandler
@@ -13,6 +14,11 @@ public class SkinCarousel : MonoBehaviour,
     [SerializeField] RectTransform content;
     [SerializeField] Button prevButton;
     [SerializeField] Button nextButton;
+
+    [Header("Buy Refs")]
+    [SerializeField] Button buyButton;
+    [SerializeField] TextMeshProUGUI buyButtonText;
+
     BallSkinController ballSkinController;
     PanelAnimator _panel;
 
@@ -51,17 +57,11 @@ public class SkinCarousel : MonoBehaviour,
     void Awake()
     {
         ballSkinController = FindAnyObjectByType<BallSkinController>();
-
-        // Para que las bolas 3D sigan la transicion de entrada/salida del panel
-        // (el CanvasGroup no puede desvanecer mallas 3D).
         _panel = GetComponentInParent<PanelAnimator>(true);
 
         if (catalog == null || itemPrefab == null || content == null)
         {
-            Debug.LogError(
-                "SkinCarousel: faltan referencias en el Inspector",
-                this
-            );
+            Debug.LogError("SkinCarousel: faltan referencias en el Inspector", this);
             enabled = false;
             return;
         }
@@ -74,7 +74,6 @@ public class SkinCarousel : MonoBehaviour,
         }
 
         Canvas parentCanvas = GetComponentInParent<Canvas>();
-
         if (parentCanvas == null)
         {
             Debug.LogError("SkinCarousel: no se encuentra un Canvas padre", this);
@@ -89,6 +88,9 @@ public class SkinCarousel : MonoBehaviour,
 
         if (nextButton != null)
             nextButton.onClick.AddListener(() => SelectIndex(_targetIndex + 1));
+
+        if (buyButton != null)
+            buyButton.onClick.AddListener(BuyCurrentSkin);
 
         _items = new SkinCarouselItem[Count];
 
@@ -105,41 +107,35 @@ public class SkinCarousel : MonoBehaviour,
         if (_items == null || Count == 0)
             return;
 
-        // Fuente de verdad: la skin guardada para la bola (es la que SI se guarda bien).
-        // Si no hay, se usa SkinService.EquippedId.
         int start = -1;
 
         if (ballSkinController != null)
         {
             string savedName = ballSkinController.GetSavedSkinName();
-
             if (!string.IsNullOrEmpty(savedName))
-                start = Array.FindIndex(
-                    catalog.skins,
-                    s => s != null && s.displayName == savedName
-                );
+                start = Array.FindIndex(catalog.skins, s => s != null && s.displayName == savedName);
         }
 
         if (start < 0)
-            start = Array.FindIndex(
-                catalog.skins,
-                s => s != null && s.id == SkinService.EquippedId
-            );
+            start = Array.FindIndex(catalog.skins, s => s != null && s.id == SkinService.EquippedId);
 
         _targetIndex = Mathf.Max(0, start);
 
         _pos = _targetIndex;
         _vel = 0f;
         _dragVel = 0f;
-        _dragging = false;   // si el panel se cerro a mitad de drag, OnEndDrag nunca se llamo
+        _dragging = false;
         _lastNearest = -1;
         _lastSavedIndex = -1;
 
         Layout();
         RefreshUI();
 
-        // Guardar inmediatamente la skin central inicial.
-        SaveSkinForIndex(_targetIndex);
+        SkinData currentSkin = Current;
+        if (currentSkin != null && SkinService.IsUnlocked(currentSkin))
+        {
+            SaveSkinForIndex(_targetIndex);
+        }
     }
 
     void OnDisable()
@@ -147,8 +143,6 @@ public class SkinCarousel : MonoBehaviour,
         if (_items == null || Count == 0)
             return;
 
-        // Al cerrar el panel (Back, pausa, Escape...) se confirma la skin elegida,
-        // aunque el carrusel aun se estuviera moviendo o arrastrando.
         _dragging = false;
         CommitSelection();
     }
@@ -165,30 +159,15 @@ public class SkinCarousel : MonoBehaviour,
     {
         if (!_dragging)
         {
-            _pos = Mathf.SmoothDamp(
-                _pos,
-                _targetIndex,
-                ref _vel,
-                smoothTime,
-                Mathf.Infinity,
-                Time.unscaledDeltaTime
-            );
+            _pos = Mathf.SmoothDamp(_pos, _targetIndex, ref _vel, smoothTime, Mathf.Infinity, Time.unscaledDeltaTime);
         }
 
         Layout();
-
-        // Detectar qué bola está realmente en el centro
-        // y tiene el tamaño de seleccionada.
         DetectLargeSelectedBall();
 
         if (_dragging)
         {
-            int nearest = Mathf.Clamp(
-                Mathf.RoundToInt(_pos),
-                0,
-                Count - 1
-            );
-
+            int nearest = Mathf.Clamp(Mathf.RoundToInt(_pos), 0, Count - 1);
             if (nearest != _targetIndex)
                 SelectIndex(nearest);
         }
@@ -207,18 +186,11 @@ public class SkinCarousel : MonoBehaviour,
         if (spacing <= 0f)
             return;
 
-        float deltaIdx =
-            -e.delta.x / _canvas.scaleFactor / spacing;
+        float deltaIdx = -e.delta.x / _canvas.scaleFactor / spacing;
 
-        _pos = Mathf.Clamp(
-            _pos + deltaIdx,
-            -overscroll,
-            Count - 1 + overscroll
-        );
+        _pos = Mathf.Clamp(_pos + deltaIdx, -overscroll, Count - 1 + overscroll);
 
-        float instant = deltaIdx /
-            Mathf.Max(Time.unscaledDeltaTime, 0.0001f);
-
+        float instant = deltaIdx / Mathf.Max(Time.unscaledDeltaTime, 0.0001f);
         _dragVel = Mathf.Lerp(_dragVel, instant, 0.5f);
     }
 
@@ -227,9 +199,7 @@ public class SkinCarousel : MonoBehaviour,
         _dragging = false;
         _vel = 0f;
 
-        SelectIndex(
-            Mathf.RoundToInt(_pos + _dragVel * inertia)
-        );
+        SelectIndex(Mathf.RoundToInt(_pos + _dragVel * inertia));
     }
 
     // ---------------- SELECCION ----------------
@@ -244,21 +214,20 @@ public class SkinCarousel : MonoBehaviour,
         if (index != _targetIndex)
         {
             _targetIndex = index;
-
             RefreshUI();
 
             SkinData selectedSkin = Current;
 
-            SkinService.Equip(selectedSkin);
-
-            SelectionChanged?.Invoke(selectedSkin);
+            if (selectedSkin != null && SkinService.IsUnlocked(selectedSkin))
+            {
+                SkinService.Equip(selectedSkin);
+                SelectionChanged?.Invoke(selectedSkin);
+            }
         }
 
-        // Se comprueba también aunque el índice no haya cambiado.
         DetectLargeSelectedBall();
     }
 
-    // Confirma la skin del indice objetivo (equipada + guardada para la bola).
     void CommitSelection()
     {
         _targetIndex = Mathf.Clamp(_targetIndex, 0, Count - 1);
@@ -267,39 +236,34 @@ public class SkinCarousel : MonoBehaviour,
         if (skin == null)
             return;
 
-        SkinService.Equip(skin);
-        SaveSkinForIndex(_targetIndex);
+        if (SkinService.IsUnlocked(skin))
+        {
+            SkinService.Equip(skin);
+            SaveSkinForIndex(_targetIndex);
+        }
     }
 
-    // Detecta la bola central que tiene el tamaño máximo.
     void DetectLargeSelectedBall()
     {
         if (_items == null || _items.Length == 0)
             return;
 
-        int centerIndex = Mathf.Clamp(
-            Mathf.RoundToInt(_pos),
-            0,
-            Count - 1
-        );
-
-        // La bola debe estar centrada y haber alcanzado
-        // prácticamente el tamaño centerScale.
+        int centerIndex = Mathf.Clamp(Mathf.RoundToInt(_pos), 0, Count - 1);
         float distance = Mathf.Abs(_pos - centerIndex);
 
         if (distance > centerTolerance)
             return;
 
-        float actualScale = Mathf.Lerp(
-            centerScale,
-            sideScale,
-            Mathf.SmoothStep(0f, 1f, Mathf.Clamp01(distance))
-        );
+        float actualScale = Mathf.Lerp(centerScale, sideScale, Mathf.SmoothStep(0f, 1f, Mathf.Clamp01(distance)));
 
         if (actualScale < centerScale - centerTolerance)
             return;
 
-        SaveSkinForIndex(centerIndex);
+        SkinData skin = catalog.skins[centerIndex];
+        if (skin != null && SkinService.IsUnlocked(skin))
+        {
+            SaveSkinForIndex(centerIndex);
+        }
     }
 
     void SaveSkinForIndex(int index)
@@ -309,10 +273,7 @@ public class SkinCarousel : MonoBehaviour,
 
         if (ballSkinController == null)
         {
-            Debug.LogWarning(
-                "SkinCarousel: BallSkinController no esta asignado en el Inspector.",
-                this
-            );
+            Debug.LogWarning("SkinCarousel: BallSkinController no esta asignado en el Inspector.", this);
             return;
         }
 
@@ -320,13 +281,10 @@ public class SkinCarousel : MonoBehaviour,
             return;
 
         SkinData skin = catalog.skins[index];
-
         if (skin == null)
             return;
 
-        // Guardar el nombre de la skin seleccionada.
         ballSkinController.SelectSkin(skin.displayName);
-
         _lastSavedIndex = index;
     }
 
@@ -340,6 +298,82 @@ public class SkinCarousel : MonoBehaviour,
 
         for (int i = 0; i < _items.Length; i++)
             _items[i].SetSelected(i == _targetIndex);
+
+        SkinData currentSkin = Current;
+        if (currentSkin != null && buyButton != null)
+        {
+            bool isUnlocked = SkinService.IsUnlocked(currentSkin);
+
+            if (isUnlocked)
+            {
+                buyButton.gameObject.SetActive(false);
+            }
+            else
+            {
+                buyButton.gameObject.SetActive(true);
+
+                if (buyButtonText != null)
+                {
+                    buyButtonText.text = currentSkin.price.ToString();
+                }
+
+                int playerPoints = PointsManager.Instance != null ? PointsManager.Instance.GetCurrentScore() : 0;
+                buyButton.interactable = playerPoints >= currentSkin.price;
+            }
+        }
+    }
+
+    public void BuyCurrentSkin()
+    {
+        SkinData currentSkin = Current;
+        if (currentSkin == null || SkinService.IsUnlocked(currentSkin))
+            return;
+
+        int price = currentSkin.price;
+        int playerPoints = PointsManager.Instance != null ? PointsManager.Instance.GetCurrentScore() : 0;
+
+        if (playerPoints >= price)
+        {
+            if (PointsManager.Instance != null)
+            {
+                PointsManager.Instance.SpendPoints(price);
+                // Sincronizado automáticamente con la duración dinámica calculada en PointsManager
+                PointsManager.Instance.AnimateScoreSpend(price);
+            }
+
+            Vector3 targetBallPos = _items[_targetIndex].GetBallPosition();
+
+            if (buyButton != null)
+                buyButton.interactable = false;
+
+            if (PurchaseCollector.Instance != null)
+            {
+                PurchaseCollector.Instance.SpawnPurchaseEffect(targetBallPos, price, () => {
+                    SkinService.Unlock(currentSkin);
+                    _items[_targetIndex].UpdateLockState(currentSkin);
+
+                    SkinService.Equip(currentSkin);
+                    SaveSkinForIndex(_targetIndex);
+                    SelectionChanged?.Invoke(currentSkin);
+
+                    RefreshUI();
+                    Debug.Log("¡Skin comprada, animación completada y equipada: " + currentSkin.displayName + "!");
+                });
+            }
+            else
+            {
+                SkinService.Unlock(currentSkin);
+                _items[_targetIndex].UpdateLockState(currentSkin);
+                SkinService.Equip(currentSkin);
+                SaveSkinForIndex(_targetIndex);
+                SelectionChanged?.Invoke(currentSkin);
+                RefreshUI();
+            }
+        }
+        else
+        {
+            Debug.Log("No tienes suficientes puntos para comprar esta skin.");
+        }
     }
 
     // ---------------- LAYOUT ----------------
@@ -349,7 +383,6 @@ public class SkinCarousel : MonoBehaviour,
         if (_items == null)
             return;
 
-        // 0 = panel invisible, 1 = totalmente visible.
         float panelVis = _panel != null ? _panel.Visibility : 1f;
 
         for (int i = 0; i < _items.Length; i++)
@@ -357,57 +390,29 @@ public class SkinCarousel : MonoBehaviour,
             float d = i - _pos;
             float abs = Mathf.Abs(d);
 
-            float t = Mathf.SmoothStep(
-                0f,
-                1f,
-                Mathf.Clamp01(abs)
-            );
+            float t = Mathf.SmoothStep(0f, 1f, Mathf.Clamp01(abs));
+            float fade = 1f - Mathf.SmoothStep(0f, 1f, Mathf.InverseLerp(1f, fadeEnd, abs));
 
-            float fade = 1f - Mathf.SmoothStep(
-                0f,
-                1f,
-                Mathf.InverseLerp(1f, fadeEnd, abs)
-            );
-
-            float scale = Mathf.Lerp(
-                centerScale,
-                sideScale,
-                t
-            ) * fade * panelVis;
-
-            float brightness = Mathf.Lerp(
-                1f,
-                sideBrightness,
-                t
-            );
+            float scale = Mathf.Lerp(centerScale, sideScale, t) * fade * panelVis;
+            float brightness = Mathf.Lerp(1f, sideBrightness, t);
 
             bool visible = abs < fadeEnd && scale > 0.01f;
 
             var rt = _items[i].Rect;
-
-            rt.anchoredPosition = new Vector2(
-                d * spacing,
-                0f
-            );
-
+            rt.anchoredPosition = new Vector2(d * spacing, 0f);
             rt.localScale = Vector3.one;
 
             _items[i].SetScale(scale);
             _items[i].SetVisual(brightness, visible);
         }
 
-        int nearest = Mathf.Clamp(
-            Mathf.RoundToInt(_pos),
-            0,
-            Count - 1
-        );
+        int nearest = Mathf.Clamp(Mathf.RoundToInt(_pos), 0, Count - 1);
 
         if (nearest != _lastNearest)
         {
             _lastNearest = nearest;
 
-            foreach (var item in _items.OrderByDescending(
-                x => Mathf.Abs(x.Index - nearest)))
+            foreach (var item in _items.OrderByDescending(x => Mathf.Abs(x.Index - nearest)))
             {
                 item.Rect.SetAsLastSibling();
             }

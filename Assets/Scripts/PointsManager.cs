@@ -9,21 +9,28 @@ public class PointsManager : MonoBehaviour
     [Header("UI del Marcador")]
     [SerializeField] private TextMeshProUGUI scoreText;
     [SerializeField] private string scorePrefix = "";
+    [SerializeField] private bool alwaysShowScore = false;
 
     [Header("Animación y Tiempos del Texto")]
-    [SerializeField] private float punchScaleMultiplier = 1.3f; // Cuánto crece el texto al recibir un punto
-    [SerializeField] private float punchDuration = 0.15f;     // Lo que dura el efecto de pulso
-    [SerializeField] private float showScaleDuration = 0.2f;  // Lo que tarda en aparecer con animación al inicio
-    [SerializeField] private float hideDelay = 1.0f;          // Tiempo que se queda visible en pantalla tras terminar de sumar
+    [SerializeField] private float punchScaleMultiplier = 1.3f;
+    [SerializeField] private float punchDuration = 0.15f;
+    [SerializeField] private float showScaleDuration = 0.2f;
+    [SerializeField] private float hideDelay = 1.0f;
+
+    [Header("Configuración Dinámica por Precio")]
+    [SerializeField] private float baseDuration = 0.5f;
+    [SerializeField] private float maxDuration = 2.0f;
+    [SerializeField] private int referenceMaxPrice = 500;
+    [Tooltip("Curva para modular cómo afecta el precio al tiempo de animación de forma personalizada.")]
+    [SerializeField] private AnimationCurve priceDurationCurve = AnimationCurve.EaseInOut(0f, 0f, 1f, 1f);
 
     [Header("Puntuación")]
     private int currentScore = 0;
     private const string SCORE_KEY = "PlayerScore";
 
     private Vector3 originalScale;
-    private Coroutine punchCoroutine;
     private Coroutine hideCoroutine;
-    private Coroutine showCoroutine;
+    private Coroutine scoreAnimCoroutine;
 
     private void Awake()
     {
@@ -34,6 +41,7 @@ public class PointsManager : MonoBehaviour
         else
         {
             Destroy(gameObject);
+            return;
         }
 
         if (scoreText != null)
@@ -45,50 +53,50 @@ public class PointsManager : MonoBehaviour
     private void Start()
     {
         currentScore = PlayerPrefs.GetInt(SCORE_KEY, 0);
+        currentScore = 100000; // Valor inicial para pruebas si lo deseas
         UpdateScoreUI();
 
-        // Asegurar que comience desactivado al iniciar el juego
         if (scoreText != null)
         {
-            scoreText.gameObject.SetActive(false);
+            scoreText.gameObject.SetActive(alwaysShowScore);
         }
     }
 
-    /// <summary>
-    /// Muestra el marcador anticipadamente con una animación suave de aparición (*pop*).
-    /// </summary>
-    public void ShowScore()
+    public int GetCurrentScore()
     {
-        if (scoreText != null)
-        {
-            // Cancelar temporizadores previos de ocultado
-            if (hideCoroutine != null)
-            {
-                StopCoroutine(hideCoroutine);
-            }
-
-            // Cancelar animación de aparición anterior si estuviera activa
-            if (showCoroutine != null)
-            {
-                StopCoroutine(showCoroutine);
-            }
-
-            scoreText.gameObject.SetActive(true);
-            UpdateScoreUI();
-
-            // Disparar la animación de aparición
-            showCoroutine = StartCoroutine(ShowTextRoutine());
-        }
+        return currentScore;
     }
 
     public void AddPoints(int amount)
     {
         currentScore += amount;
-
         PlayerPrefs.SetInt(SCORE_KEY, currentScore);
         PlayerPrefs.Save();
-
         UpdateScoreUI();
+        ShowScore();
+    }
+
+    public void SpendPoints(int amount)
+    {
+        currentScore -= amount;
+        currentScore = Mathf.Max(0, currentScore);
+        PlayerPrefs.SetInt(SCORE_KEY, currentScore);
+        PlayerPrefs.Save();
+    }
+
+    /// <summary>
+    /// Anima el texto bajando progresivamente calculando la duración según el precio de forma automática y modulada por curva.
+    /// </summary>
+    public void AnimateScoreSpend(int skinPrice)
+    {
+        // 1. Factor de precio normalizado (0 a 1 respecto al precio de referencia)
+        float priceFactor = Mathf.Clamp01((float)skinPrice / referenceMaxPrice);
+
+        // 2. Modulamos el factor usando la curva configurable desde el Inspector
+        float curvedFactor = priceDurationCurve.Evaluate(priceFactor);
+
+        // 3. Obtenemos la duración final interpolada
+        float dynamicDuration = Mathf.Lerp(baseDuration, maxDuration, curvedFactor);
 
         if (scoreText != null)
         {
@@ -98,13 +106,48 @@ public class PointsManager : MonoBehaviour
             {
                 StopCoroutine(hideCoroutine);
             }
+        }
 
-            // Reiniciar la animación de pulso al recibir puntos
-            if (punchCoroutine != null)
+        if (scoreAnimCoroutine != null)
+        {
+            StopCoroutine(scoreAnimCoroutine);
+        }
+
+        scoreAnimCoroutine = StartCoroutine(AnimateScoreSpendRoutine(skinPrice, dynamicDuration));
+    }
+
+    private IEnumerator AnimateScoreSpendRoutine(int amountToSubtract, float duration)
+    {
+        int startScore = currentScore + amountToSubtract;
+        int targetScore = currentScore;
+
+        float elapsed = 0f;
+
+        while (elapsed < duration)
+        {
+            elapsed += Time.deltaTime;
+            float t = Mathf.Clamp01(elapsed / duration);
+
+            float smoothT = Mathf.SmoothStep(0f, 1f, t);
+            int displayedScore = Mathf.RoundToInt(Mathf.Lerp(startScore, targetScore, smoothT));
+
+            if (scoreText != null)
             {
-                StopCoroutine(punchCoroutine);
+                scoreText.text = scorePrefix + displayedScore.ToString();
             }
-            punchCoroutine = StartCoroutine(PunchTextRoutine());
+
+            yield return null;
+        }
+
+        UpdateScoreUI();
+
+        if (!alwaysShowScore)
+        {
+            if (hideCoroutine != null)
+            {
+                StopCoroutine(hideCoroutine);
+            }
+            hideCoroutine = StartCoroutine(HideScoreAfterDelay());
         }
     }
 
@@ -116,72 +159,27 @@ public class PointsManager : MonoBehaviour
         }
     }
 
-    private IEnumerator ShowTextRoutine()
+    public void ShowScore()
     {
-        float elapsedTime = 0f;
-        scoreText.transform.localScale = Vector3.zero; // Nace desde escala 0
-
-        while (elapsedTime < showScaleDuration)
-        {
-            elapsedTime += Time.deltaTime;
-            float t = elapsedTime / showScaleDuration;
-
-            // Curva suave elástica o progresiva hacia el tamaño original
-            scoreText.transform.localScale = Vector3.Lerp(Vector3.zero, originalScale, Mathf.SmoothStep(0f, 1f, t));
-            yield return null;
-        }
-
-        scoreText.transform.localScale = originalScale;
-    }
-
-    private IEnumerator PunchTextRoutine()
-    {
-        float elapsedTime = 0f;
-        Vector3 targetScale = originalScale * punchScaleMultiplier;
-
-        // Fase 1: Crecer rápido
-        while (elapsedTime < punchDuration / 2f)
-        {
-            elapsedTime += Time.deltaTime;
-            float t = elapsedTime / (punchDuration / 2f);
-            scoreText.transform.localScale = Vector3.Lerp(originalScale, targetScale, Mathf.SmoothStep(0f, 1f, t));
-            yield return null;
-        }
-
-        elapsedTime = 0f;
-
-        // Fase 2: Volver a su tamaño original
-        while (elapsedTime < punchDuration / 2f)
-        {
-            elapsedTime += Time.deltaTime;
-            float t = elapsedTime / (punchDuration / 2f);
-            scoreText.transform.localScale = Vector3.Lerp(targetScale, originalScale, Mathf.SmoothStep(0f, 1f, t));
-            yield return null;
-        }
-
-        scoreText.transform.localScale = originalScale;
-
-        // Iniciar el tiempo de espera antes de ocultarlo
-        hideCoroutine = StartCoroutine(HideTextAfterDelayRoutine());
-    }
-
-    private IEnumerator HideTextAfterDelayRoutine()
-    {
-        yield return new WaitForSeconds(hideDelay);
-
         if (scoreText != null)
         {
-            scoreText.gameObject.SetActive(false);
+            scoreText.gameObject.SetActive(true);
+
+            if (alwaysShowScore) return;
+
+            if (hideCoroutine != null)
+            {
+                StopCoroutine(hideCoroutine);
+            }
+            hideCoroutine = StartCoroutine(HideScoreAfterDelay());
         }
     }
 
-    public void ResetScore()
+    private IEnumerator HideScoreAfterDelay()
     {
-        currentScore = 0;
-        PlayerPrefs.SetInt(SCORE_KEY, currentScore);
-        PlayerPrefs.Save();
-        UpdateScoreUI();
+        if (alwaysShowScore) yield break;
 
+        yield return new WaitForSeconds(hideDelay);
         if (scoreText != null)
         {
             scoreText.gameObject.SetActive(false);
