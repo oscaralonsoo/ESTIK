@@ -21,6 +21,7 @@ public static class LevelLoader
 
     static readonly List<string> mainLevelScenes = new List<string>
     {
+        "Level0",
         "Level1",
         "Level2",
         "Level3",
@@ -29,8 +30,7 @@ public static class LevelLoader
         "Level6",
         "Level7",
         "Level8",
-        "Level9",
-        "Level10"
+        "Level9"
     };
 
     public static PlayMode Mode { get; private set; } = PlayMode.Normal;
@@ -46,7 +46,7 @@ public static class LevelLoader
         {
             if (IsInTutorial) return 0;
             EnsureRun();
-            return queue[position] + 1;
+            return queue[position];
         }
     }
 
@@ -198,5 +198,14 @@ public static class LevelLoader
             (queue[0], queue[queue.Count - 1]) = (queue[queue.Count - 1], queue[0]);
 
         lastLevelOfPreviousRun = queue[queue.Count - 1];
+    }
+
+    public static AsyncOperation LoadSelectedLevel()
+    {
+        int level = PlayerPrefs.GetInt("SelectedLevel", 0);
+
+        int safeIndex = level % mainLevelScenes.Count;
+
+        return LoadSpecificLevel(mainLevelScenes[safeIndex]);
     }
 }
