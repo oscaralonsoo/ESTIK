@@ -190,11 +190,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 27750693988983082, guid: a47e68aefa8f5bc46b99ca7c3fee457f, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0
+      value: 0.3
       objectReference: {fileID: 0}
     - target: {fileID: 27750693988983082, guid: a47e68aefa8f5bc46b99ca7c3fee457f, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 15
+      value: 12.2
       objectReference: {fileID: 0}
     - target: {fileID: 27750693988983082, guid: a47e68aefa8f5bc46b99ca7c3fee457f, type: 3}
       propertyPath: m_LocalRotation.w
@@ -224,6 +224,14 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 945946687783520781, guid: a47e68aefa8f5bc46b99ca7c3fee457f, type: 3}
+      propertyPath: m_Size.z
+      value: 0.82
+      objectReference: {fileID: 0}
+    - target: {fileID: 3363346981622894758, guid: a47e68aefa8f5bc46b99ca7c3fee457f, type: 3}
+      propertyPath: m_Size.z
+      value: 1.07
+      objectReference: {fileID: 0}
     - target: {fileID: 6706252074240031875, guid: a47e68aefa8f5bc46b99ca7c3fee457f, type: 3}
       propertyPath: m_Name
       value: DribblingGate_02
@@ -245,7 +253,8 @@ PrefabInstance:
       value: DribblingTraining (1)
       objectReference: {fileID: 0}
     m_RemovedComponents: []
-    m_RemovedGameObjects: []
+    m_RemovedGameObjects:
+    - {fileID: 2873996717153547902, guid: a47e68aefa8f5bc46b99ca7c3fee457f, type: 3}
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: a47e68aefa8f5bc46b99ca7c3fee457f, type: 3}
