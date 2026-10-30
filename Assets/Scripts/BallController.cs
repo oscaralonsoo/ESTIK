@@ -113,7 +113,11 @@ public class BallController : MonoBehaviour
             if (remainingShots > 0 && grounded)
             {
                 draging = true;
-                dragStartPosition = Pointer.current.position.ReadValue() / Screen.height;
+
+                Vector2 ballScreenPos = mainCamera.WorldToScreenPoint(ballRigidbody.position);
+
+                dragStartPosition = ballScreenPos / Screen.height;
+
                 dragCurrentPosition = dragStartPosition;
             }
         }
