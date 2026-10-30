@@ -6,8 +6,6 @@ using UnityEngine.UI;
 public class ToggleFeedback : MonoBehaviour,
     IPointerEnterHandler, IPointerExitHandler, IPointerDownHandler, IPointerUpHandler
 {
-    [Header("Animación Cambio de Estado (ON / OFF)")]
-    [SerializeField] float togglePunchScale = 1.12f;
 
     [Header("Al pasar el ratón")]
     [SerializeField] float hoverScale = 1.05f;

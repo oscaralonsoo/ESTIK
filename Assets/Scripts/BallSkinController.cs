@@ -1,9 +1,11 @@
-
+using System;
 using UnityEngine;
 
 public class BallSkinController : MonoBehaviour
 {
     private const string SkinKey = "SelectedBall";
+
+    public static event Action<string> SkinChanged;
 
     public void SelectSkin(string skinName)
     {
@@ -11,6 +13,8 @@ public class BallSkinController : MonoBehaviour
 
         PlayerPrefs.SetString(SkinKey, skinName);
         PlayerPrefs.Save();
+
+        SkinChanged?.Invoke(skinName);
     }
 
     public string GetSavedSkinName()

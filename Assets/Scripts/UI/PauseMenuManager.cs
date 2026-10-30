@@ -3,19 +3,20 @@ using UnityEngine.InputSystem;
 
 public class PauseMenuManager : MonoBehaviour
 {
+    public static bool GamePaused { get; private set; }
+
     [Header("HUD")]
-    public GameObject hudPanel;          // HUD con el boton de pausa
+    public GameObject hudPanel;
 
     [Header("Paneles")]
-    public GameObject pausePanel;        // Resume / Options / Skins
+    public GameObject pausePanel;
     public GameObject optionsPanel;
-    public GameObject customBallPanel;   // Se controla solo
+    public GameObject customBallPanel;
 
-    GameObject currentPanel;             // Panel secundario abierto (options / skins)
-    bool paused;
+    GameObject currentPanel;
     bool transitioning;
 
-    public bool IsPaused => paused;
+    public bool IsPaused => GamePaused;
 
     void Start()
     {
@@ -29,15 +30,14 @@ public class PauseMenuManager : MonoBehaviour
 
     void OnDisable()
     {
-        // Evita dejar el juego congelado si se desactiva el canvas estando en pausa
+        GamePaused = false;
         Time.timeScale = 1f;
-        paused = false;
     }
 
     void ResetState()
     {
+        GamePaused = false;
         Time.timeScale = 1f;
-        paused = false;
         transitioning = false;
         currentPanel = null;
 
@@ -52,19 +52,15 @@ public class PauseMenuManager : MonoBehaviour
         var keyboard = Keyboard.current;
         if (keyboard == null || !keyboard.escapeKey.wasPressedThisFrame) return;
 
-        if (!paused) OnPausePressed();
+        if (!GamePaused) OnPausePressed();
         else if (currentPanel != null) OnBackPressed();
         else OnResumePressed();
     }
-
-    // ---------- Botones ----------
-
-    // Boton de pausa del HUD
     public void OnPausePressed()
     {
-        if (paused || transitioning) return;
+        if (GamePaused || transitioning) return;
 
-        paused = true;
+        GamePaused = true;
         Time.timeScale = 0f;
 
         if (hudPanel) hudPanel.SetActive(false);
@@ -74,9 +70,8 @@ public class PauseMenuManager : MonoBehaviour
     // Boton Resume
     public void OnResumePressed()
     {
-        if (!paused || transitioning) return;
+        if (!GamePaused || transitioning) return;
 
-        // Si hay un panel secundario abierto, se cierra sin animar
         if (currentPanel != null)
         {
             currentPanel.SetActive(false);
@@ -86,7 +81,7 @@ public class PauseMenuManager : MonoBehaviour
         if (pausePanel) pausePanel.SetActive(false);
         if (hudPanel) hudPanel.SetActive(true);
 
-        paused = false;
+        GamePaused = false;
         Time.timeScale = 1f;
     }
 
@@ -94,7 +89,6 @@ public class PauseMenuManager : MonoBehaviour
 
     public void OnSkinsPressed() => OpenPanel(customBallPanel);
 
-    // Boton Back de Options / llamalo tambien desde el cierre de CustomBallPanel
     public void OnBackPressed()
     {
         if (currentPanel == null || transitioning) return;
@@ -109,12 +103,9 @@ public class PauseMenuManager : MonoBehaviour
             transitioning = false;
         });
     }
-
-    // Si CustomBallPanel se cierra solo con su propio boton, llama a esto desde ahi
-    // (OnClick -> PauseMenuManager.OnSecondaryPanelClosed) para volver al menu de pausa
     public void OnSecondaryPanelClosed()
     {
-        if (!paused) return;
+        if (!GamePaused) return;
 
         if (currentPanel != null)
         {
@@ -125,11 +116,9 @@ public class PauseMenuManager : MonoBehaviour
         if (pausePanel) pausePanel.SetActive(true);
     }
 
-    // ---------- Internos ----------
-
     void OpenPanel(GameObject panel)
     {
-        if (panel == null || !paused || transitioning || currentPanel == panel) return;
+        if (panel == null || !GamePaused || transitioning || currentPanel == panel) return;
 
         transitioning = true;
 

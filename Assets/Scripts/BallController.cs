@@ -6,6 +6,8 @@ public class BallController : MonoBehaviour
 {
     [Header("SHOOT PROPERTIES")]
     [SerializeField] private float shootSpeed = 30f;
+    [Tooltip("Por debajo de esta distancia de drag (en alturas de pantalla) el disparo se cancela.")]
+    [SerializeField] private float minDragDistance = 0.03f;
     [SerializeField] private float maxDragDistance = 0.2f;
     [SerializeField] private float maxAerealDragDistance = 0.3f;
     [SerializeField] private float shootAngle = 30f;
@@ -18,9 +20,14 @@ public class BallController : MonoBehaviour
     [SerializeField] private float slowmoJoinTransitionDuration = 0.5f;
     [SerializeField] private float slowmoLeaveTransitionDuration = 0f;
 
+    [Header("ZONAS SIN LANZAMIENTO")]
+    [Tooltip("Boton de pausa (o un area mayor a su alrededor). Un click que empieza aqui no lanza la bola.")]
+    [SerializeField] private RectTransform[] blockedZones;
+
     [Header("DEBUG")]
     bool initialized = true;
     [SerializeField] public bool draging = false;
+    [SerializeField] private bool gestureBlocked = false;
     [SerializeField] private bool aerealShot = false;
     [SerializeField] private bool slowmo = false;
     [SerializeField] private bool grounded = false;
@@ -36,18 +43,29 @@ public class BallController : MonoBehaviour
     private DesaturationSlowmo postProcessSlowmo;
     private TraceBehaviour traceBehaviour;
     private Camera mainCamera;
+    private string currentSkinName;
 
     private const string SkinKey = "SelectedBall";
 
     private void Awake()
     {
         initialized = true;
-        
+
         //TRACE
         GameObject trace = Instantiate(tracePrefab);
         trace.SetActive(false);
         traceBehaviour = trace.GetComponentInChildren<TraceBehaviour>();
         if (!traceBehaviour) initialized = false;
+    }
+
+    private void OnEnable()
+    {
+        BallSkinController.SkinChanged += OnSkinChanged;
+    }
+
+    private void OnDisable()
+    {
+        BallSkinController.SkinChanged -= OnSkinChanged;
     }
 
     void Start()
@@ -71,19 +89,38 @@ public class BallController : MonoBehaviour
         if (!initialized || Pointer.current == null || ballRigidbody == null)
             return;
 
-        if (Pointer.current.press.wasPressedThisFrame && remainingShots > 0 && grounded)
+        if (PauseMenuManager.GamePaused)
         {
-            draging = true;
+            CancelAim();
+            gestureBlocked = false;
+            return;
+        }
+
+        if (gestureBlocked)
+        {
+            if (Pointer.current.press.wasReleasedThisFrame) gestureBlocked = false;
+            return;
+        }
+
+        if (Pointer.current.press.wasPressedThisFrame)
+        {
+            if (IsInBlockedZone(Pointer.current.position.ReadValue()))
+            {
+                gestureBlocked = true;
+                return;
+            }
+
+            if (remainingShots > 0 && grounded)
+            {
+                draging = true;
+                dragStartPosition = Pointer.current.position.ReadValue() / Screen.height;
+                dragCurrentPosition = dragStartPosition;
+            }
         }
 
         if (draging)
         {
-            Vector3 ballScreenPos3D = mainCamera.WorldToScreenPoint(ballRigidbody.position);
-            Vector2 ballScreenPos = new Vector2(ballScreenPos3D.x, ballScreenPos3D.y);
-            dragStartPosition = ballScreenPos / Screen.height;
-
-            Vector2 rawPos = Pointer.current.position.ReadValue();
-            dragCurrentPosition = rawPos / Screen.height;
+            dragCurrentPosition = Pointer.current.position.ReadValue() / Screen.height;
             ShowTrace();
         }
         else
@@ -94,15 +131,17 @@ public class BallController : MonoBehaviour
 
         if (Pointer.current.press.wasReleasedThisFrame && draging)
         {
-            Vector3 ballScreenPos3D = mainCamera.WorldToScreenPoint(ballRigidbody.position);
-            Vector2 ballScreenPos = new Vector2(ballScreenPos3D.x, ballScreenPos3D.y);
-            dragStartPosition = ballScreenPos / Screen.height;
+            dragEndPosition = Pointer.current.position.ReadValue() / Screen.height;
 
-            Vector2 rawPos = Pointer.current.position.ReadValue();
-            dragEndPosition = rawPos / Screen.height;
-
-            Shoot();
-            OnShoot();
+            if (GetPower01((dragStartPosition - dragEndPosition).magnitude) <= 0f)
+            {
+                CancelAim();
+            }
+            else
+            {
+                Shoot();
+                OnShoot();
+            }
         }
 
         slowmo = draging || (aerealShot && remainingShots != 0);
@@ -114,6 +153,46 @@ public class BallController : MonoBehaviour
         Time.fixedDeltaTime = 0.02f * Time.timeScale;
 
         if (slowmo) postProcessSlowmo.ActivatePostProcess(); else postProcessSlowmo.DeactivatePostProcess();
+    }
+    private float GetPower01(float dragMagnitude)
+    {
+        return Mathf.InverseLerp(minDragDistance, maxDragDistance, dragMagnitude);
+    }
+
+    private bool IsInBlockedZone(Vector2 screenPos)
+    {
+        if (blockedZones == null) return false;
+
+        foreach (var zone in blockedZones)
+        {
+            if (zone == null || !zone.gameObject.activeInHierarchy) continue;
+
+            Camera cam = null;
+            Canvas canvas = zone.GetComponentInParent<Canvas>();
+            if (canvas != null)
+            {
+                canvas = canvas.rootCanvas;
+                if (canvas.renderMode != RenderMode.ScreenSpaceOverlay)
+                    cam = canvas.worldCamera;
+            }
+
+            if (RectTransformUtility.RectangleContainsScreenPoint(zone, screenPos, cam))
+                return true;
+        }
+
+        return false;
+    }
+
+    private void CancelAim()
+    {
+        if (!draging) return;
+
+        HideTrace();
+        draging = false;
+        dragStartPosition = Vector2.zero;
+        dragCurrentPosition = Vector2.zero;
+        dragEndPosition = Vector2.zero;
+        currentShootSpeed = 0f;
     }
 
     private Vector3 GetCameraRelativeDirection(Vector2 dragDirection)
@@ -139,9 +218,7 @@ public class BallController : MonoBehaviour
 
         Vector2 dragDir = dragStartPosition - dragEndPosition;
 
-        currentShootSpeed = dragDir.magnitude > maxDragDistance
-            ? shootSpeed
-            : dragDir.magnitude / maxDragDistance * shootSpeed;
+        currentShootSpeed = GetPower01(dragDir.magnitude) * shootSpeed;
 
         if (aerealShot)
         {
@@ -182,10 +259,18 @@ public class BallController : MonoBehaviour
         currentShootSpeed = 0f;
     }
 
+    #region Skin
+    private void OnSkinChanged(string skinName)
+    {
+        LoadSavedSkin();
+    }
+
     private void LoadSavedSkin()
     {
         string savedSkinName = PlayerPrefs.GetString(SkinKey, "");
         if (string.IsNullOrEmpty(savedSkinName)) savedSkinName = "BallDefault";
+
+        if (savedSkinName == currentSkinName) return;
 
         GameObject prefab = Resources.Load<GameObject>(savedSkinName);
 
@@ -195,22 +280,25 @@ public class BallController : MonoBehaviour
             prefab = Resources.Load<GameObject>(savedSkinName);
         }
 
+        if (prefab == null) return;
+
         foreach (Transform child in transform)
         {
+            child.gameObject.SetActive(false);
             Destroy(child.gameObject);
         }
 
         Instantiate(prefab, transform);
+        currentSkinName = savedSkinName;
     }
+    #endregion
 
     #region Trace
     private void ShowTrace()
     {
         Vector2 dragDir = dragStartPosition - dragCurrentPosition;
 
-        currentShootSpeed = dragDir.magnitude > maxDragDistance
-            ? shootSpeed
-            : dragDir.magnitude / maxDragDistance * shootSpeed;
+        currentShootSpeed = GetPower01(dragDir.magnitude) * shootSpeed;
 
         if (aerealShot)
         {
@@ -250,7 +338,7 @@ public class BallController : MonoBehaviour
         traceBehaviour.SetFillAmount(fillPercentatge);
         traceBehaviour.gameObject.SetActive(true);
         traceBehaviour.transform.SetPositionAndRotation(tracePosition, traceRotation);
-        
+
     }
 
     private void HideTrace()
@@ -273,7 +361,7 @@ public class BallController : MonoBehaviour
     }
     private void OnCollisionExit(Collision other)
     {
-        if(other.collider.CompareTag("Floor"))
+        if (other.collider.CompareTag("Floor"))
         {
             grounded = false;
         }
@@ -283,8 +371,9 @@ public class BallController : MonoBehaviour
     {
         if (other.CompareTag("Area"))
         {
-            if (remainingShots != 0) {
-                
+            if (remainingShots != 0)
+            {
+
                 aerealShot = true;
                 remainingShots = 1;
                 if (mainCamera.TryGetComponent<CameraFollow>(out CameraFollow cameraFollow))
@@ -301,39 +390,39 @@ public class BallController : MonoBehaviour
         FastSceneLoader.Instance.RestartLevel();
     }
 
-/*    public bool IsAiming => draging;
+    /*    public bool IsAiming => draging;
 
-    public float CurrentShootSpeed => currentShootSpeed;
+        public float CurrentShootSpeed => currentShootSpeed;
 
-    public float MaxShootSpeed => shootSpeed;
+        public float MaxShootSpeed => shootSpeed;
 
-    public Vector2 DragDirection => dragStartPosition - dragCurrentPosition;
+        public Vector2 DragDirection => dragStartPosition - dragCurrentPosition;
 
-    public int ShotCount { get; private set; }
+        public int ShotCount { get; private set; }
 
-    public Vector3 LastShootDirection { get; private set; }
+        public Vector3 LastShootDirection { get; private set; }
 
-    public Vector3 BallPosition => ballRigidbody != null
-        ? ballRigidbody.position
-        : transform.position;
+        public Vector3 BallPosition => ballRigidbody != null
+            ? ballRigidbody.position
+            : transform.position;
 
-    public Vector3 ShootDirection
-    {
-        get
+        public Vector3 ShootDirection
         {
-            if (camera == null)
-                return Vector3.zero;
-
-            Vector3 direction = GetCameraRelativeDirection(DragDirection);
-
-            if (currentShootAngle > 0f && direction.sqrMagnitude > 0.0001f)
+            get
             {
-                Vector3 rightAxis = Vector3.Cross(Vector3.up, direction);
-                direction = Quaternion.AngleAxis(-currentShootAngle, rightAxis)
-                    * direction;
-            }
+                if (camera == null)
+                    return Vector3.zero;
 
-            return direction.normalized;
-        }
-    }*/
+                Vector3 direction = GetCameraRelativeDirection(DragDirection);
+
+                if (currentShootAngle > 0f && direction.sqrMagnitude > 0.0001f)
+                {
+                    Vector3 rightAxis = Vector3.Cross(Vector3.up, direction);
+                    direction = Quaternion.AngleAxis(-currentShootAngle, rightAxis)
+                        * direction;
+                }
+
+                return direction.normalized;
+            }
+        }*/
 }

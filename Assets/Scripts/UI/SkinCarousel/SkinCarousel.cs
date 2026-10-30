@@ -105,16 +105,33 @@ public class SkinCarousel : MonoBehaviour,
         if (_items == null || Count == 0)
             return;
 
-        int start = Array.FindIndex(
-            catalog.skins,
-            s => s.id == SkinService.EquippedId
-        );
+        // Fuente de verdad: la skin guardada para la bola (es la que SI se guarda bien).
+        // Si no hay, se usa SkinService.EquippedId.
+        int start = -1;
+
+        if (ballSkinController != null)
+        {
+            string savedName = ballSkinController.GetSavedSkinName();
+
+            if (!string.IsNullOrEmpty(savedName))
+                start = Array.FindIndex(
+                    catalog.skins,
+                    s => s != null && s.displayName == savedName
+                );
+        }
+
+        if (start < 0)
+            start = Array.FindIndex(
+                catalog.skins,
+                s => s != null && s.id == SkinService.EquippedId
+            );
 
         _targetIndex = Mathf.Max(0, start);
 
         _pos = _targetIndex;
         _vel = 0f;
         _dragVel = 0f;
+        _dragging = false;   // si el panel se cerro a mitad de drag, OnEndDrag nunca se llamo
         _lastNearest = -1;
         _lastSavedIndex = -1;
 
@@ -123,6 +140,17 @@ public class SkinCarousel : MonoBehaviour,
 
         // Guardar inmediatamente la skin central inicial.
         SaveSkinForIndex(_targetIndex);
+    }
+
+    void OnDisable()
+    {
+        if (_items == null || Count == 0)
+            return;
+
+        // Al cerrar el panel (Back, pausa, Escape...) se confirma la skin elegida,
+        // aunque el carrusel aun se estuviera moviendo o arrastrando.
+        _dragging = false;
+        CommitSelection();
     }
 
     void Start()
@@ -228,6 +256,19 @@ public class SkinCarousel : MonoBehaviour,
 
         // Se comprueba también aunque el índice no haya cambiado.
         DetectLargeSelectedBall();
+    }
+
+    // Confirma la skin del indice objetivo (equipada + guardada para la bola).
+    void CommitSelection()
+    {
+        _targetIndex = Mathf.Clamp(_targetIndex, 0, Count - 1);
+
+        SkinData skin = catalog.skins[_targetIndex];
+        if (skin == null)
+            return;
+
+        SkinService.Equip(skin);
+        SaveSkinForIndex(_targetIndex);
     }
 
     // Detecta la bola central que tiene el tamaño máximo.
