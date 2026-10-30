@@ -13,6 +13,7 @@ public class MainMenuManager : MonoBehaviour
     public GameObject mainPanel;
     public GameObject optionsPanel;
     public GameObject customizationPanel;
+    public GameObject LevelSelector;
 
     GameObject currentPanel;
     bool transitioning;
@@ -25,6 +26,7 @@ public class MainMenuManager : MonoBehaviour
 
         if (optionsPanel) optionsPanel.SetActive(false);
         if (customizationPanel) customizationPanel.SetActive(false);
+        if (LevelSelector) LevelSelector.SetActive(false);
         if (mainPanel) mainPanel.SetActive(true);
         currentPanel = null;
     }
@@ -43,9 +45,8 @@ public class MainMenuManager : MonoBehaviour
         menuCanvas.SetActive(false);
         if (ball) ball.SetActive(true);
     }
-
+    public void OnLevelSelectorPressed() => OpenPanel(LevelSelector);
     public void OnOptionsPressed() => OpenPanel(optionsPanel);
-
     public void OnCustomizationPressed() => OpenPanel(customizationPanel);
     public void OnBackPressed()
     {

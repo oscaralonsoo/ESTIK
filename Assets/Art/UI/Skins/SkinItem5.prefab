@@ -10,7 +10,6 @@ GameObject:
   m_Component:
   - component: {fileID: 8107585254000657610}
   - component: {fileID: 4160961074298183657}
-  - component: {fileID: 5738853382861298191}
   m_Layer: 5
   m_Name: SkinItem5
   m_TagString: Untagged
@@ -51,29 +50,6 @@ CanvasGroup:
   m_Interactable: 1
   m_BlocksRaycasts: 1
   m_IgnoreParentGroups: 0
---- !u!114 &5738853382861298191
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 70572593172112771}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a21e062c9ebce2f48847a354b5c1114d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::SkinCarouselItem
-  ball: {fileID: 3610265761855600692, guid: 956578114d9029146a59abc545fcf13b, type: 3}
-  ballRenderer: {fileID: 3532467979076489005, guid: 956578114d9029146a59abc545fcf13b, type: 3}
-  lockIcon: {fileID: 0}
-  spinSpeed: 40
-  lockedBrightness: 0.2
-  hideParticlesWhenLocked: 1
-  prefabScaleMultiplier: 1
-  ignoreChildPrefixes:
-  - Trail
-  particlesSortingOrder: 10
-  shellSortingOrder: 12
 --- !u!1 &2708558728230043586
 GameObject:
   m_ObjectHideFlags: 0
@@ -264,6 +240,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: IceBall
       objectReference: {fileID: 0}
+    - target: {fileID: 2562415716623255454, guid: dee8026883e301641abdfd21969451f6, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3532467979076489005, guid: dee8026883e301641abdfd21969451f6, type: 3}
+      propertyPath: m_SortingLayer
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 3610265761855600692, guid: dee8026883e301641abdfd21969451f6, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -304,7 +288,8 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 2562415716623255454, guid: dee8026883e301641abdfd21969451f6, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
