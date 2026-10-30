@@ -1,5 +1,6 @@
 using System.Collections;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class GoalController : MonoBehaviour
 {
@@ -29,11 +30,11 @@ public class GoalController : MonoBehaviour
                 goalParticles.Play();
             }
 
-            // Llama a la secuencia en el PointCollector pasándole la posición del impacto
             if (pointCollector != null)
             {
                 pointCollector.SpawnPointsEffect(hitPosition);
             }
+
 
             StartCoroutine(TriggerChangeCoroutine());
         }
