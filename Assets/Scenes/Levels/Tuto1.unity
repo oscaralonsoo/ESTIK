@@ -267,6 +267,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 642726158661726747, guid: cdafbd9b89fc25f4a83120e28bec3afd, type: 3}
+      propertyPath: m_Cameras.Array.size
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 3656551249161738337, guid: cdafbd9b89fc25f4a83120e28bec3afd, type: 3}
       propertyPath: m_LocalScale.x
       value: 1.0899985
@@ -348,7 +352,8 @@ PrefabInstance:
       value: 1.6954691
       objectReference: {fileID: 0}
     m_RemovedComponents: []
-    m_RemovedGameObjects: []
+    m_RemovedGameObjects:
+    - {fileID: 5909184209334704209, guid: cdafbd9b89fc25f4a83120e28bec3afd, type: 3}
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: cdafbd9b89fc25f4a83120e28bec3afd, type: 3}
