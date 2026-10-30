@@ -22,13 +22,13 @@ public class DragTutorial : MonoBehaviour
         mainCamera = Camera.main;
 
         if (ball == null)
-            ball = FindFirstObjectByType<BallController>(FindObjectsInactive.Include);
+            ball = FindAnyObjectByType<BallController>(FindObjectsInactive.Include);
 
         if (indicator == null)
-            indicator = FindFirstObjectByType<TraceBehaviour>(FindObjectsInactive.Include);
+            indicator = FindAnyObjectByType<TraceBehaviour>(FindObjectsInactive.Include);
 
         if (goal == null)
-            goal = FindFirstObjectByType<GoalController>(FindObjectsInactive.Include);
+            goal = FindAnyObjectByType<GoalController>(FindObjectsInactive.Include);
 
         if (!mainCamera || !indicator || !ball || !goal || !drag)
         {

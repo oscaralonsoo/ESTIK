@@ -4,8 +4,8 @@ using UnityEngine;
 [RequireComponent(typeof(RectTransform))]
 public class SkinCarouselItem : MonoBehaviour
 {
-    static readonly int BaseColorId = Shader.PropertyToID("_BaseColor"); 
-    static readonly int ColorId = Shader.PropertyToID("_Color");       
+    static readonly int BaseColorId = Shader.PropertyToID("_BaseColor");
+    static readonly int ColorId = Shader.PropertyToID("_Color");
     struct Tint
     {
         public Renderer renderer;
@@ -25,7 +25,7 @@ public class SkinCarouselItem : MonoBehaviour
     [SerializeField] float prefabScaleMultiplier = 1f;
     [SerializeField] string[] ignoreChildPrefixes = { "Trail" };
 
-    [Header("Sorting (particulas antes, cascara despues)")]
+    [Header("Sorting")]
     [SerializeField] int particlesSortingOrder = 10;
     [SerializeField] int shellSortingOrder = 11;
 
@@ -79,9 +79,23 @@ public class SkinCarouselItem : MonoBehaviour
         ApplyBallMaterial(data);
         SpawnPrefabVisual(data);
         BuildTints();
+        UpdateLockState(data);
+    }
 
+    public void UpdateLockState(SkinData data)
+    {
         if (lockIcon != null)
             lockIcon.SetActive(!SkinService.IsUnlocked(data));
+    }
+
+    /// <summary>
+    /// Devuelve la posición mundial de la bola para que el PurchaseCollector sepa hacia dónde volar.
+    /// </summary>
+    public Vector3 GetBallPosition()
+    {
+        if (ball != null)
+            return ball.position;
+        return transform.position;
     }
 
     void ApplyBallMaterial(SkinData data)
@@ -91,6 +105,7 @@ public class SkinCarouselItem : MonoBehaviour
         else
             Debug.LogWarning($"Skin '{data.id}' no tiene Ball Material asignado", data);
     }
+
     void SpawnPrefabVisual(SkinData data)
     {
         DestroyVisual();
@@ -181,6 +196,7 @@ public class SkinCarouselItem : MonoBehaviour
         foreach (var tr in root.GetComponentsInChildren<Transform>(true))
             tr.gameObject.layer = layer;
     }
+
     float FitScaleToBall(Transform visualRoot)
     {
         Bounds? meshBounds = null;
@@ -218,6 +234,7 @@ public class SkinCarouselItem : MonoBehaviour
             ps.Play(true);
         }
     }
+
     void SetupSorting(Renderer[] renderers)
     {
         foreach (var r in renderers)
@@ -283,6 +300,7 @@ public class SkinCarouselItem : MonoBehaviour
             tint.renderer.SetPropertyBlock(_mpb);
         }
     }
+
     public void SetSelected(bool selected)
     {
         _selected = selected;
