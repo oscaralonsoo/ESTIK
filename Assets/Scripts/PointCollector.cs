@@ -42,16 +42,11 @@ public class PointCollector : MonoBehaviour
         mainCamera = Camera.main;
     }
 
-    /// <summary>
-    /// Función principal que se llama para ejecutar toda la secuencia de puntos desde una posición del mundo.
-    /// </summary>
     public void SpawnPointsEffect(Vector3 worldSpawnPosition, int customMin = -1, int customMax = -1, float customDuration = -1f)
     {
         int min = customMin != -1 ? customMin : minPoints;
         int max = customMax != -1 ? customMax : maxPoints;
         float finalDuration = customDuration != -1f ? customDuration : duration;
-
-        // Opcional: Asegurar que el marcador se muestre al iniciar la secuencia
         if (PointsManager.Instance != null)
         {
             PointsManager.Instance.ShowScore();
@@ -79,13 +74,11 @@ public class PointCollector : MonoBehaviour
 
     private IEnumerator AnimatePoint2DRoutine(Vector3 worldPos, float flightDuration)
     {
-        // 1. Dispersión inicial alrededor de la posición de impacto en el mundo 3D
         Vector2 randomOffset = Random.insideUnitCircle * spreadRadius;
         Vector3 startWorldPos = worldPos + new Vector3(randomOffset.x, randomOffset.y, 0f);
 
         GameObject pointInstance = Instantiate(point2DPrefab, startWorldPos, Quaternion.identity);
 
-        // Configurar capas de renderizado del sprite 2D
         SpriteRenderer spriteRenderer = pointInstance.GetComponent<SpriteRenderer>();
         if (spriteRenderer != null)
         {
@@ -93,7 +86,6 @@ public class PointCollector : MonoBehaviour
             spriteRenderer.sortingOrder = sortingOrder;
         }
 
-        // Orientar inicialmente hacia la cámara
         if (mainCamera != null)
         {
             pointInstance.transform.rotation = mainCamera.transform.rotation;
@@ -101,19 +93,17 @@ public class PointCollector : MonoBehaviour
 
         Vector3 targetScale = pointInstance.transform.localScale;
         pointInstance.transform.localScale = Vector3.zero;
-
-        // 2. Calcular la posición destino del Canvas UI convertida al mundo 3D
         Vector3 uiScreenPos = RectTransformUtility.WorldToScreenPoint(null, targetUIPoint.position);
         Vector3 targetWorldPos = mainCamera.ScreenToWorldPoint(new Vector3(uiScreenPos.x, uiScreenPos.y, mainCamera.nearClipPlane + 5f));
 
         Vector3 startPos3D = startWorldPos;
         Vector3 midPoint = (startPos3D + targetWorldPos) / 2f;
 
-        // Crear curva parabólica
+
         Vector3 curveOffset = new Vector3(Random.Range(-curveHeight, curveHeight) * 0.5f, curveHeight, 0f);
         Vector3 controlPoint = midPoint + curveOffset;
 
-        // Fase 1: Crecer desde escala 0 (Pop inicial)
+
         float spawnElapsedTime = 0f;
         while (spawnElapsedTime < spawnScaleDuration && pointInstance != null)
         {
@@ -125,7 +115,7 @@ public class PointCollector : MonoBehaviour
 
         if (pointInstance == null) yield break;
 
-        // Fase 2: Vuelo mediante Curva Bézier Cuadrática hacia la UI
+
         float flightElapsedTime = 0f;
 
         while (flightElapsedTime < flightDuration && pointInstance != null)
@@ -134,20 +124,17 @@ public class PointCollector : MonoBehaviour
             float t = flightElapsedTime / flightDuration;
             float smoothT = Mathf.SmoothStep(0f, 1f, t);
 
-            // Fórmula de Curva Bézier Cuadrática en 3D
             Vector3 currentPos = Mathf.Pow(1f - smoothT, 2f) * startPos3D +
                                  2f * (1f - smoothT) * smoothT * controlPoint +
                                  Mathf.Pow(smoothT, 2f) * targetWorldPos;
 
             pointInstance.transform.position = currentPos;
 
-            // Mantener orientado hacia la cámara durante todo el trayecto
             if (mainCamera != null)
             {
                 pointInstance.transform.rotation = mainCamera.transform.rotation;
             }
 
-            // Efecto de encogimiento al llegar a la mitad final del recorrido
             if (t > 0.5f)
             {
                 float shrinkT = (t - 0.5f) * 2f;
@@ -157,7 +144,6 @@ public class PointCollector : MonoBehaviour
             yield return null;
         }
 
-        // Fase 3: Llegada, sumar un punto al PointsManager y destruir el sprite
         if (pointInstance != null)
         {
             if (PointsManager.Instance != null)

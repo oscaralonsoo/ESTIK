@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -18,6 +19,18 @@ public class SkinCarousel : MonoBehaviour,
     [Header("Buy Refs")]
     [SerializeField] Button buyButton;
     [SerializeField] TextMeshProUGUI buyButtonText;
+    [SerializeField] Color cantAffordTextColor = new Color(1f, 0.35f, 0.35f, 1f);
+
+    [Header("Not Enough Points Popup")]
+    [SerializeField] TextMeshProUGUI notEnoughText;
+    [SerializeField] float popDuration = 0.35f;
+    [SerializeField, Range(0f, 1f)] float popStartScale = 0.85f;
+    [Tooltip("0 = sin rebote, 1 = rebote marcado.")]
+    [SerializeField, Range(0f, 1.5f)] float popOvershoot = 0.5f;
+    [SerializeField] float popHoldTime = 1.2f;
+    [SerializeField] float popFadeTime = 0.5f;
+    [SerializeField] float popRiseDistance = 20f;
+    [SerializeField] int popupSortingOrder = 1000;
 
     BallSkinController ballSkinController;
     PanelAnimator _panel;
@@ -37,9 +50,13 @@ public class SkinCarousel : MonoBehaviour,
     [Header("Selection")]
     [SerializeField] float centerTolerance = 0.01f;
 
+    [Header("Purchase")]
+    [SerializeField] float unlockAnimationLock = 0.6f;
+
     public event Action<SkinData> SelectionChanged;
 
     public SkinData Current => catalog.skins[_targetIndex];
+    public bool IsUnlocking => _unlocking;
 
     SkinCarouselItem[] _items;
     Canvas _canvas;
@@ -51,6 +68,14 @@ public class SkinCarousel : MonoBehaviour,
     int _lastSavedIndex = -1;
 
     bool _dragging;
+    bool _unlocking;
+    Coroutine _unlockRoutine;
+
+    CanvasGroup _popupGroup;
+    RectTransform _popupRect;
+    Vector2 _popupBasePos;
+    Coroutine _popupRoutine;
+    Color _buyTextDefaultColor = Color.white;
 
     int Count => catalog.skins.Length;
 
@@ -92,6 +117,31 @@ public class SkinCarousel : MonoBehaviour,
         if (buyButton != null)
             buyButton.onClick.AddListener(BuyCurrentSkin);
 
+        if (buyButtonText != null)
+            _buyTextDefaultColor = buyButtonText.color;
+
+        if (notEnoughText != null)
+        {
+            _popupRect = notEnoughText.rectTransform;
+            _popupBasePos = _popupRect.anchoredPosition;
+
+            _popupGroup = notEnoughText.GetComponent<CanvasGroup>();
+            if (_popupGroup == null)
+                _popupGroup = notEnoughText.gameObject.AddComponent<CanvasGroup>();
+
+            _popupGroup.interactable = false;
+            _popupGroup.blocksRaycasts = false;
+
+            Canvas popupCanvas = notEnoughText.GetComponent<Canvas>();
+            if (popupCanvas == null)
+                popupCanvas = notEnoughText.gameObject.AddComponent<Canvas>();
+
+            popupCanvas.overrideSorting = true;
+            popupCanvas.sortingOrder = popupSortingOrder;
+
+            HidePopupImmediate();
+        }
+
         _items = new SkinCarouselItem[Count];
 
         for (int i = 0; i < Count; i++)
@@ -125,8 +175,11 @@ public class SkinCarousel : MonoBehaviour,
         _vel = 0f;
         _dragVel = 0f;
         _dragging = false;
+        _unlocking = false;
         _lastNearest = -1;
         _lastSavedIndex = -1;
+
+        HidePopupImmediate();
 
         Layout();
         RefreshUI();
@@ -144,6 +197,17 @@ public class SkinCarousel : MonoBehaviour,
             return;
 
         _dragging = false;
+
+        if (_unlockRoutine != null)
+        {
+            StopCoroutine(_unlockRoutine);
+            _unlockRoutine = null;
+        }
+
+        _unlocking = false;
+
+        HidePopupImmediate();
+
         CommitSelection();
     }
 
@@ -165,21 +229,28 @@ public class SkinCarousel : MonoBehaviour,
         Layout();
         DetectLargeSelectedBall();
 
-        if (_dragging)
+        if (_dragging && !_unlocking)
         {
             int nearest = Mathf.Clamp(Mathf.RoundToInt(_pos), 0, Count - 1);
             if (nearest != _targetIndex)
                 SelectIndex(nearest);
         }
     }
+
     public void OnBeginDrag(PointerEventData e)
     {
+        if (_unlocking)
+            return;
+
         _dragging = true;
         _dragVel = 0f;
     }
 
     public void OnDrag(PointerEventData e)
     {
+        if (_unlocking || !_dragging)
+            return;
+
         if (spacing <= 0f)
             return;
 
@@ -193,14 +264,24 @@ public class SkinCarousel : MonoBehaviour,
 
     public void OnEndDrag(PointerEventData e)
     {
+        if (!_dragging)
+            return;
+
         _dragging = false;
         _vel = 0f;
 
+        if (_unlocking)
+            return;
+
         SelectIndex(Mathf.RoundToInt(_pos + _dragVel * inertia));
     }
+
     public void SelectIndex(int index)
     {
         if (Count == 0)
+            return;
+
+        if (_unlocking)
             return;
 
         index = Mathf.Clamp(index, 0, Count - 1);
@@ -208,6 +289,9 @@ public class SkinCarousel : MonoBehaviour,
         if (index != _targetIndex)
         {
             _targetIndex = index;
+
+            HidePopupImmediate();
+
             RefreshUI();
 
             SkinData selectedSkin = Current;
@@ -285,10 +369,10 @@ public class SkinCarousel : MonoBehaviour,
     void RefreshUI()
     {
         if (prevButton != null)
-            prevButton.interactable = _targetIndex > 0;
+            prevButton.interactable = !_unlocking && _targetIndex > 0;
 
         if (nextButton != null)
-            nextButton.interactable = _targetIndex < Count - 1;
+            nextButton.interactable = !_unlocking && _targetIndex < Count - 1;
 
         for (int i = 0; i < _items.Length; i++)
             _items[i].SetSelected(i == _targetIndex);
@@ -312,10 +396,16 @@ public class SkinCarousel : MonoBehaviour,
                 }
 
                 int playerPoints = PointsManager.Instance != null ? PointsManager.Instance.GetCurrentScore() : 0;
-                buyButton.interactable = playerPoints >= currentSkin.price;
+                bool canAfford = playerPoints >= currentSkin.price;
+
+                buyButton.interactable = !_unlocking;
+
+                if (buyButtonText != null)
+                    buyButtonText.color = canAfford ? _buyTextDefaultColor : cantAffordTextColor;
             }
         }
     }
+
     public void PulseCurrentItem()
     {
         if (_items != null && _targetIndex >= 0 && _targetIndex < _items.Length)
@@ -324,8 +414,9 @@ public class SkinCarousel : MonoBehaviour,
 
     public void BuyCurrentSkin()
     {
-        if (buyButton == null)
+        if (buyButton == null || _unlocking)
             return;
+
         SkinData currentSkin = Current;
         if (currentSkin == null || SkinService.IsUnlocked(currentSkin))
             return;
@@ -335,9 +426,16 @@ public class SkinCarousel : MonoBehaviour,
 
         if (playerPoints < price)
         {
-            Debug.Log("No tienes suficientes puntos para comprar esta skin.");
+            ShowNotEnoughPoints();
             return;
         }
+
+        _unlocking = true;
+        _dragging = false;
+        _dragVel = 0f;
+        _vel = 0f;
+
+        HidePopupImmediate();
 
         if (PointsManager.Instance != null)
         {
@@ -349,8 +447,7 @@ public class SkinCarousel : MonoBehaviour,
         SkinCarouselItem buyItem = _items[buyIndex];
         Vector3 targetBallPos = buyItem.GetBallPosition();
 
-        if (buyButton != null)
-            buyButton.interactable = false;
+        RefreshUI();
 
         if (PurchaseCollector.Instance != null)
         {
@@ -375,8 +472,122 @@ public class SkinCarousel : MonoBehaviour,
 
         _items[index].PlayUnlockAnimation();
 
-        RefreshUI();
         Debug.Log("¡Skin comprada y equipada: " + skin.displayName + "!");
+
+        if (_unlockRoutine != null)
+            StopCoroutine(_unlockRoutine);
+
+        if (unlockAnimationLock > 0f && isActiveAndEnabled)
+        {
+            _unlockRoutine = StartCoroutine(ReleaseUnlockLock());
+        }
+        else
+        {
+            _unlocking = false;
+            RefreshUI();
+        }
+    }
+
+    IEnumerator ReleaseUnlockLock()
+    {
+        yield return new WaitForSecondsRealtime(unlockAnimationLock);
+
+        _unlocking = false;
+        _unlockRoutine = null;
+        RefreshUI();
+    }
+
+    void ShowNotEnoughPoints()
+    {
+        if (notEnoughText == null)
+        {
+            Debug.Log("No tienes suficientes puntos para comprar esta skin.");
+            return;
+        }
+
+        if (!isActiveAndEnabled)
+            return;
+
+        if (_popupRoutine != null)
+            StopCoroutine(_popupRoutine);
+
+        _popupRoutine = StartCoroutine(NotEnoughPointsRoutine());
+    }
+
+    IEnumerator NotEnoughPointsRoutine()
+    {
+        notEnoughText.gameObject.SetActive(true);
+
+        _popupRect.SetAsLastSibling();
+
+        _popupRect.anchoredPosition = _popupBasePos;
+        _popupGroup.alpha = 0f;
+        _popupRect.localScale = Vector3.one * popStartScale;
+
+        float t = 0f;
+        while (t < popDuration)
+        {
+            t += Time.unscaledDeltaTime;
+            float k = Mathf.Clamp01(t / Mathf.Max(popDuration, 0.0001f));
+            float s = Mathf.LerpUnclamped(popStartScale, 1f, EaseOutBack(k, popOvershoot));
+            _popupRect.localScale = Vector3.one * s;
+            _popupGroup.alpha = Mathf.SmoothStep(0f, 1f, k);
+            yield return null;
+        }
+
+        _popupRect.localScale = Vector3.one;
+        _popupGroup.alpha = 1f;
+
+        float hold = 0f;
+        while (hold < popHoldTime)
+        {
+            hold += Time.unscaledDeltaTime;
+            yield return null;
+        }
+
+        float f = 0f;
+        while (f < popFadeTime)
+        {
+            f += Time.unscaledDeltaTime;
+            float k = Mathf.Clamp01(f / Mathf.Max(popFadeTime, 0.0001f));
+            float e = Mathf.SmoothStep(0f, 1f, k);
+            _popupGroup.alpha = 1f - e;
+            _popupRect.anchoredPosition = _popupBasePos + Vector2.up * (popRiseDistance * e);
+            yield return null;
+        }
+
+        HidePopupImmediate();
+    }
+
+    static float EaseOutBack(float x, float overshoot)
+    {
+        float c1 = overshoot;
+        float c3 = c1 + 1f;
+        float p = x - 1f;
+        return 1f + c3 * p * p * p + c1 * p * p;
+    }
+
+    void HidePopupImmediate()
+    {
+        if (_popupRoutine != null)
+        {
+            StopCoroutine(_popupRoutine);
+            _popupRoutine = null;
+        }
+
+        if (notEnoughText == null)
+            return;
+
+        if (_popupGroup != null)
+            _popupGroup.alpha = 0f;
+
+        if (_popupRect != null)
+        {
+            _popupRect.anchoredPosition = _popupBasePos;
+            _popupRect.localScale = Vector3.one;
+        }
+
+        notEnoughText.gameObject.SetActive(false);
     }
 
     void Layout()
