@@ -22,7 +22,7 @@ public class PointsManager : MonoBehaviour
     [SerializeField] private AnimationCurve priceDurationCurve = AnimationCurve.EaseInOut(0f, 0f, 1f, 1f);
 
     [Header("Puntuación")]
-    private int currentScore = 0;
+    [SerializeField] private int points= 0;
     private const string SCORE_KEY = "PlayerScore";
 
     private Vector3 originalScale;
@@ -49,8 +49,8 @@ public class PointsManager : MonoBehaviour
 
     private void Start()
     {
-        currentScore = PlayerPrefs.GetInt(SCORE_KEY, 0);
-        currentScore = 100000; // Valor inicial para pruebas si lo deseas
+        points = PlayerPrefs.GetInt(SCORE_KEY, 0);
+        points = 0;
         UpdateScoreUI();
 
         if (scoreText != null)
@@ -61,13 +61,13 @@ public class PointsManager : MonoBehaviour
 
     public int GetCurrentScore()
     {
-        return currentScore;
+        return points;
     }
 
     public void AddPoints(int amount)
     {
-        currentScore += amount;
-        PlayerPrefs.SetInt(SCORE_KEY, currentScore);
+        points += amount;
+        PlayerPrefs.SetInt(SCORE_KEY, points);
         PlayerPrefs.Save();
         UpdateScoreUI();
         ShowScore();
@@ -75,24 +75,17 @@ public class PointsManager : MonoBehaviour
 
     public void SpendPoints(int amount)
     {
-        currentScore -= amount;
-        currentScore = Mathf.Max(0, currentScore);
-        PlayerPrefs.SetInt(SCORE_KEY, currentScore);
+        points -= amount;
+        points = Mathf.Max(0, points);
+        PlayerPrefs.SetInt(SCORE_KEY, points);
         PlayerPrefs.Save();
     }
-
-    /// <summary>
-    /// Anima el texto bajando progresivamente calculando la duración según el precio de forma automática y modulada por curva.
-    /// </summary>
     public void AnimateScoreSpend(int skinPrice)
     {
-        // 1. Factor de precio normalizado (0 a 1 respecto al precio de referencia)
         float priceFactor = Mathf.Clamp01((float)skinPrice / referenceMaxPrice);
 
-        // 2. Modulamos el factor usando la curva configurable desde el Inspector
         float curvedFactor = priceDurationCurve.Evaluate(priceFactor);
 
-        // 3. Obtenemos la duración final interpolada
         float dynamicDuration = Mathf.Lerp(baseDuration, maxDuration, curvedFactor);
 
         if (scoreText != null)
@@ -115,8 +108,8 @@ public class PointsManager : MonoBehaviour
 
     private IEnumerator AnimateScoreSpendRoutine(int amountToSubtract, float duration)
     {
-        int startScore = currentScore + amountToSubtract;
-        int targetScore = currentScore;
+        int startScore = points + amountToSubtract;
+        int targetScore = points;
 
         float elapsed = 0f;
 
@@ -152,7 +145,7 @@ public class PointsManager : MonoBehaviour
     {
         if (scoreText != null)
         {
-            scoreText.text = scorePrefix + currentScore.ToString();
+            scoreText.text = scorePrefix + points.ToString();
         }
     }
 
