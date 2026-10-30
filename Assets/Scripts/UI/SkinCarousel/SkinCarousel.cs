@@ -324,6 +324,8 @@ public class SkinCarousel : MonoBehaviour,
 
     public void BuyCurrentSkin()
     {
+        if (buyButton == null)
+            return;
         SkinData currentSkin = Current;
         if (currentSkin == null || SkinService.IsUnlocked(currentSkin))
             return;

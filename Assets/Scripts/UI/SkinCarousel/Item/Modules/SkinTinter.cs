@@ -2,10 +2,6 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-/// <summary>
-/// Aplica brillo / oscurecimiento (lock) / flash a los renderers de la skin
-/// usando MaterialPropertyBlock (no instancia materiales).
-/// </summary>
 [Serializable]
 public class SkinTinter
 {
@@ -23,17 +19,11 @@ public class SkinTinter
     [SerializeField, Range(0f, 1f)] float lockedBrightness = 0.15f;
 
     readonly List<Tint> _tints = new List<Tint>();
-    // No se puede crear en el constructor: Unity lo prohíbe durante la serialización.
     MaterialPropertyBlock _mpb;
     float _lastApplied = -1f;
-
-    /// <summary>0 = normal, 1 = totalmente oscurecido (bloqueado).</summary>
     public float Darkness { get; set; }
 
-    /// <summary>0 = sin flash, 1 = blanco total.</summary>
     public float Flash { get; set; }
-
-    /// <summary>Brillo que dicta el carrusel (centro vs lateral).</summary>
     public float Brightness { get; set; } = 1f;
 
     public void Build(IEnumerable<Renderer> renderers)
@@ -44,8 +34,6 @@ public class SkinTinter
         foreach (var r in renderers)
             Add(r);
     }
-
-    /// <summary>Aplica solo si el brillo cambió desde la última vez.</summary>
     public void ApplyIfChanged()
     {
         if (_tints.Count == 0 || Mathf.Approximately(Brightness, _lastApplied))
@@ -55,7 +43,6 @@ public class SkinTinter
         Apply();
     }
 
-    /// <summary>Fuerza reaplicar (p. ej. al cambiar el estado de lock).</summary>
     public void Refresh()
     {
         _lastApplied = -1f;

@@ -1,12 +1,6 @@
 using System;
 using System.Collections;
 using UnityEngine;
-
-/// <summary>
-/// Coordinador de un item del carrusel de skins.
-/// La lógica concreta vive en los módulos (Item/Modules):
-/// SkinVisual, SkinTinter, SkinGlowEffect, SkinReceivePulse, SkinUnlockAnimation.
-/// </summary>
 [RequireComponent(typeof(RectTransform))]
 public class SkinCarouselItem : MonoBehaviour
 {
@@ -39,8 +33,6 @@ public class SkinCarouselItem : MonoBehaviour
 
     Coroutine _unlockCo;
     Action _onUnlockDone;
-
-    // ───────────── Lifecycle ─────────────
 
     void Awake()
     {
@@ -93,9 +85,6 @@ public class SkinCarouselItem : MonoBehaviour
         if (_valid && _selected)
             ball.Rotate(0f, spinSpeed * dt, 0f, Space.Self);
     }
-
-    // ───────────── Setup ─────────────
-
     public void Init(SkinData data, int index)
     {
         Index = index;
@@ -127,9 +116,6 @@ public class SkinCarouselItem : MonoBehaviour
         else
             Debug.LogWarning($"Skin '{data.id}' no tiene Ball Material asignado", data);
     }
-
-    // ───────────── Animaciones ─────────────
-
     public void PlayReceivePulse()
     {
         if (!_valid) return;
@@ -199,9 +185,6 @@ public class SkinCarouselItem : MonoBehaviour
         _onUnlockDone = null;
         cb?.Invoke();
     }
-
-    // ───────────── API para el carrusel ─────────────
-
     public Vector3 GetBallPosition()
     {
         return ball != null ? ball.position : transform.position;
