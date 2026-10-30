@@ -9,4 +9,5 @@ public class SkinData : ScriptableObject
     public GameObject effectPrefab;
     public GameObject ballPrefab;
     public bool unlockedByDefault = true;
+    public int price = 100;
 }
