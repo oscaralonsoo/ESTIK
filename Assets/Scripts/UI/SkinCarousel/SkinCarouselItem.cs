@@ -16,7 +16,10 @@ public class SkinCarouselItem : MonoBehaviour
     [Header("Refs")]
     [SerializeField] Transform ball;
     [SerializeField] Renderer ballRenderer;
+
+    [Header("Lock")]
     [SerializeField] GameObject lockIcon;
+    [SerializeField, Range(0f, 1f)] float lockedBrightness = 0.15f;
 
     [Header("Feel")]
     [SerializeField] float spinSpeed = 40f;
@@ -35,15 +38,19 @@ public class SkinCarouselItem : MonoBehaviour
     readonly List<Tint> _tints = new List<Tint>();
     MaterialPropertyBlock _mpb;
     Vector3 _baseBallScale = Vector3.one;
+    Vector3 _lockBaseScale = Vector3.one;
     float _lastBrightness = -1f;
+    float _currentBrightness = 1f;
 
     GameObject _visualInstance;
     Renderer[] _visualRenderers;
+    ParticleSystem[] _particles;
 
     bool _valid;
     bool _selected;
     bool _usePrefabVisual;
     bool _visualShown = true;
+    bool _locked;
 
     void Awake()
     {
@@ -63,6 +70,9 @@ public class SkinCarouselItem : MonoBehaviour
         }
 
         _baseBallScale = ball.localScale;
+
+        if (lockIcon != null)
+            _lockBaseScale = lockIcon.transform.localScale;
     }
 
     void Update()
@@ -84,8 +94,17 @@ public class SkinCarouselItem : MonoBehaviour
 
     public void UpdateLockState(SkinData data)
     {
+        _locked = !SkinService.IsUnlocked(data);
+
         if (lockIcon != null)
-            lockIcon.SetActive(!SkinService.IsUnlocked(data));
+            lockIcon.SetActive(_locked && _visualShown);
+
+        // Las particulas de una skin bloqueada se pausan para que no "brille" sin comprarla
+        SetParticlesActive(!_locked);
+
+        // Forzar que se vuelva a aplicar el tinte (oscuro si esta bloqueada)
+        _lastBrightness = -1f;
+        ApplyBrightness(_currentBrightness);
     }
 
     /// <summary>
@@ -139,6 +158,7 @@ public class SkinCarouselItem : MonoBehaviour
         }
 
         SetupParticles(_visualInstance);
+        _particles = _visualInstance.GetComponentsInChildren<ParticleSystem>(true);
 
         _visualRenderers = _visualInstance.GetComponentsInChildren<Renderer>(true);
         SetupSorting(_visualRenderers);
@@ -151,6 +171,7 @@ public class SkinCarouselItem : MonoBehaviour
 
         _visualInstance = null;
         _visualRenderers = null;
+        _particles = null;
         _usePrefabVisual = false;
     }
 
@@ -235,6 +256,25 @@ public class SkinCarouselItem : MonoBehaviour
         }
     }
 
+    void SetParticlesActive(bool active)
+    {
+        if (_particles == null) return;
+
+        foreach (var ps in _particles)
+        {
+            if (ps == null) continue;
+
+            if (active)
+            {
+                if (!ps.isPlaying) ps.Play(true);
+            }
+            else
+            {
+                ps.Stop(true, ParticleSystemStopBehavior.StopEmittingAndClear);
+            }
+        }
+    }
+
     void SetupSorting(Renderer[] renderers)
     {
         foreach (var r in renderers)
@@ -288,11 +328,13 @@ public class SkinCarouselItem : MonoBehaviour
 
     void ApplyBrightness(float brightness)
     {
+        float finalBrightness = _locked ? brightness * lockedBrightness : brightness;
+
         foreach (var tint in _tints)
         {
             if (tint.renderer == null) continue;
 
-            Color c = tint.baseColor * brightness;
+            Color c = tint.baseColor * finalBrightness;
             c.a = tint.baseColor.a;
 
             tint.renderer.GetPropertyBlock(_mpb);
@@ -312,17 +354,29 @@ public class SkinCarouselItem : MonoBehaviour
     {
         if (!_valid) return;
         ball.localScale = _baseBallScale * s;
+
+        if (lockIcon != null)
+            lockIcon.transform.localScale = _lockBaseScale * s;
     }
 
     public void SetVisual(float brightness, bool visible)
     {
         if (!_valid) return;
 
+        _currentBrightness = brightness;
+
         bool ballShouldShow = visible && !_usePrefabVisual;
         if (ballRenderer.enabled != ballShouldShow)
             ballRenderer.enabled = ballShouldShow;
 
         SetVisualShown(visible);
+
+        if (lockIcon != null)
+        {
+            bool lockShouldShow = _locked && visible;
+            if (lockIcon.activeSelf != lockShouldShow)
+                lockIcon.SetActive(lockShouldShow);
+        }
 
         if (!visible || _tints.Count == 0 || Mathf.Approximately(brightness, _lastBrightness))
             return;
