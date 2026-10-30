@@ -95,14 +95,20 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: '::'
   shootSpeed: 40
+  minDragDistance: 0.03
   maxDragDistance: 0.25
   maxAerealDragDistance: 0.3
-  shootAngle: 20
+  shootAngle: 30
+  shootMovingSpeed: 2
   tracePrefab: {fileID: 2832149820851652839, guid: cea40a733ecaf3342ba41d69d2cd71b0, type: 3}
   slowMotionScale: 0.1
   slowmoJoinTransitionDuration: 0.5
+  slowMotionAerealScale: 0
+  slowmoAerealJoinTransitionDuration: 1
   slowmoLeaveTransitionDuration: 0
+  blockedZones: []
   draging: 0
+  gestureBlocked: 0
   aerealShot: 0
   slowmo: 0
   grounded: 0
@@ -114,3 +120,5 @@ MonoBehaviour:
   dragCurrentPosition: {x: 0, y: 0}
   traceArrows: []
   ballRigidbody: {fileID: 3216378794060732006}
+  currentSlowmoScale: 0.2
+  currentSlowmoJoinTransitionDuration: 0.5

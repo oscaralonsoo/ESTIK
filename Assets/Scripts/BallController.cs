@@ -11,6 +11,7 @@ public class BallController : MonoBehaviour
     [SerializeField] private float maxDragDistance = 0.2f;
     [SerializeField] private float maxAerealDragDistance = 0.3f;
     [SerializeField] private float shootAngle = 30f;
+    [SerializeField] private float shootMovingSpeed = 5f;
 
     [Header("TRACE PROPERTIES")]
     [SerializeField] private GameObject tracePrefab;
@@ -18,6 +19,8 @@ public class BallController : MonoBehaviour
     [Header("SLOWMO PROPERTIES")]
     [SerializeField] public float slowMotionScale = 0.2f;
     [SerializeField] private float slowmoJoinTransitionDuration = 0.5f;
+    [SerializeField] public float slowMotionAerealScale = 0.2f;
+    [SerializeField] private float slowmoAerealJoinTransitionDuration = 0.1f;
     [SerializeField] private float slowmoLeaveTransitionDuration = 0f;
 
     [Header("ZONAS SIN LANZAMIENTO")]
@@ -45,6 +48,9 @@ public class BallController : MonoBehaviour
     private Camera mainCamera;
     private string currentSkinName;
 
+    [SerializeField] private float currentSlowmoScale = 0.2f;
+    [SerializeField] private float currentSlowmoJoinTransitionDuration = 0.5f;
+
     private const string SkinKey = "SelectedBall";
 
     private void Awake()
@@ -56,6 +62,9 @@ public class BallController : MonoBehaviour
         trace.SetActive(false);
         traceBehaviour = trace.GetComponentInChildren<TraceBehaviour>();
         if (!traceBehaviour) initialized = false;
+
+        currentSlowmoScale = slowMotionScale;
+        currentSlowmoJoinTransitionDuration = slowmoJoinTransitionDuration;
     }
 
     private void OnEnable()
@@ -127,11 +136,6 @@ public class BallController : MonoBehaviour
             dragCurrentPosition = Pointer.current.position.ReadValue() / Screen.height;
             ShowTrace();
         }
-        else
-        {
-            Time.timeScale = 1.0f;
-            Time.fixedDeltaTime = 0.02f;
-        }
 
         if (Pointer.current.press.wasReleasedThisFrame && draging)
         {
@@ -150,8 +154,8 @@ public class BallController : MonoBehaviour
 
         slowmo = draging || (aerealShot && remainingShots != 0);
 
-        float targetTimeScale = slowmo ? slowMotionScale : 1.0f;
-        float currentTransitionDuration = draging ? slowmoJoinTransitionDuration : slowmoLeaveTransitionDuration;
+        float targetTimeScale = slowmo ? currentSlowmoScale : 1.0f;
+        float currentTransitionDuration = slowmo ? currentSlowmoJoinTransitionDuration : slowmoLeaveTransitionDuration;
         float changeSpeed = currentTransitionDuration > 0f ? (1f / currentTransitionDuration) * Time.unscaledDeltaTime : 1000f;
         Time.timeScale = Mathf.MoveTowards(Time.timeScale, targetTimeScale, changeSpeed);
         Time.fixedDeltaTime = 0.02f * Time.timeScale;
@@ -377,7 +381,12 @@ public class BallController : MonoBehaviour
         {
             if (remainingShots != 0)
             {
+                Vector3 currentVelocity = ballRigidbody.linearVelocity.normalized;
+                currentVelocity *= shootMovingSpeed;
+                ballRigidbody.linearVelocity = currentVelocity;
 
+                currentSlowmoScale = slowMotionAerealScale;
+                currentSlowmoJoinTransitionDuration = slowmoAerealJoinTransitionDuration;
                 aerealShot = true;
                 remainingShots = 1;
                 if (mainCamera.TryGetComponent<CameraFollow>(out CameraFollow cameraFollow))
