@@ -166,8 +166,24 @@ MonoBehaviour:
   ball: {fileID: 2853717137531339073}
   ballRenderer: {fileID: 2631674353709987416}
   lockIcon: {fileID: 2802437641688325282}
-  lockedBrightness: 0.2
+  lockedBrightness: 0
   spinSpeed: 40
+  pulseScale: 1.15
+  pulseMinStrength: 0.45
+  pulseDecay: 12
+  pulseMinInterval: 0.07
+  pulseMaxInterval: 0.22
+  receiveHold: 0.3
+  shakeDuration: 0.35
+  shakeAngle: 18
+  lockPopDuration: 0.25
+  lockPopScale: 1.6
+  revealDuration: 0.55
+  ballPunchScale: 1.35
+  glowColor: {r: 1, g: 0.90616274, b: 0.19339621, a: 1}
+  glowSize: 5
+  glowGrow: 1
+  glowDuration: 1.2
   prefabScaleMultiplier: 1
   ignoreChildPrefixes:
   - Trail

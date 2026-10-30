@@ -172,9 +172,6 @@ public class SkinCarousel : MonoBehaviour,
                 SelectIndex(nearest);
         }
     }
-
-    // ---------------- INPUT ----------------
-
     public void OnBeginDrag(PointerEventData e)
     {
         _dragging = true;
@@ -201,9 +198,6 @@ public class SkinCarousel : MonoBehaviour,
 
         SelectIndex(Mathf.RoundToInt(_pos + _dragVel * inertia));
     }
-
-    // ---------------- SELECCION ----------------
-
     public void SelectIndex(int index)
     {
         if (Count == 0)
@@ -322,6 +316,11 @@ public class SkinCarousel : MonoBehaviour,
             }
         }
     }
+    public void PulseCurrentItem()
+    {
+        if (_items != null && _targetIndex >= 0 && _targetIndex < _items.Length)
+            _items[_targetIndex].PlayReceivePulse();
+    }
 
     public void BuyCurrentSkin()
     {
@@ -332,51 +331,51 @@ public class SkinCarousel : MonoBehaviour,
         int price = currentSkin.price;
         int playerPoints = PointsManager.Instance != null ? PointsManager.Instance.GetCurrentScore() : 0;
 
-        if (playerPoints >= price)
+        if (playerPoints < price)
         {
-            if (PointsManager.Instance != null)
-            {
-                PointsManager.Instance.SpendPoints(price);
-                // Sincronizado automáticamente con la duración dinámica calculada en PointsManager
-                PointsManager.Instance.AnimateScoreSpend(price);
-            }
+            Debug.Log("No tienes suficientes puntos para comprar esta skin.");
+            return;
+        }
 
-            Vector3 targetBallPos = _items[_targetIndex].GetBallPosition();
+        if (PointsManager.Instance != null)
+        {
+            PointsManager.Instance.SpendPoints(price);
+            PointsManager.Instance.AnimateScoreSpend(price);
+        }
 
-            if (buyButton != null)
-                buyButton.interactable = false;
+        int buyIndex = _targetIndex;
+        SkinCarouselItem buyItem = _items[buyIndex];
+        Vector3 targetBallPos = buyItem.GetBallPosition();
 
-            if (PurchaseCollector.Instance != null)
-            {
-                PurchaseCollector.Instance.SpawnPurchaseEffect(targetBallPos, price, () => {
-                    SkinService.Unlock(currentSkin);
-                    _items[_targetIndex].UpdateLockState(currentSkin);
+        if (buyButton != null)
+            buyButton.interactable = false;
 
-                    SkinService.Equip(currentSkin);
-                    SaveSkinForIndex(_targetIndex);
-                    SelectionChanged?.Invoke(currentSkin);
-
-                    RefreshUI();
-                    Debug.Log("¡Skin comprada, animación completada y equipada: " + currentSkin.displayName + "!");
-                });
-            }
-            else
-            {
-                SkinService.Unlock(currentSkin);
-                _items[_targetIndex].UpdateLockState(currentSkin);
-                SkinService.Equip(currentSkin);
-                SaveSkinForIndex(_targetIndex);
-                SelectionChanged?.Invoke(currentSkin);
-                RefreshUI();
-            }
+        if (PurchaseCollector.Instance != null)
+        {
+            PurchaseCollector.Instance.SpawnPurchaseEffect(
+                targetBallPos,
+                price,
+                () => CompletePurchase(currentSkin, buyIndex),
+                () => buyItem.PlayReceivePulse());
         }
         else
         {
-            Debug.Log("No tienes suficientes puntos para comprar esta skin.");
+            CompletePurchase(currentSkin, buyIndex);
         }
     }
 
-    // ---------------- LAYOUT ----------------
+    void CompletePurchase(SkinData skin, int index)
+    {
+        SkinService.Unlock(skin);
+        SkinService.Equip(skin);
+        SaveSkinForIndex(index);
+        SelectionChanged?.Invoke(skin);
+
+        _items[index].PlayUnlockAnimation();
+
+        RefreshUI();
+        Debug.Log("¡Skin comprada y equipada: " + skin.displayName + "!");
+    }
 
     void Layout()
     {
