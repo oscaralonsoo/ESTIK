@@ -40,6 +40,7 @@ public class FastSceneLoader : MonoBehaviour
 
         image.gameObject.SetActive(true);
         imageRect.localScale = Vector3.one * maxScale;
+
     }
 
     private IEnumerator Start()
@@ -53,13 +54,13 @@ public class FastSceneLoader : MonoBehaviour
     public void StartPlaying()
     {
         if (isTransitioning) return;
-        StartCoroutine(ExitSceneRoutine(() => LevelLoader.StartGame(PlayMode.Normal)));
+        StartCoroutine(ExitSceneRoutine(() => LevelLoader.StartGame()));
     }
 
     public void LoadNextLevel()
     {
         if (isTransitioning) return;
-        StartCoroutine(ExitSceneRoutine(LevelLoader.Next));
+        StartCoroutine(ExitSceneRoutine(LevelLoader.LoadNext));
     }
 
     public void RestartLevel()

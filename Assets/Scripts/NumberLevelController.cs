@@ -9,8 +9,8 @@ public class NumberLevelController : MonoBehaviour
     {
         level = GetComponent<TMP_Text>();
 
-        int levelNum = LevelLoader.CurrentLevel;
-        if (levelNum == 0) level.text = "Tutorial";
-        else level.text = LevelLoader.CurrentLevel.ToString();
+        int levelNum = LevelLoader.GetCurrentLevel();
+        if (levelNum <= 0) level.text = "Tutorial";
+        else level.text = LevelLoader.GetCurrentLevel().ToString();
     }
 }

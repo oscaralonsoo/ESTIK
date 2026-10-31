@@ -2,12 +2,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public enum PlayMode
-{
-    Normal,
-    Random
-}
-
 public static class LevelLoader
 {
     const string MenuSceneName = "MainMenu";
@@ -33,81 +27,57 @@ public static class LevelLoader
         "Level9"
     };
 
-    public static PlayMode Mode { get; private set; } = PlayMode.Normal;
-    public static bool IsInTutorial { get; private set; } = true;
+    static int currentLevel = 0;
 
-    static readonly List<int> queue = new List<int>();
-    static int position;
-    static int lastLevelOfPreviousRun = -1;
-
-    public static int CurrentLevel
+    public static AsyncOperation StartGame()
     {
-        get
-        {
-            if (IsInTutorial) return 0;
-            EnsureRun();
-            return queue[position];
-        }
-    }
-
-    public static bool HasNext
-    {
-        get
-        {
-            if (IsInTutorial) return position + 1 < tutorialScenes.Count;
-            EnsureRun();
-            return position + 1 < queue.Count;
-        }
-    }
-
-    public static AsyncOperation StartGame(PlayMode mode)
-    {
-        Mode = mode;
         bool completedTutorial = PlayerPrefs.GetInt("HasCompletedTutorial", 0) == 1;
 
-        if (!completedTutorial && tutorialScenes.Count > 0)
-        {
-            IsInTutorial = true;
-            position = 0;
-            Time.timeScale = 1f;
-            return SceneManager.LoadSceneAsync(tutorialScenes[position]);
-        }
+        currentLevel = completedTutorial ? PlayerPrefs.GetInt("SelectedLevel", 0) : -tutorialScenes.Count;
 
-        return StartMainRun(mode);
-    }
-
-    public static AsyncOperation StartMainRun(PlayMode mode)
-    {
-        Mode = mode;
-        IsInTutorial = false;
-        BuildQueue();
-        position = 0;
         return LoadCurrent();
     }
 
-    public static AsyncOperation Next()
+    public static AsyncOperation LoadNext()
     {
-        if (IsInTutorial)
-        {
-            position++;
-            if (position < tutorialScenes.Count)
-            {
-                Time.timeScale = 1f;
-                return SceneManager.LoadSceneAsync(tutorialScenes[position]);
-            }
+        currentLevel++;
 
+        if (currentLevel == 0)
+        {
             PlayerPrefs.SetInt("HasCompletedTutorial", 1);
             PlayerPrefs.Save();
-            return StartMainRun(Mode);
         }
 
-        if (!HasNext)
+        if (currentLevel >= mainLevelScenes.Count)
         {
+            currentLevel = 0;
             return LoadMenu();
         }
 
-        position++;
+        if (currentLevel > 0)
+        {
+            int record = PlayerPrefs.GetInt("Record", 1);
+            if (currentLevel > record)
+            {
+                if (currentLevel < mainLevelScenes.Count)
+                {
+                    PlayerPrefs.SetInt("Record", currentLevel);
+                    PlayerPrefs.Save();
+                }
+            }
+        }
+
         return LoadCurrent();
+    }
+
+    public static AsyncOperation LoadMenu()
+    {
+        return SceneManager.LoadSceneAsync(MenuSceneName);
+    }
+
+    static AsyncOperation LoadCurrent()
+    {
+        return LoadSpecificLevel(currentLevel);
     }
 
     public static AsyncOperation Reload()
@@ -116,96 +86,33 @@ public static class LevelLoader
         return SceneManager.LoadSceneAsync(SceneManager.GetActiveScene().name);
     }
 
-    public static AsyncOperation LoadMenu()
-    {
-        queue.Clear();
-        IsInTutorial = false;
-        Time.timeScale = 1f;
-        return SceneManager.LoadSceneAsync(MenuSceneName);
-    }
-
-    static AsyncOperation LoadCurrent()
+    public static AsyncOperation LoadSpecificLevel(int sceneNum)
     {
         Time.timeScale = 1f;
-        int levelIndex = queue[position];
-        return SceneManager.LoadSceneAsync(mainLevelScenes[levelIndex]);
-    }
-
-    public static AsyncOperation LoadSpecificLevel(string sceneName)
-    {
-        int tutorialIndex = tutorialScenes.IndexOf(sceneName);
-        if (tutorialIndex >= 0)
-        {
-            IsInTutorial = true;
-            position = tutorialIndex;
-            Time.timeScale = 1f;
-            return SceneManager.LoadSceneAsync(sceneName);
-        }
-
-        int mainIndex = mainLevelScenes.IndexOf(sceneName);
-        if (mainIndex >= 0)
-        {
-            IsInTutorial = false;
-            BuildQueue();
-            position = queue.IndexOf(mainIndex);
-            if (position < 0) position = 0;
-            Time.timeScale = 1f;
-            return SceneManager.LoadSceneAsync(sceneName);
-        }
-
-        Debug.LogWarning($"[LevelLoader] La escena '{sceneName}' no está registrada en las listas.");
-        Time.timeScale = 1f;
+        string sceneName = "";
+        if (sceneNum < 0) sceneName = GetTutorialLevelName(sceneNum);
+        else sceneName = GetLevelName(sceneNum);
+        
+        currentLevel = sceneNum;
         return SceneManager.LoadSceneAsync(sceneName);
     }
 
-    static void EnsureRun()
+    public static string GetTutorialLevelName(int num)
     {
-        if (queue.Count > 0) return;
-
-        Mode = PlayMode.Normal;
-        IsInTutorial = false;
-        BuildQueue();
-
-        string currentScene = SceneManager.GetActiveScene().name;
-        int indexInMain = mainLevelScenes.IndexOf(currentScene);
-
-        if (indexInMain >= 0)
-        {
-            position = queue.IndexOf(indexInMain);
-            if (position < 0) position = 0;
-        }
-        else
-        {
-            position = 0;
-        }
+        if (num >= 0) return "";
+        else if (num < -tutorialScenes.Count) return tutorialScenes[0];
+        else return tutorialScenes[tutorialScenes.Count + num];
     }
 
-    static void BuildQueue()
+    public static string GetLevelName(int num)
     {
-        queue.Clear();
-        for (int i = 0; i < mainLevelScenes.Count; i++)
-            queue.Add(i);
-
-        if (Mode != PlayMode.Random) return;
-
-        for (int i = queue.Count - 1; i > 0; i--)
-        {
-            int j = Random.Range(0, i + 1);
-            (queue[i], queue[j]) = (queue[j], queue[i]);
-        }
-
-        if (queue.Count > 1 && queue[0] == lastLevelOfPreviousRun)
-            (queue[0], queue[queue.Count - 1]) = (queue[queue.Count - 1], queue[0]);
-
-        lastLevelOfPreviousRun = queue[queue.Count - 1];
+        if (num < 0) return "";
+        else if (num >= mainLevelScenes.Count) return mainLevelScenes[mainLevelScenes.Count - 1];
+        else return mainLevelScenes[num];
     }
 
-    public static AsyncOperation LoadSelectedLevel()
+    public static int GetCurrentLevel()
     {
-        int level = PlayerPrefs.GetInt("SelectedLevel", 0);
-
-        int safeIndex = level % mainLevelScenes.Count;
-
-        return LoadSpecificLevel(mainLevelScenes[safeIndex]);
+        return currentLevel;
     }
 }

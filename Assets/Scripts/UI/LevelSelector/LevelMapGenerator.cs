@@ -188,10 +188,8 @@ void GenerateBackground()
     {
         if (nodePositions.Count < 2 || pathSegmentPrefab == null) return;
 
-        // 1. Calcular todos los puntos suaves de la curva Catmull-Rom
         List<Vector3> splinePoints = CalculateCatmullRomSpline(nodePositions, pointsPerSegment);
 
-        // 2. Instanciar los trazos a lo largo de la curva
         float accumulatedDistance = 0f;
 
         for (int i = 0; i < splinePoints.Count - 1; i++)

@@ -15,6 +15,9 @@ public class MainMenuManager : MonoBehaviour
     public GameObject customizationPanel;
     public GameObject LevelSelector;
 
+    [Header("Buttons")]
+    public GameObject levelSelectorButton;
+
     GameObject currentPanel;
     bool transitioning;
 
@@ -29,6 +32,8 @@ public class MainMenuManager : MonoBehaviour
         if (LevelSelector) LevelSelector.SetActive(false);
         if (mainPanel) mainPanel.SetActive(true);
         currentPanel = null;
+
+        levelSelectorButton.SetActive(PlayerPrefs.GetInt("HasCompletedTutorial", 0) == 1);
     }
 
     void Update()
