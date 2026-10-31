@@ -6,7 +6,6 @@ public class BallController : MonoBehaviour
 {
     [Header("SHOOT PROPERTIES")]
     [SerializeField] private float shootSpeed = 30f;
-    [Tooltip("Por debajo de esta distancia de drag (en alturas de pantalla) el disparo se cancela.")]
     [SerializeField] private float minDragDistance = 0.03f;
     [SerializeField] private float maxDragDistance = 0.2f;
     [SerializeField] private float maxAerealDragDistance = 0.3f;
@@ -15,6 +14,12 @@ public class BallController : MonoBehaviour
 
     [Header("TRACE PROPERTIES")]
     [SerializeField] private GameObject tracePrefab;
+
+    [Header("STICK PROPERTIES")]
+    [SerializeField] private GameObject stickPrefab;
+    [SerializeField] private Vector3 stickDistance = new Vector3(1.469f,1.597f,0.5f);
+    [SerializeField] private float stickHitDuration = 0.1f;
+    [SerializeField] private float stickFollowThrough = 0.05f;
 
     [Header("SLOWMO PROPERTIES")]
     [SerializeField] public float slowMotionScale = 0.2f;
@@ -45,6 +50,7 @@ public class BallController : MonoBehaviour
 
     private DesaturationSlowmo postProcessSlowmo;
     private TraceBehaviour traceBehaviour;
+    private StickBehaviour stickBehaviour;
     private Camera mainCamera;
     private string currentSkinName;
 
@@ -62,6 +68,11 @@ public class BallController : MonoBehaviour
         trace.SetActive(false);
         traceBehaviour = trace.GetComponentInChildren<TraceBehaviour>();
         if (!traceBehaviour) initialized = false;
+
+        GameObject stick = Instantiate(stickPrefab);
+        stick.SetActive(false);
+        stickBehaviour = stick.GetComponentInChildren<StickBehaviour>();
+        if (!stickBehaviour) initialized = false;
 
         currentSlowmoScale = slowMotionScale;
         currentSlowmoJoinTransitionDuration = slowmoJoinTransitionDuration;
@@ -135,9 +146,10 @@ public class BallController : MonoBehaviour
         {
             dragCurrentPosition = Pointer.current.position.ReadValue() / Screen.height;
             ShowTrace();
+            ShowStick();
         }
 
-        if (Pointer.current.press.wasReleasedThisFrame && draging)
+        if (Pointer.current.press.wasReleasedThisFrame && draging && !gestureBlocked)
         {
             dragEndPosition = Pointer.current.position.ReadValue() / Screen.height;
 
@@ -147,8 +159,8 @@ public class BallController : MonoBehaviour
             }
             else
             {
-                Shoot();
-                OnShoot();
+                gestureBlocked = true;
+                StartCoroutine(PerformShootSequence());
             }
         }
 
@@ -196,6 +208,7 @@ public class BallController : MonoBehaviour
         if (!draging) return;
 
         HideTrace();
+        HideStick();
         draging = false;
         dragStartPosition = Vector2.zero;
         dragCurrentPosition = Vector2.zero;
@@ -220,13 +233,13 @@ public class BallController : MonoBehaviour
         return worldDirection.normalized;
     }
 
-    void Shoot()
+    private IEnumerator PerformShootSequence()
     {
-        if (!ballRigidbody) return;
-
         Vector2 dragDir = dragStartPosition - dragEndPosition;
-
         currentShootSpeed = GetPower01(dragDir.magnitude) * shootSpeed;
+        float fillPercentage = currentShootSpeed / shootSpeed;
+
+        Vector3 shootDir = GetCameraRelativeDirection(dragDir);
 
         if (aerealShot)
         {
@@ -243,28 +256,52 @@ public class BallController : MonoBehaviour
             currentShootAngle = 0f;
         }
 
-        Vector3 shootDir = GetCameraRelativeDirection(dragDir);
-
         if (currentShootAngle > 0f)
         {
             Vector3 rightAxis = Vector3.Cross(Vector3.up, shootDir);
             shootDir = Quaternion.AngleAxis(-currentShootAngle, rightAxis) * shootDir;
         }
 
+        HideTrace();
+
+        if (stickBehaviour != null && stickBehaviour.gameObject.activeInHierarchy)
+        {
+            float elapsed = 0f;
+            Quaternion aimRotation = Quaternion.LookRotation(-GetCameraRelativeDirection(dragDir));
+            Vector3 stickBasePos = ballRigidbody.transform.position + (aimRotation * stickDistance);
+
+            while (elapsed < stickHitDuration)
+            {
+                elapsed += Time.unscaledDeltaTime;
+                float t = elapsed / stickHitDuration;
+
+                float currentAnimPercent = Mathf.Lerp(fillPercentage, 0f, t);
+
+                stickBehaviour.SetAimAndFill(stickBasePos, aimRotation, currentAnimPercent);
+                yield return null;
+            }
+        }
 
         ballRigidbody.WakeUp();
         ballRigidbody.linearVelocity = shootDir * currentShootSpeed;
-    }
 
-    void OnShoot()
-    {
-        HideTrace();
+        yield return new WaitForSecondsRealtime(stickFollowThrough);
+
+        HideStick();
         remainingShots--;
         draging = false;
+        gestureBlocked = false;
+
         dragStartPosition = Vector2.zero;
         dragCurrentPosition = Vector2.zero;
         dragEndPosition = Vector2.zero;
         currentShootSpeed = 0f;
+    }
+
+    private IEnumerator FailShoot()
+    {
+        yield return new WaitForSeconds(2f);
+        FastSceneLoader.Instance.RestartLevel();
     }
 
     #region Skin
@@ -359,6 +396,44 @@ public class BallController : MonoBehaviour
 
     #endregion
 
+    #region Stick
+    private void ShowStick()
+    {
+        if (!stickBehaviour) return;
+
+        Vector2 dragDir = dragStartPosition - dragCurrentPosition;
+
+        currentShootSpeed = GetPower01(dragDir.magnitude) * shootSpeed;
+        float fillPercentatge = currentShootSpeed / shootSpeed;
+
+        Vector3 shootDir = GetCameraRelativeDirection(dragDir);
+
+        if (shootDir.sqrMagnitude < 0.0001f || currentShootSpeed <= 0f)
+        {
+            HideStick();
+            return;
+        }
+
+        Quaternion aimRotation = Quaternion.identity;
+        if (shootDir != Vector3.zero)
+        {
+            aimRotation = Quaternion.LookRotation(-shootDir);
+        }
+
+        Vector3 stickPosition = ballRigidbody.transform.position + (aimRotation * stickDistance);
+
+        stickBehaviour.gameObject.SetActive(true);
+        stickBehaviour.SetAimAndFill(stickPosition, aimRotation, fillPercentatge);
+    }
+
+    private void HideStick()
+    {
+        if (stickBehaviour != null)
+        {
+            stickBehaviour.gameObject.SetActive(false);
+        }
+    }
+    #endregion
 
     private void OnCollisionStay(Collision other)
     {
@@ -397,45 +472,4 @@ public class BallController : MonoBehaviour
         }
     }
 
-    private IEnumerator FailShoot()
-    {
-        yield return new WaitForSeconds(2f);
-        FastSceneLoader.Instance.RestartLevel();
-    }
-
-    /*    public bool IsAiming => draging;
-
-        public float CurrentShootSpeed => currentShootSpeed;
-
-        public float MaxShootSpeed => shootSpeed;
-
-        public Vector2 DragDirection => dragStartPosition - dragCurrentPosition;
-
-        public int ShotCount { get; private set; }
-
-        public Vector3 LastShootDirection { get; private set; }
-
-        public Vector3 BallPosition => ballRigidbody != null
-            ? ballRigidbody.position
-            : transform.position;
-
-        public Vector3 ShootDirection
-        {
-            get
-            {
-                if (camera == null)
-                    return Vector3.zero;
-
-                Vector3 direction = GetCameraRelativeDirection(DragDirection);
-
-                if (currentShootAngle > 0f && direction.sqrMagnitude > 0.0001f)
-                {
-                    Vector3 rightAxis = Vector3.Cross(Vector3.up, direction);
-                    direction = Quaternion.AngleAxis(-currentShootAngle, rightAxis)
-                        * direction;
-                }
-
-                return direction.normalized;
-            }
-        }*/
 }
