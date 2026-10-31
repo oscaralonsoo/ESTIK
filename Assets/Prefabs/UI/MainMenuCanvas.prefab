@@ -153,9 +153,6 @@ MonoBehaviour:
   scoreText: {fileID: 4926799127167544298}
   scorePrefix: 
   alwaysShowScore: 1
-  punchScaleMultiplier: 3.62
-  punchDuration: 1.62
-  showScaleDuration: 0.87
   hideDelay: 1
   baseDuration: 0.5
   maxDuration: 3
@@ -184,6 +181,7 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+  points: 0
 --- !u!1 &1392100607493320061
 GameObject:
   m_ObjectHideFlags: 0
@@ -1376,6 +1374,7 @@ MonoBehaviour:
   optionsPanel: {fileID: 5542651185029799971}
   customizationPanel: {fileID: 611038465223939967}
   LevelSelector: {fileID: 5781556657124754672}
+  levelSelectorButton: {fileID: 6960573302886769595}
 --- !u!114 &1090671507317789096
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1772,7 +1771,7 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6960573302886769595}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
