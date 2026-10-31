@@ -2486,6 +2486,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: NumberLevel
       objectReference: {fileID: 0}
+    - target: {fileID: 5168966013311176255, guid: e774fcf81796dbc468edb10e2b459979, type: 3}
+      propertyPath: point2DPrefab
+      value: 
+      objectReference: {fileID: 9090323118063016019, guid: 43e45ba96e0ab454795435b3adfb3cd6, type: 3}
+    - target: {fileID: 5168966013311176255, guid: e774fcf81796dbc468edb10e2b459979, type: 3}
+      propertyPath: targetUIPoint
+      value: 
+      objectReference: {fileID: 578255510}
     - target: {fileID: 7771225633940897449, guid: e774fcf81796dbc468edb10e2b459979, type: 3}
       propertyPath: m_Camera
       value: 
@@ -2499,6 +2507,11 @@ PrefabInstance:
       insertIndex: -1
       addedObject: {fileID: 0}
   m_SourcePrefab: {fileID: 100100000, guid: e774fcf81796dbc468edb10e2b459979, type: 3}
+--- !u!224 &578255510 stripped
+RectTransform:
+  m_CorrespondingSourceObject: {fileID: 5646088584304250409, guid: e774fcf81796dbc468edb10e2b459979, type: 3}
+  m_PrefabInstance: {fileID: 578255509}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &582376582 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1317488370194037504, guid: c3dcc2ef51485cc44b6ed9ae5d6a60dc, type: 3}

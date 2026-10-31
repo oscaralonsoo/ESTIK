@@ -1774,6 +1774,11 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 60133be2c5bd1fa48a4de05b0e30adac, type: 3}
+--- !u!224 &438373461 stripped
+RectTransform:
+  m_CorrespondingSourceObject: {fileID: 2044349507974931151, guid: 60133be2c5bd1fa48a4de05b0e30adac, type: 3}
+  m_PrefabInstance: {fileID: 438373460}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &445294198
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1931,6 +1936,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 2333795420770974812, guid: afd7502102afe3e4a8c2ca4e28f5c1a4, type: 3}
+      propertyPath: targetUIPoint
+      value: 
+      objectReference: {fileID: 438373461}
     - target: {fileID: 3190110144580108033, guid: afd7502102afe3e4a8c2ca4e28f5c1a4, type: 3}
       propertyPath: m_LocalPosition.x
       value: -0.32
@@ -3065,7 +3074,7 @@ PrefabInstance:
       objectReference: {fileID: 1726727313}
     - target: {fileID: 7761925288819645968, guid: 702dad000acc5ce44b531e4be744f874, type: 3}
       propertyPath: m_Cameras.Array.size
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7761925288819645968, guid: 702dad000acc5ce44b531e4be744f874, type: 3}
       propertyPath: 'm_Cameras.Array.data[0]'

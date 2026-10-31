@@ -9898,6 +9898,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: 'NumberLevel '
       objectReference: {fileID: 0}
+    - target: {fileID: 5168966013311176255, guid: e774fcf81796dbc468edb10e2b459979, type: 3}
+      propertyPath: targetUIPoint
+      value: 
+      objectReference: {fileID: 1786700638}
     - target: {fileID: 5448539592642219362, guid: e774fcf81796dbc468edb10e2b459979, type: 3}
       propertyPath: m_LocalPosition.x
       value: 2.27
@@ -9930,6 +9934,11 @@ PrefabInstance:
 --- !u!20 &1786700637 stripped
 Camera:
   m_CorrespondingSourceObject: {fileID: 2337495837257231932, guid: e774fcf81796dbc468edb10e2b459979, type: 3}
+  m_PrefabInstance: {fileID: 1786700636}
+  m_PrefabAsset: {fileID: 0}
+--- !u!224 &1786700638 stripped
+RectTransform:
+  m_CorrespondingSourceObject: {fileID: 5646088584304250409, guid: e774fcf81796dbc468edb10e2b459979, type: 3}
   m_PrefabInstance: {fileID: 1786700636}
   m_PrefabAsset: {fileID: 0}
 --- !u!4 &1794437293 stripped
