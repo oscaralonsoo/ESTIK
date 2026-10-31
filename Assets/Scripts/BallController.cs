@@ -35,6 +35,7 @@ public class BallController : MonoBehaviour
     [Header("DEBUG")]
     bool initialized = true;
     [SerializeField] public bool draging = false;
+    [SerializeField] private bool isShooting = false;
     [SerializeField] private bool gestureBlocked = false;
     [SerializeField] private bool aerealShot = false;
     [SerializeField] private bool slowmo = false;
@@ -116,51 +117,51 @@ public class BallController : MonoBehaviour
             return;
         }
 
-        if (gestureBlocked)
+        if (!isShooting)
         {
-            if (Pointer.current.press.wasReleasedThisFrame) gestureBlocked = false;
-            return;
-        }
-
-        if (Pointer.current.press.wasPressedThisFrame)
-        {
-            if (IsInBlockedZone(Pointer.current.position.ReadValue()))
+            if (gestureBlocked)
             {
-                gestureBlocked = true;
-                return;
-            }
-
-            if (remainingShots > 0 && grounded)
-            {
-                draging = true;
-
-                Vector2 ballScreenPos = mainCamera.WorldToScreenPoint(ballRigidbody.position);
-
-                dragStartPosition = ballScreenPos / Screen.height;
-
-                dragCurrentPosition = dragStartPosition;
-            }
-        }
-
-        if (draging)
-        {
-            dragCurrentPosition = Pointer.current.position.ReadValue() / Screen.height;
-            ShowTrace();
-            ShowStick();
-        }
-
-        if (Pointer.current.press.wasReleasedThisFrame && draging && !gestureBlocked)
-        {
-            dragEndPosition = Pointer.current.position.ReadValue() / Screen.height;
-
-            if (GetPower01((dragStartPosition - dragEndPosition).magnitude) <= 0f)
-            {
-                CancelAim();
+                if (Pointer.current.press.wasReleasedThisFrame) gestureBlocked = false;
             }
             else
             {
-                gestureBlocked = true;
-                StartCoroutine(PerformShootSequence());
+                if (Pointer.current.press.wasPressedThisFrame)
+                {
+                    if (IsInBlockedZone(Pointer.current.position.ReadValue()))
+                    {
+                        gestureBlocked = true;
+                    }
+                    else if (remainingShots > 0 && grounded)
+                    {
+                        draging = true;
+                        Vector2 ballScreenPos = mainCamera.WorldToScreenPoint(ballRigidbody.position);
+                        dragStartPosition = ballScreenPos / Screen.height;
+                        dragCurrentPosition = dragStartPosition;
+                    }
+                }
+
+                if (draging)
+                {
+                    dragCurrentPosition = Pointer.current.position.ReadValue() / Screen.height;
+                    ShowTrace();
+                    ShowStick();
+                }
+
+                if (Pointer.current.press.wasReleasedThisFrame && draging)
+                {
+                    dragEndPosition = Pointer.current.position.ReadValue() / Screen.height;
+
+                    if (GetPower01((dragStartPosition - dragEndPosition).magnitude) <= 0f)
+                    {
+                        CancelAim();
+                    }
+                    else
+                    {
+                        isShooting = true;
+                        draging = false;
+                        StartCoroutine(PerformShootSequence());
+                    }
+                }
             }
         }
 
@@ -235,6 +236,7 @@ public class BallController : MonoBehaviour
 
     private IEnumerator PerformShootSequence()
     {
+        isShooting = true;
         Vector2 dragDir = dragStartPosition - dragEndPosition;
         currentShootSpeed = GetPower01(dragDir.magnitude) * shootSpeed;
         float fillPercentage = currentShootSpeed / shootSpeed;
@@ -290,7 +292,7 @@ public class BallController : MonoBehaviour
         HideStick();
         remainingShots--;
         draging = false;
-        gestureBlocked = false;
+        isShooting = false;
 
         dragStartPosition = Vector2.zero;
         dragCurrentPosition = Vector2.zero;
