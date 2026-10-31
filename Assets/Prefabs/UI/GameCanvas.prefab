@@ -457,7 +457,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -60, y: -60}
+  m_AnchoredPosition: {x: -83, y: -79}
   m_SizeDelta: {x: 120, y: 120}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &6171722082508725631
@@ -3075,7 +3075,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -178, y: 898}
+  m_AnchoredPosition: {x: -395.4, y: 879}
   m_SizeDelta: {x: 200, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &6965750776244313884
@@ -3108,8 +3108,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: 0
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 05d58b82bc62a934da5d349070d3e70a, type: 2}
+  m_sharedMaterial: {fileID: -6553086594465919240, guid: 05d58b82bc62a934da5d349070d3e70a, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -3133,8 +3133,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 36
-  m_fontSizeBase: 36
+  m_fontSize: 60
+  m_fontSizeBase: 60
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -3193,9 +3193,6 @@ MonoBehaviour:
   scoreText: {fileID: 2930881062921783884}
   scorePrefix: 
   alwaysShowScore: 0
-  punchScaleMultiplier: 1.3
-  punchDuration: 0.15
-  showScaleDuration: 0.2
   hideDelay: 1
   baseDuration: 0.5
   maxDuration: 2
@@ -3224,6 +3221,7 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+  points: 0
 --- !u!1 &7315073426663335731
 GameObject:
   m_ObjectHideFlags: 0
@@ -3419,6 +3417,14 @@ MonoBehaviour:
   nextButton: {fileID: 7162377212062031279}
   buyButton: {fileID: 0}
   buyButtonText: {fileID: 0}
+  cantAffordTextColor: {r: 1, g: 0.35, b: 0.35, a: 1}
+  notEnoughText: {fileID: 0}
+  popDuration: 0.35
+  popStartScale: 0.85
+  popOvershoot: 0.5
+  popHoldTime: 1.2
+  popFadeTime: 0.5
+  popRiseDistance: 20
   spacing: 200
   centerScale: 2
   sideScale: 1
@@ -3428,6 +3434,7 @@ MonoBehaviour:
   inertia: 0.15
   overscroll: 0.35
   centerTolerance: 0.01
+  unlockAnimationLock: 0.6
 --- !u!222 &6206927408094231114
 CanvasRenderer:
   m_ObjectHideFlags: 0
