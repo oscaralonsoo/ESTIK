@@ -4593,37 +4593,6 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 1891950390030581109, guid: 060f1670b0d30b64aa9f59405b94bfdf, type: 3}
   m_PrefabInstance: {fileID: 898293}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &1194803084
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1194803085}
-  m_Layer: 0
-  m_Name: Props
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &1194803085
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1194803084}
-  serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0.0881082, z: -0, w: 0.9961109}
-  m_LocalPosition: {x: -12.8, y: 0, z: -22}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &1210564328 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4244486551040727500, guid: d79879c01047d6e40a5bbe49d9ed2a29, type: 3}
@@ -5137,37 +5106,6 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 49ef5f493cbf41143938b1e4ff27a932, type: 3}
---- !u!1 &1338341249
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1338341250}
-  m_Layer: 0
-  m_Name: Terreno
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &1338341250
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1338341249}
-  serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0.3035821, z: -0, w: 0.9528053}
-  m_LocalPosition: {x: -6.9460278, y: -5, z: -35.466812}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 1
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: -35.346, z: 0}
 --- !u!4 &1344026135 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1317488370194037504, guid: c3dcc2ef51485cc44b6ed9ae5d6a60dc, type: 3}
@@ -9260,8 +9198,6 @@ SceneRoots:
   - {fileID: 848649468}
   - {fileID: 1173193876224733837}
   - {fileID: 1726727312}
-  - {fileID: 1338341250}
-  - {fileID: 1194803085}
   - {fileID: 693540406}
   - {fileID: 1844228822}
   - {fileID: 1268011270}
