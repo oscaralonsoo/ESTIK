@@ -1793,6 +1793,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4169456010730410575, guid: 60133be2c5bd1fa48a4de05b0e30adac, type: 3}
+      propertyPath: m_Camera
+      value: 
+      objectReference: {fileID: 848649469}
     - target: {fileID: 8360041603307240670, guid: 60133be2c5bd1fa48a4de05b0e30adac, type: 3}
       propertyPath: m_Name
       value: GameCanvas
@@ -1802,11 +1806,6 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 60133be2c5bd1fa48a4de05b0e30adac, type: 3}
---- !u!20 &438373461 stripped
-Camera:
-  m_CorrespondingSourceObject: {fileID: 6786256633593774159, guid: 60133be2c5bd1fa48a4de05b0e30adac, type: 3}
-  m_PrefabInstance: {fileID: 438373460}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &445294198
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -3184,12 +3183,17 @@ PrefabInstance:
     - target: {fileID: 7761925288819645968, guid: 702dad000acc5ce44b531e4be744f874, type: 3}
       propertyPath: 'm_Cameras.Array.data[0]'
       value: 
-      objectReference: {fileID: 438373461}
+      objectReference: {fileID: 848649469}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 702dad000acc5ce44b531e4be744f874, type: 3}
+--- !u!20 &848649469 stripped
+Camera:
+  m_CorrespondingSourceObject: {fileID: 5472433285648352096, guid: 702dad000acc5ce44b531e4be744f874, type: 3}
+  m_PrefabInstance: {fileID: 848649468}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &856389059 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 3117852383724881764, guid: a9781ecf6aed5ee48bc6bb186c2353d3, type: 3}
