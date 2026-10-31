@@ -9886,11 +9886,6 @@ MeshCollider:
   m_Convex: 1
   m_CookingOptions: 30
   m_Mesh: {fileID: 4063199496184022521, guid: 185f0f0d10f6ad24a9b3195cc600d188, type: 3}
---- !u!20 &2896359085243925099 stripped
-Camera:
-  m_CorrespondingSourceObject: {fileID: 6786256633593774159, guid: 60133be2c5bd1fa48a4de05b0e30adac, type: 3}
-  m_PrefabInstance: {fileID: 8510764591948382756}
-  m_PrefabAsset: {fileID: 0}
 --- !u!4 &2908797203612413553
 Transform:
   m_ObjectHideFlags: 0
@@ -10554,12 +10549,17 @@ PrefabInstance:
     - target: {fileID: 7761925288819645968, guid: 702dad000acc5ce44b531e4be744f874, type: 3}
       propertyPath: 'm_Cameras.Array.data[0]'
       value: 
-      objectReference: {fileID: 2896359085243925099}
+      objectReference: {fileID: 3049924690310267375}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 702dad000acc5ce44b531e4be744f874, type: 3}
+--- !u!20 &3049924690310267375 stripped
+Camera:
+  m_CorrespondingSourceObject: {fileID: 5472433285648352096, guid: 702dad000acc5ce44b531e4be744f874, type: 3}
+  m_PrefabInstance: {fileID: 3049924690310267374}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &3053967802936033358
 Transform:
   m_ObjectHideFlags: 0
@@ -27158,7 +27158,7 @@ PrefabInstance:
     - target: {fileID: 4169456010730410575, guid: 60133be2c5bd1fa48a4de05b0e30adac, type: 3}
       propertyPath: m_Camera
       value: 
-      objectReference: {fileID: 2896359085243925099}
+      objectReference: {fileID: 3049924690310267375}
     - target: {fileID: 4169456010730410575, guid: 60133be2c5bd1fa48a4de05b0e30adac, type: 3}
       propertyPath: m_RenderMode
       value: 1

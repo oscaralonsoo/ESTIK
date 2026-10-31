@@ -965,6 +965,11 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: c884019a91e142746a77fdbece9cc846, type: 3}
+--- !u!20 &1932774449 stripped
+Camera:
+  m_CorrespondingSourceObject: {fileID: 2931127513269497707, guid: cdafbd9b89fc25f4a83120e28bec3afd, type: 3}
+  m_PrefabInstance: {fileID: 8642712923777086842}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1939098395
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1092,10 +1097,22 @@ PrefabInstance:
       propertyPath: m_Convex
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 490794323303742862, guid: cdafbd9b89fc25f4a83120e28bec3afd, type: 3}
+      propertyPath: m_Camera
+      value: 
+      objectReference: {fileID: 1932774449}
     - target: {fileID: 515583066999536021, guid: cdafbd9b89fc25f4a83120e28bec3afd, type: 3}
       propertyPath: m_Convex
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 642726158661726747, guid: cdafbd9b89fc25f4a83120e28bec3afd, type: 3}
+      propertyPath: m_Cameras.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 642726158661726747, guid: cdafbd9b89fc25f4a83120e28bec3afd, type: 3}
+      propertyPath: 'm_Cameras.Array.data[0]'
+      value: 
+      objectReference: {fileID: 1932774449}
     - target: {fileID: 706179592552436689, guid: cdafbd9b89fc25f4a83120e28bec3afd, type: 3}
       propertyPath: m_Convex
       value: 1
