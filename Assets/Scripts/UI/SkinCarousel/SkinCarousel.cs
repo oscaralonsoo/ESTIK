@@ -25,12 +25,10 @@ public class SkinCarousel : MonoBehaviour,
     [SerializeField] TextMeshProUGUI notEnoughText;
     [SerializeField] float popDuration = 0.35f;
     [SerializeField, Range(0f, 1f)] float popStartScale = 0.85f;
-    [Tooltip("0 = sin rebote, 1 = rebote marcado.")]
     [SerializeField, Range(0f, 1.5f)] float popOvershoot = 0.5f;
     [SerializeField] float popHoldTime = 1.2f;
     [SerializeField] float popFadeTime = 0.5f;
     [SerializeField] float popRiseDistance = 20f;
-    [SerializeField] int popupSortingOrder = 1000;
 
     BallSkinController ballSkinController;
     PanelAnimator _panel;
@@ -137,7 +135,12 @@ public class SkinCarousel : MonoBehaviour,
                 popupCanvas = notEnoughText.gameObject.AddComponent<Canvas>();
 
             popupCanvas.overrideSorting = true;
-            popupCanvas.sortingOrder = popupSortingOrder;
+
+            SortingLayer[] layers = SortingLayer.layers;
+            if (layers != null && layers.Length > 0)
+                popupCanvas.sortingLayerID = layers[layers.Length - 1].id;
+
+            popupCanvas.sortingOrder = short.MaxValue;
 
             HidePopupImmediate();
         }
