@@ -6,7 +6,11 @@ public class MoleEmergeParticles : MonoBehaviour
     [SerializeField] private ParticleSystem dirtParticles;
     [SerializeField] private Transform holePoint;
 
-    [Header("Ajustes de Part�culas")]
+    [Header("Ajustes del Animator")]
+    private Animator moleAnimator;
+    [SerializeField] private float animatorDelay = 0f; 
+
+    [Header("Ajustes de Partículas")]
     [SerializeField] private Color dirtColor = new Color(0.40f, 0.27f, 0.15f, 1f);
     [SerializeField] private int burstCount = 40;
     [SerializeField] private float coneAngle = 50f;
@@ -20,13 +24,31 @@ public class MoleEmergeParticles : MonoBehaviour
     [Header("Ajustes del Trigger Collider")]
     [SerializeField] private float maxColliderRadius = 1.5f;
     [SerializeField] private float colliderExpandDuration = 0.5f;
-    [SerializeField] private float repelForce = 10f; // Velocidad directa deseada
-    [SerializeField] private float upwardLift = 2f;  // Cu�nto se levanta extra hacia arriba del suelo
+    [SerializeField] private float repelForce = 10f; 
+    [SerializeField] private float upwardLift = 2f; 
 
     private void Awake()
     {
         if (dirtParticles == null)
             dirtParticles = CreateDirtParticles();
+
+        if (moleAnimator == null)
+            moleAnimator = GetComponent<Animator>();
+
+        if (moleAnimator != null && animatorDelay > 0f)
+        {
+            moleAnimator.enabled = false;
+            StartCoroutine(DelayedAnimatorStart());
+        }
+    }
+
+    private IEnumerator DelayedAnimatorStart()
+    {
+        yield return new WaitForSeconds(animatorDelay);
+        if (moleAnimator != null)
+        {
+            moleAnimator.enabled = true;
+        }
     }
 
     public void PlayEmerge()
@@ -82,7 +104,6 @@ public class MoleEmergeParticles : MonoBehaviour
                     if (pushDir.y < 0.2f) pushDir.y = 0.2f;
                     pushDir.Normalize();
 
-                    // Calculamos la velocidad base y le sumamos el empuje hacia arriba configurable
                     Vector3 targetVelocity = pushDir * repelForce;
                     targetVelocity.y += upwardLift;
 
