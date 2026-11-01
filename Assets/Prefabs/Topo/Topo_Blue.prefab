@@ -1924,6 +1924,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::MoleEmergeParticles
   dirtParticles: {fileID: 0}
   holePoint: {fileID: 6923616073385816174}
+  animatorDelay: 1
   dirtColor: {r: 0.4, g: 0.27, b: 0.15, a: 1}
   burstCount: 45
   coneAngle: 50
@@ -1933,7 +1934,7 @@ MonoBehaviour:
   lifetimeRange: {x: 0.9, y: 1.5}
   gravity: 0.75
   drag: 1.8
-  maxColliderRadius: 1.5
+  maxColliderRadius: 0.8
   colliderExpandDuration: 0.5
   repelForce: 25
   upwardLift: 2
