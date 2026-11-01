@@ -5,29 +5,21 @@ using UnityEngine.Events;
 public class SandTornadoAppear : MonoBehaviour
 {
     [Header("Inicio")]
-    [Tooltip("Al dar a Play empieza oculto y aparece con la animación. Si no, empieza ya visible.")]
     public bool appearOnStart = true;
     public float startDelay = 0f;
 
     [Header("Animación")]
     public float appearDuration = 3f;
     public float disappearDuration = 2.5f;
-    [Tooltip("0 = todos los anillos a la vez. Más = más escalonado (aparece de abajo a arriba, se disipa de arriba a abajo).")]
     [Range(0f, 0.9f)] public float stagger = 0.6f;
-    [Tooltip("Anchura inicial de la columna (1 = anchura final). Más bajo = columna más fina al empezar.")]
     [Range(0.01f, 1f)] public float startWidth = 0.04f;
-    [Tooltip("Ráfagas de opacidad mientras aparece o se disipa. 0 = opacidad limpia.")]
     [Range(0f, 1f)] public float gustiness = 0.3f;
     public float gustSpeed = 2.5f;
 
     [Header("Vida")]
-    [Tooltip("Segundos visible antes de desaparecer solo. 0 = se queda hasta que llames a Disappear().")]
     public float lifetime = 0f;
-    [Tooltip("Cuando desaparece solo, vuelve a aparecer pasado 'hiddenTime'. Necesita lifetime mayor que 0.")]
     public bool repeat = false;
-    [Tooltip("Segundos oculto antes de volver a aparecer (solo con repeat).")]
     public float hiddenTime = 5f;
-    [Tooltip("Destruye el tornado cuando termina de desaparecer (se ignora con repeat).")]
     public bool destroyWhenHidden = false;
 
     [Header("Eventos")]
@@ -48,7 +40,6 @@ public class SandTornadoAppear : MonoBehaviour
     float[] sysLastAlpha;
     ParticleSystem.Particle[] buffer;
 
-    // Renderers que no son partículas
     Renderer[] meshRenderers;
     int[] meshTier;
     string[] meshProp;
@@ -103,7 +94,6 @@ public class SandTornadoAppear : MonoBehaviour
         else tiers = new Transform[0];
         tierU = new float[tiers.Length];
 
-        // Partículas: la opacidad se aplica al color de cada partícula (vale con cualquier shader)
         systems = GetComponentsInChildren<ParticleSystem>(true);
         int ns = systems.Length;
         sysTier = new int[ns];
@@ -121,7 +111,6 @@ public class SandTornadoAppear : MonoBehaviour
         }
         buffer = new ParticleSystem.Particle[maxP];
 
-        // Resto de renderers: se anima la propiedad de color del material
         mpb = new MaterialPropertyBlock();
         Renderer[] all = GetComponentsInChildren<Renderer>(true);
         int count = 0;
@@ -151,7 +140,6 @@ public class SandTornadoAppear : MonoBehaviour
             }
             k++;
         }
-
         hasMotion = GetComponent("SandTornadoMotion") != null;
 
         p = appearOnStart ? 0f : 1f;
@@ -209,8 +197,6 @@ public class SandTornadoAppear : MonoBehaviour
             if (destroyWhenHidden && !repeat) Destroy(gameObject);
         }
     }
-
-    // Opacidad de una capa: fade suave + ráfagas mientras está a medias
     float Alpha(float u, int seed)
     {
         float a = Mathf.SmoothStep(0f, 1f, u);
@@ -228,7 +214,6 @@ public class SandTornadoAppear : MonoBehaviour
         int n = tiers.Length;
         float span = Mathf.Max(0.05f, 1f - stagger);
 
-        // Embudo: cada anillo pasa de columna finísima a su anchura completa
         for (int i = 0; i < n; i++)
         {
             float start = n > 1 ? stagger * i / (n - 1f) : 0f;
@@ -242,7 +227,6 @@ public class SandTornadoAppear : MonoBehaviour
             tiers[i].localScale = new Vector3(baseScale.x * w, baseScale.y, baseScale.z * w);
         }
 
-        // Mallas: opacidad por material
         for (int i = 0; i < meshRenderers.Length; i++)
         {
             Renderer r = meshRenderers[i];
@@ -262,7 +246,6 @@ public class SandTornadoAppear : MonoBehaviour
             }
         }
 
-        // Partículas: opacidad por partícula + emisión
         for (int i = 0; i < systems.Length; i++)
         {
             ParticleSystem ps = systems[i];

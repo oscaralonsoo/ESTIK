@@ -1,10 +1,6 @@
 using System;
 using UnityEngine;
 
-/// <summary>
-/// Halo que aparece al desbloquear. Crea un SpriteRenderer hijo con una textura
-/// radial generada por código (compartida entre todos los items).
-/// </summary>
 [Serializable]
 public class SkinGlowEffect
 {

@@ -1,10 +1,6 @@
 using System;
 using UnityEngine;
 
-/// <summary>
-/// Pulso aleatorio que se dispara mientras el item "recibe puntos".
-/// Expone <see cref="Punch"/> (0 = reposo) para que el item lo aplique donde quiera.
-/// </summary>
 [Serializable]
 public class SkinReceivePulse
 {

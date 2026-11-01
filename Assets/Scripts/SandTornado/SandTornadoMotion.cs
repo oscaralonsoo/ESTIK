@@ -6,22 +6,16 @@ public class SandTornadoMotion : MonoBehaviour
     public float speed = 2.5f;
     public float sway = 0.5f;
     public float swayFrequency = 0.8f;
-    [Tooltip("Ida y vuelta: al llegar a un extremo da la vuelta. Si está desactivado, usa 'loop'.")]
     public bool pingPong = true;
-    [Tooltip("Solo si pingPong está desactivado: al llegar al final reaparece en el inicio.")]
     public bool loop = true;
-    [Tooltip("Punto de inicio en X.")]
     public float startX = 12f;
-    [Tooltip("Punto final en X. Si es mayor que startX va de izquierda a derecha, si es menor de derecha a izquierda.")]
     public float endX = -12f;
     public float tilt = 6f;
     public float leanWobble = 4f;
     public float leanSpeed = 2.2f;
-    [Tooltip("Qué tan rápido se gira la inclinación al cambiar de sentido.")]
     public float turnSpeed = 3f;
 
     [Header("Anillos")]
-    [Tooltip("Padre de los anillos. Vacío = busca el hijo llamado Body.")]
     public Transform body;
     public float tierSpin = 2.5f;
     public float wobble = 0.18f;
@@ -118,12 +112,5 @@ public class SandTornadoMotion : MonoBehaviour
             float k = Mathf.Sin(time * squashSpeed - i * 0.9f) * squash;
             tiers[i].localScale = new Vector3(1f - k * 0.5f, 1f + k, 1f - k * 0.5f);
         }
-    }
-
-    void OnDrawGizmosSelected()
-    {
-        Gizmos.color = Color.yellow;
-        Vector3 p = transform.position;
-        Gizmos.DrawLine(new Vector3(startX, p.y, p.z), new Vector3(endX, p.y, p.z));
     }
 }

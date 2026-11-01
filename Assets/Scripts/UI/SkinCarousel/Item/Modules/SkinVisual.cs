@@ -2,10 +2,6 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-/// <summary>
-/// Gestiona el visual 3D de la skin: instancia el prefab, desactiva su gameplay,
-/// ajusta escala / layers / sorting y controla partículas y visibilidad.
-/// </summary>
 [Serializable]
 public class SkinVisual
 {
@@ -23,11 +19,7 @@ public class SkinVisual
     GameObject _instance;
     Renderer[] _renderers;
     ParticleSystem[] _particles;
-
-    /// <summary>True si se usa un prefab completo en lugar de la malla de la bola.</summary>
     public bool UsesPrefab { get; private set; }
-
-    /// <summary>True si el visual está visible (lo dicta el carrusel).</summary>
     public bool Shown { get; private set; } = true;
 
     public void Init(Transform ball, Renderer ballRenderer)
@@ -35,8 +27,6 @@ public class SkinVisual
         _ball = ball;
         _ballRenderer = ballRenderer;
     }
-
-    // ───────────── Spawn / Clear ─────────────
 
     public void Spawn(SkinData data)
     {
@@ -87,10 +77,6 @@ public class SkinVisual
         _particles = null;
         UsesPrefab = false;
     }
-
-    // ───────────── Tint ─────────────
-
-    /// <summary>Renderers sobre los que se aplica el brillo.</summary>
     public IEnumerable<Renderer> GetTintRenderers()
     {
         if (!UsesPrefab || _instance == null)
@@ -102,8 +88,6 @@ public class SkinVisual
         foreach (var mr in _instance.GetComponentsInChildren<MeshRenderer>(false))
             yield return mr;
     }
-
-    // ───────────── Runtime ─────────────
 
     public void SetParticlesActive(bool active)
     {
@@ -132,9 +116,6 @@ public class SkinVisual
         foreach (var r in _renderers)
             if (r != null) r.enabled = visible;
     }
-
-    // ───────────── Helpers ─────────────
-
     static void DisableGameplay(GameObject root)
     {
         foreach (var mb in root.GetComponentsInChildren<MonoBehaviour>(true))

@@ -2,11 +2,6 @@ using System;
 using System.Collections;
 using UnityEngine;
 
-/// <summary>
-/// Secuencia de desbloqueo: shake del candado -> pop del candado + reveal de la bola.
-/// No toca transforms: expone valores (BallPunch, LockScale, LockRot) que el item aplica,
-/// y modifica Darkness/Flash del tinter.
-/// </summary>
 [Serializable]
 public class SkinUnlockAnimation
 {
@@ -17,14 +12,8 @@ public class SkinUnlockAnimation
     [SerializeField] float lockPopScale = 1.6f;
     [SerializeField] float revealDuration = 0.55f;
     [SerializeField] float ballPunchScale = 1.35f;
-
-    /// <summary>Multiplicador de escala de la bola.</summary>
     public float BallPunch { get; private set; } = 1f;
-
-    /// <summary>Multiplicador de escala del candado.</summary>
     public float LockScale { get; private set; } = 1f;
-
-    /// <summary>Rotación Z del candado en grados.</summary>
     public float LockRot { get; private set; }
 
     public void Reset()
@@ -38,7 +27,6 @@ public class SkinUnlockAnimation
     /// <param name="onFrame">Se llama cada frame de la fase de reveal (el item reaplica el tinte).</param>
     public IEnumerator Run(SkinTinter tinter, Action onShakeEnd, Action onFrame)
     {
-        // Fase 1: shake
         float t = 0f;
         while (t < shakeDuration)
         {
@@ -53,7 +41,6 @@ public class SkinUnlockAnimation
 
         onShakeEnd?.Invoke();
 
-        // Fase 2: pop del candado + reveal
         t = 0f;
         float total = Mathf.Max(revealDuration, lockPopDuration);
         while (t < total)
