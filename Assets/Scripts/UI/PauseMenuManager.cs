@@ -16,7 +16,7 @@ public class PauseMenuManager : MonoBehaviour
     public GameObject optionsPanel;
     public GameObject customBallPanel;
 
-    [Header("Animacion botones del HUD")]
+    [Header("HUD Buttons Anim")]
     [SerializeField] float hudButtonStagger = 0.05f;
     [SerializeField] float hudHideTime = 0.3f;
     [SerializeField] Vector2 hudButtonRise = new Vector2(0f, -30f);
@@ -148,10 +148,10 @@ public class PauseMenuManager : MonoBehaviour
         GamePaused = false;
         Time.timeScale = 1f;
     }
-
     public void OnMainMenuPressed()
     {
         if (transitioning) return;
+
         transitioning = true;
 
         if (FastSceneLoader.Instance != null)
@@ -165,6 +165,7 @@ public class PauseMenuManager : MonoBehaviour
             SceneManager.LoadScene(0);
         }
     }
+
     public void OnRestartPressed()
     {
         if (transitioning) return;
@@ -176,6 +177,7 @@ public class PauseMenuManager : MonoBehaviour
         }
         else
         {
+            LivesManager.Instance.LoseLife();
             GamePaused = false;
             Time.timeScale = 1f;
             SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);

@@ -54,6 +54,9 @@ public class FastSceneLoader : MonoBehaviour
     public void StartPlaying()
     {
         if (isTransitioning) return;
+
+        LivesManager.Instance.ResetLives();
+
         StartCoroutine(ExitSceneRoutine(() => LevelLoader.StartGame()));
     }
 
@@ -66,6 +69,16 @@ public class FastSceneLoader : MonoBehaviour
     public void RestartLevel()
     {
         if (isTransitioning) return;
+
+        bool livesLeft = LivesManager.Instance.LoseLife();
+
+        if (!livesLeft)
+        {
+            LivesManager.Instance.ResetLives();
+            StartCoroutine(ExitSceneRoutine(LevelLoader.LoadMenu));
+            return;
+        }
+
         StartCoroutine(ExitSceneRoutine(LevelLoader.Reload));
     }
 
