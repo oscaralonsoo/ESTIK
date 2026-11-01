@@ -114,7 +114,9 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 8
   groundCheckDistance: 1
-  blockedZones: []
+  blockedZones:
+  - {fileID: 0}
+  - {fileID: 0}
   draging: 0
   isShooting: 0
   gestureBlocked: 0

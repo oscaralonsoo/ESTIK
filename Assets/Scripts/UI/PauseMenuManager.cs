@@ -1,5 +1,8 @@
+using System.Collections;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class PauseMenuManager : MonoBehaviour
 {
@@ -13,8 +16,15 @@ public class PauseMenuManager : MonoBehaviour
     public GameObject optionsPanel;
     public GameObject customBallPanel;
 
+    [Header("Animacion botones del HUD")]
+    [SerializeField] float hudButtonStagger = 0.05f;
+    [SerializeField] float hudHideTime = 0.3f;
+    [SerializeField] Vector2 hudButtonRise = new Vector2(0f, -30f);
+
     GameObject currentPanel;
     bool transitioning;
+    Button[] hudButtons;
+    Coroutine hudRoutine;
 
     public bool IsPaused => GamePaused;
 
@@ -56,6 +66,7 @@ public class PauseMenuManager : MonoBehaviour
         else if (currentPanel != null) OnBackPressed();
         else OnResumePressed();
     }
+
     public void OnPausePressed()
     {
         if (GamePaused || transitioning) return;
@@ -63,11 +74,64 @@ public class PauseMenuManager : MonoBehaviour
         GamePaused = true;
         Time.timeScale = 0f;
 
-        if (hudPanel) hudPanel.SetActive(false);
+        HideHud();
         if (pausePanel) pausePanel.SetActive(true);
     }
+    void CacheHudButtons()
+    {
+        if (hudButtons != null || hudPanel == null) return;
+        hudButtons = hudPanel.GetComponentsInChildren<Button>(true);
+    }
 
-    // Boton Resume
+    static ButtonFeedback GetFeedback(Button b)
+    {
+        var fb = b.GetComponent<ButtonFeedback>();
+        if (fb == null) fb = b.gameObject.AddComponent<ButtonFeedback>();
+        return fb;
+    }
+
+    void HideHud()
+    {
+        if (!hudPanel) return;
+        CacheHudButtons();
+
+        if (hudRoutine != null) StopCoroutine(hudRoutine);
+
+        for (int i = 0; i < hudButtons.Length; i++)
+        {
+            if (hudButtons[i] == null || !hudButtons[i].gameObject.activeInHierarchy) continue;
+            GetFeedback(hudButtons[i]).Disappear(i * hudButtonStagger);
+        }
+
+        hudRoutine = StartCoroutine(DeactivateHudAfter(hudHideTime));
+    }
+
+    IEnumerator DeactivateHudAfter(float seconds)
+    {
+        yield return new WaitForSecondsRealtime(seconds);
+        if (hudPanel) hudPanel.SetActive(false);
+        hudRoutine = null;
+    }
+
+    void ShowHud()
+    {
+        if (!hudPanel) return;
+
+        if (hudRoutine != null)
+        {
+            StopCoroutine(hudRoutine);
+            hudRoutine = null;
+        }
+
+        hudPanel.SetActive(true);
+        CacheHudButtons();
+
+        for (int i = 0; i < hudButtons.Length; i++)
+        {
+            if (hudButtons[i] == null || !hudButtons[i].gameObject.activeInHierarchy) continue;
+            GetFeedback(hudButtons[i]).Appear(i * hudButtonStagger, hudButtonRise);
+        }
+    }
     public void OnResumePressed()
     {
         if (!GamePaused || transitioning) return;
@@ -79,10 +143,43 @@ public class PauseMenuManager : MonoBehaviour
         }
 
         if (pausePanel) pausePanel.SetActive(false);
-        if (hudPanel) hudPanel.SetActive(true);
+        ShowHud();
 
         GamePaused = false;
         Time.timeScale = 1f;
+    }
+
+    public void OnMainMenuPressed()
+    {
+        if (transitioning) return;
+        transitioning = true;
+
+        if (FastSceneLoader.Instance != null)
+        {
+            FastSceneLoader.Instance.GoToMenu();
+        }
+        else
+        {
+            GamePaused = false;
+            Time.timeScale = 1f;
+            SceneManager.LoadScene(0);
+        }
+    }
+    public void OnRestartPressed()
+    {
+        if (transitioning) return;
+        transitioning = true;
+
+        if (FastSceneLoader.Instance != null)
+        {
+            FastSceneLoader.Instance.RestartLevel();
+        }
+        else
+        {
+            GamePaused = false;
+            Time.timeScale = 1f;
+            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+        }
     }
 
     public void OnOptionsPressed() => OpenPanel(optionsPanel);
@@ -103,6 +200,7 @@ public class PauseMenuManager : MonoBehaviour
             transitioning = false;
         });
     }
+
     public void OnSecondaryPanelClosed()
     {
         if (!GamePaused) return;
