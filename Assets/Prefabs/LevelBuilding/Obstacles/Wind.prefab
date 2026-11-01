@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 7264020905017548102}
   - component: {fileID: 251544930956357693}
   - component: {fileID: 4399405102692996715}
+  - component: {fileID: 3737852097213968134}
   m_Layer: 0
   m_Name: Wind
   m_TagString: Untagged
@@ -28,7 +29,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: -0.5142193, y: 0.48536435, z: -0.48536435, w: 0.5142193}
   m_LocalPosition: {x: -6.16, y: 1.55, z: -2.39}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 1, y: 1.6594, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 7989584222323412406}
@@ -288,8 +289,8 @@ ParticleSystem:
     startSize:
       serializedVersion: 2
       minMaxState: 3
-      scalar: 0.3
-      minScalar: 0.1
+      scalar: 0.7
+      minScalar: 0.3
       maxCurve:
         serializedVersion: 2
         m_Curve:
@@ -673,7 +674,7 @@ ParticleSystem:
     donutRadius: 0.2
     m_Position: {x: 0, y: 0, z: 0}
     m_Rotation: {x: 0, y: 0, z: 0}
-    m_Scale: {x: 15, y: 5, z: 0.1}
+    m_Scale: {x: 15, y: 10, z: 5}
     placementMode: 0
     m_MeshMaterialIndex: 0
     m_MeshNormalOffset: 0
@@ -871,8 +872,8 @@ ParticleSystem:
     rateOverTime:
       serializedVersion: 2
       minMaxState: 3
-      scalar: 12
-      minScalar: 8
+      scalar: 25
+      minScalar: 15
       maxCurve:
         serializedVersion: 2
         m_Curve:
@@ -4847,6 +4848,25 @@ ParticleSystemRenderer:
   m_MeshWeighting1: 1
   m_MeshWeighting2: 1
   m_MeshWeighting3: 1
+--- !u!114 &3737852097213968134
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3219900071249661556}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 43e0ab54cb9fe76499b1be26ff5d722c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ParticleDistanceCull
+  targetCamera: {fileID: 0}
+  distanceReference: {fileID: 7264020905017548102}
+  hideDistance: 50
+  hysteresis: 3
+  instant: 0
+  hidden: 0
+  currentDistance: 0
 --- !u!1001 &7895792725819250547
 PrefabInstance:
   m_ObjectHideFlags: 0

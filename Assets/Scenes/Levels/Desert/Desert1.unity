@@ -660,11 +660,6 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: a709ad0a41571f846a048d4a4e2cccc3, type: 3}
---- !u!4 &414238815 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 8389507931189033363, guid: e774fcf81796dbc468edb10e2b459979, type: 3}
-  m_PrefabInstance: {fileID: 1040718195317552809}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &428669871
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1256,52 +1251,6 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 1548805080850163827, guid: a709ad0a41571f846a048d4a4e2cccc3, type: 3}
   m_PrefabInstance: {fileID: 242226486}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &812129390
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 812129391}
-  - component: {fileID: 812129392}
-  m_Layer: 0
-  m_Name: LivesManager
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &812129391
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 812129390}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 414238815}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &812129392
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 812129390}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f4f1cf2e88aa27e4ca3ddc4bf044a8f2, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::LivesManager
-  maxLives: 5
-  currentLives: 5
 --- !u!1 &877216563
 GameObject:
   m_ObjectHideFlags: 0
@@ -22786,10 +22735,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
-    m_AddedGameObjects:
-    - targetCorrespondingSourceObject: {fileID: 8389507931189033363, guid: e774fcf81796dbc468edb10e2b459979, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 812129391}
+    m_AddedGameObjects: []
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 3883290511581537261, guid: e774fcf81796dbc468edb10e2b459979, type: 3}
       insertIndex: -1

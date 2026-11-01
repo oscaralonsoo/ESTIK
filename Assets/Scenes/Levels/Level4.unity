@@ -1346,6 +1346,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Viento
       objectReference: {fileID: 0}
+    - target: {fileID: 3737852097213968134, guid: b99809ad53dbca54fa9853d716278dc6, type: 3}
+      propertyPath: targetCamera
+      value: 
+      objectReference: {fileID: 848649469}
     - target: {fileID: 7264020905017548102, guid: b99809ad53dbca54fa9853d716278dc6, type: 3}
       propertyPath: m_LocalPosition.x
       value: -8.43
@@ -2967,6 +2971,11 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 702dad000acc5ce44b531e4be744f874, type: 3}
+--- !u!20 &848649469 stripped
+Camera:
+  m_CorrespondingSourceObject: {fileID: 5986942559028764858, guid: 702dad000acc5ce44b531e4be744f874, type: 3}
+  m_PrefabInstance: {fileID: 848649468}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &856389059 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 3117852383724881764, guid: a9781ecf6aed5ee48bc6bb186c2353d3, type: 3}

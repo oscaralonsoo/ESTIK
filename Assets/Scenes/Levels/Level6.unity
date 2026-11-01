@@ -5965,6 +5965,11 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 3341983888776621314, guid: 702dad000acc5ce44b531e4be744f874, type: 3}
   m_PrefabInstance: {fileID: 848649468}
   m_PrefabAsset: {fileID: 0}
+--- !u!20 &848649470 stripped
+Camera:
+  m_CorrespondingSourceObject: {fileID: 5986942559028764858, guid: 702dad000acc5ce44b531e4be744f874, type: 3}
+  m_PrefabInstance: {fileID: 848649468}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &853913332
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -8050,6 +8055,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Wind (1)
       objectReference: {fileID: 0}
+    - target: {fileID: 3737852097213968134, guid: b99809ad53dbca54fa9853d716278dc6, type: 3}
+      propertyPath: targetCamera
+      value: 
+      objectReference: {fileID: 848649470}
     - target: {fileID: 7264020905017548102, guid: b99809ad53dbca54fa9853d716278dc6, type: 3}
       propertyPath: m_LocalScale.x
       value: 1.16
@@ -8707,6 +8716,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Wind (2)
       objectReference: {fileID: 0}
+    - target: {fileID: 3737852097213968134, guid: b99809ad53dbca54fa9853d716278dc6, type: 3}
+      propertyPath: targetCamera
+      value: 
+      objectReference: {fileID: 848649470}
     - target: {fileID: 7264020905017548102, guid: b99809ad53dbca54fa9853d716278dc6, type: 3}
       propertyPath: m_LocalScale.x
       value: 0.76
