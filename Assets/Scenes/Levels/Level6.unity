@@ -5960,6 +5960,11 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 702dad000acc5ce44b531e4be744f874, type: 3}
+--- !u!4 &848649469 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 3341983888776621314, guid: 702dad000acc5ce44b531e4be744f874, type: 3}
+  m_PrefabInstance: {fileID: 848649468}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &853913332
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -13369,6 +13374,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Snow
       objectReference: {fileID: 0}
+    - target: {fileID: 4287028495063280536, guid: bfe2cf860bdbdd44eadfe56a56d67a21, type: 3}
+      propertyPath: target
+      value: 
+      objectReference: {fileID: 848649469}
     - target: {fileID: 5563791246785725739, guid: bfe2cf860bdbdd44eadfe56a56d67a21, type: 3}
       propertyPath: m_LocalPosition.x
       value: 9.84
