@@ -36,6 +36,12 @@ public class BallController : MonoBehaviour
     [Tooltip("Boton de pausa (o un area mayor a su alrededor). Un click que empieza aqui no lanza la bola.")]
     [SerializeField] private RectTransform[] blockedZones;
 
+    [Header("GROUND FRICTION")]
+    [SerializeField] private float groundLinearDamping = 1.5f;
+    [SerializeField] private float groundAngularDamping = 1.0f;
+    [SerializeField] private float airLinearDamping = 0f;
+    [SerializeField] private float airAngularDamping = 0.05f;
+
     [Header("DEBUG")]
     bool initialized = true;
     [SerializeField] public bool draging = false;
@@ -123,7 +129,6 @@ public class BallController : MonoBehaviour
 
         if (!isShooting)
         {
-            grounded = Physics.Raycast(ballRigidbody.position, Vector3.down, out RaycastHit hit, groundCheckDistance, groundLayer);
 
             if (gestureBlocked)
             {
@@ -180,6 +185,18 @@ public class BallController : MonoBehaviour
         Time.fixedDeltaTime = 0.02f * Time.timeScale;
 
         if (slowmo) postProcessSlowmo.ActivatePostProcess(); else postProcessSlowmo.DeactivatePostProcess();
+    }
+    private void FixedUpdate()
+    {
+        if (!initialized || ballRigidbody == null) return;
+
+        grounded = Physics.Raycast(ballRigidbody.position, Vector3.down, groundCheckDistance, groundLayer);
+
+        // Durante el disparo aéreo (slowmo/área) no queremos fricción de suelo
+        bool applyGroundFriction = grounded && !aerealShot;
+
+        ballRigidbody.linearDamping = applyGroundFriction ? groundLinearDamping : airLinearDamping;
+        ballRigidbody.angularDamping = applyGroundFriction ? groundAngularDamping : airAngularDamping;
     }
     private float GetPower01(float dragMagnitude)
     {
