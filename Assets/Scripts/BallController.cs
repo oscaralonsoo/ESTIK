@@ -28,6 +28,10 @@ public class BallController : MonoBehaviour
     [SerializeField] private float slowmoAerealJoinTransitionDuration = 0.1f;
     [SerializeField] private float slowmoLeaveTransitionDuration = 0f;
 
+    [Header("GROUND CHECK")]
+    [SerializeField] private LayerMask groundLayer;
+    [SerializeField] private float groundCheckDistance = 0.2f;
+
     [Header("ZONAS SIN LANZAMIENTO")]
     [Tooltip("Boton de pausa (o un area mayor a su alrededor). Un click que empieza aqui no lanza la bola.")]
     [SerializeField] private RectTransform[] blockedZones;
@@ -119,6 +123,8 @@ public class BallController : MonoBehaviour
 
         if (!isShooting)
         {
+            grounded = Physics.Raycast(ballRigidbody.position, Vector3.down, out RaycastHit hit, groundCheckDistance, groundLayer);
+
             if (gestureBlocked)
             {
                 if (Pointer.current.press.wasReleasedThisFrame) gestureBlocked = false;
@@ -437,20 +443,6 @@ public class BallController : MonoBehaviour
     }
     #endregion
 
-    private void OnCollisionStay(Collision other)
-    {
-        if (other.collider.CompareTag("Floor"))
-        {
-            grounded = true;
-        }
-    }
-    private void OnCollisionExit(Collision other)
-    {
-        if (other.collider.CompareTag("Floor"))
-        {
-            grounded = false;
-        }
-    }
 
     private void OnTriggerEnter(Collider other)
     {

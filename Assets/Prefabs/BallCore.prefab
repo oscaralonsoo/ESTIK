@@ -110,8 +110,13 @@ MonoBehaviour:
   slowMotionAerealScale: 0
   slowmoAerealJoinTransitionDuration: 1
   slowmoLeaveTransitionDuration: 0
+  groundLayer:
+    serializedVersion: 2
+    m_Bits: 8
+  groundCheckDistance: 1
   blockedZones: []
   draging: 0
+  isShooting: 0
   gestureBlocked: 0
   aerealShot: 0
   slowmo: 0
