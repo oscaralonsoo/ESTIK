@@ -7,5 +7,6 @@ public class DragTutorialActivator : MonoBehaviour
     private void OnTriggerEnter(Collider other)
     {
         tutorial.gameObject.SetActive(true);
+        gameObject.SetActive(false);
     }
 }
