@@ -1,5 +1,6 @@
-using UnityEngine;
+using System.Collections;
 using System.Collections.Generic;
+using UnityEngine;
 
 public class MoveBetweenPoints : MonoBehaviour
 {
@@ -10,7 +11,7 @@ public class MoveBetweenPoints : MonoBehaviour
 
     [Header("MOVEMENT PROPERTIES")]
     [SerializeField] private float speed;
-    [SerializeField] private float waitTime;
+    [SerializeField] private float waitTime = 1;
 
     private int currentTargetIndex = 0;
     private bool movingForward = true;
@@ -23,24 +24,29 @@ public class MoveBetweenPoints : MonoBehaviour
         {
             currentTargetIndex = Random.Range(0, points.Count);
         }
+        StartCoroutine(WaitCoroutine());
     }
 
     private void Update()
     {
         if (points == null || points.Count == 0) return;
 
-        Vector3 targetPosition = points[currentTargetIndex];
-
-        transform.position = Vector3.MoveTowards(transform.position, targetPosition, speed * Time.deltaTime);
-
-        if (Vector3.Distance(transform.position, targetPosition) < 0.001f)
+        if (canMove)
         {
-            SetNextTarget();
+            Vector3 targetPosition = points[currentTargetIndex];
+
+            transform.position = Vector3.MoveTowards(transform.position, targetPosition, speed * Time.deltaTime);
+
+            if (Vector3.Distance(transform.position, targetPosition) < 0.001f)
+            {
+                SetNextTarget();
+            }
         }
     }
 
     private void SetNextTarget()
     {
+        StartCoroutine(WaitCoroutine());
         if (points.Count <= 1) return;
 
         if (random)
@@ -78,4 +84,13 @@ public class MoveBetweenPoints : MonoBehaviour
             }
         }
     }
+
+    private IEnumerator WaitCoroutine()
+    {
+        canMove = false;
+        yield return new WaitForSeconds(waitTime);
+        canMove = true;
+    }
 }
+
+
