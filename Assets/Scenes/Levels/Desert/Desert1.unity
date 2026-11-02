@@ -10841,7 +10841,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 596d23d141439c44984649cab133d7ea, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SandTornadoPull
-  ball: {fileID: 0}
+  ball: {fileID: 1126883655}
   radius: 5.5
   height: 4
   pull: 40
@@ -12035,6 +12035,11 @@ Transform:
   m_Children: []
   m_Father: {fileID: 361281222}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!54 &1126883655 stripped
+Rigidbody:
+  m_CorrespondingSourceObject: {fileID: 3876593085604278973, guid: e774fcf81796dbc468edb10e2b459979, type: 3}
+  m_PrefabInstance: {fileID: 1040718195317552809}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1175871011
 GameObject:
   m_ObjectHideFlags: 0
@@ -73810,7 +73815,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 596d23d141439c44984649cab133d7ea, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SandTornadoPull
-  ball: {fileID: 0}
+  ball: {fileID: 1126883655}
   radius: 5.5
   height: 4
   pull: 40
@@ -73833,7 +73838,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 596d23d141439c44984649cab133d7ea, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SandTornadoPull
-  ball: {fileID: 0}
+  ball: {fileID: 1126883655}
   radius: 5.5
   height: 4
   pull: 40
