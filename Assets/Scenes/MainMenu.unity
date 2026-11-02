@@ -5867,7 +5867,7 @@ MonoBehaviour:
   buyButtonText: {fileID: 3798804280993238483}
   buyLabel: COMPRAR
   cantAffordTextColor: {r: 1, g: 0.35, b: 0.35, a: 1}
-  buyAppearDelay: 0
+  buyAppearDelay: 0.15
   buyAppearOffset: {x: 0, y: -40}
   priceText: {fileID: 2073640382}
   priceOffsetY: 250
@@ -5887,7 +5887,7 @@ MonoBehaviour:
   inertia: 0.15
   overscroll: 0.35
   centerTolerance: 0.01
-  unlockAnimationLock: 0.7
+  unlockAnimationLock: 1.2
 --- !u!114 &4647572885261546227
 MonoBehaviour:
   m_ObjectHideFlags: 0
