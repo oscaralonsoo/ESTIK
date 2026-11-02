@@ -135,8 +135,6 @@ public class FastSceneLoader : MonoBehaviour
     {
         PlayerPrefs.SetInt("HasCompletedTutorial", 1);
         PlayerPrefs.Save();
-
-        LivesManager.Instance.ResetLives(false);
     }
 
     private IEnumerator DelayedExit(System.Func<AsyncOperation> loadSceneAsync)
