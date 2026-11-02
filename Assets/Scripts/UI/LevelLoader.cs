@@ -25,7 +25,9 @@ public static class LevelLoader
         "Level7",
         "Level8",
         "Level9",
-        "Desert1",
+        "Level10",
+        "Level11",
+        "Level12"
 
     };
 

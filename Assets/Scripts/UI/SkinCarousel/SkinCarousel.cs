@@ -1,6 +1,5 @@
 using System;
 using System.Collections;
-using System.Linq;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
@@ -25,6 +24,7 @@ public class SkinCarousel : MonoBehaviour,
     [Header("Buy Button Animation")]
     [SerializeField] float buyAppearDelay = 0f;
     [SerializeField] Vector2 buyAppearOffset = new Vector2(0f, -40f);
+    [SerializeField] bool buyInLayoutGroup = false;
 
     [Header("Price Label (encima de la bola)")]
     [SerializeField] TextMeshProUGUI priceText;
@@ -65,7 +65,13 @@ public class SkinCarousel : MonoBehaviour,
     public SkinData Current => catalog.skins[_targetIndex];
     public bool IsUnlocking => _unlocking;
 
+    const float MaxFrameTime = 1f / 30f;
+    const float SettleEps = 0.0005f;
+
+    static float FrameTime => Mathf.Min(Time.unscaledDeltaTime, MaxFrameTime);
+
     SkinCarouselItem[] _items;
+    bool[] _itemVisible;
     Canvas _canvas;
 
     float _pos, _vel, _dragVel;
@@ -77,6 +83,11 @@ public class SkinCarousel : MonoBehaviour,
     bool _dragging;
     bool _unlocking;
     Coroutine _unlockRoutine;
+
+    bool _layoutDirty = true;
+    float _lastPanelVis = -1f;
+    int _lastPoints = int.MinValue;
+    bool _warnedNoBall;
 
     CanvasGroup _popupGroup;
     RectTransform _popupRect;
@@ -129,7 +140,6 @@ public class SkinCarousel : MonoBehaviour,
         if (buyButton != null)
         {
             buyButton.onClick.AddListener(BuyCurrentSkin);
-
             _buyFeedback = buyButton.GetComponent<ButtonFeedback>();
         }
 
@@ -139,6 +149,7 @@ public class SkinCarousel : MonoBehaviour,
         if (priceText != null)
         {
             _priceDefaultColor = priceText.color;
+            priceText.color = _priceDefaultColor;
             priceText.raycastTarget = false;
             priceText.gameObject.SetActive(false);
         }
@@ -171,13 +182,18 @@ public class SkinCarousel : MonoBehaviour,
         }
 
         _items = new SkinCarouselItem[Count];
+        _itemVisible = new bool[Count];
 
         for (int i = 0; i < Count; i++)
         {
             SkinCarouselItem item = Instantiate(itemPrefab, content);
             item.Init(catalog.skins[i], i);
+            item.Rect.localScale = Vector3.one;
             _items[i] = item;
         }
+
+        if (EventSystem.current != null)
+            EventSystem.current.pixelDragThreshold = Mathf.Max(10, Mathf.RoundToInt(Screen.dpi / 12f));
     }
 
     void OnEnable()
@@ -212,6 +228,12 @@ public class SkinCarousel : MonoBehaviour,
         if (buyButton != null)
             buyButton.gameObject.SetActive(false);
 
+        for (int i = 0; i < _itemVisible.Length; i++)
+            _itemVisible[i] = true;
+        _layoutDirty = true;
+        _lastPanelVis = -1f;
+        _lastPoints = int.MinValue;
+
         Layout();
         RefreshUI();
 
@@ -236,12 +258,12 @@ public class SkinCarousel : MonoBehaviour,
         }
 
         _unlocking = false;
-
         _buyVisible = false;
 
         HidePopupImmediate();
 
         CommitSelection();
+        SkinService.Flush();
     }
 
     void Start()
@@ -254,13 +276,38 @@ public class SkinCarousel : MonoBehaviour,
 
     void Update()
     {
-        if (!_dragging)
+        float dt = FrameTime;
+
+        int pts = PointsManager.Instance != null ? PointsManager.Instance.GetCurrentScore() : 0;
+        if (pts != _lastPoints)
         {
-            _pos = Mathf.SmoothDamp(_pos, _targetIndex, ref _vel, smoothTime, Mathf.Infinity, Time.unscaledDeltaTime);
+            _lastPoints = pts;
+            RefreshUI();
         }
 
-        Layout();
-        DetectLargeSelectedBall();
+        bool moving = _dragging || _pos != _targetIndex || _vel != 0f;
+
+        if (!_dragging)
+        {
+            _pos = Mathf.SmoothDamp(_pos, _targetIndex, ref _vel, smoothTime, Mathf.Infinity, dt);
+
+            if (Mathf.Abs(_pos - _targetIndex) < SettleEps && Mathf.Abs(_vel) < SettleEps)
+            {
+                _pos = _targetIndex;
+                _vel = 0f;
+            }
+        }
+
+        float panelVis = _panel != null ? _panel.Visibility : 1f;
+        bool panelChanged = !Mathf.Approximately(panelVis, _lastPanelVis);
+
+        if (moving || panelChanged || _layoutDirty)
+        {
+            Layout();
+            DetectLargeSelectedBall();
+            _lastPanelVis = panelVis;
+            _layoutDirty = false;
+        }
 
         if (_dragging && !_unlocking)
         {
@@ -307,6 +354,8 @@ public class SkinCarousel : MonoBehaviour,
             return;
 
         SelectIndex(Mathf.RoundToInt(_pos + _dragVel * inertia));
+
+        SkinService.Flush();
     }
 
     public void SelectIndex(int index)
@@ -384,7 +433,11 @@ public class SkinCarousel : MonoBehaviour,
 
         if (ballSkinController == null)
         {
-            Debug.LogWarning("SkinCarousel: BallSkinController no esta asignado en el Inspector.", this);
+            if (!_warnedNoBall)
+            {
+                _warnedNoBall = true;
+                Debug.LogWarning("SkinCarousel: BallSkinController no esta asignado en el Inspector.", this);
+            }
             return;
         }
 
@@ -401,6 +454,8 @@ public class SkinCarousel : MonoBehaviour,
 
     void RefreshUI()
     {
+        _layoutDirty = true;
+
         if (prevButton != null)
             prevButton.interactable = !_unlocking && _targetIndex > 0;
 
@@ -436,7 +491,7 @@ public class SkinCarousel : MonoBehaviour,
                 buyButton.interactable = !_unlocking;
 
                 if (buyButtonText != null)
-                    buyButtonText.color = (priceOnBall || canAfford) ? _buyTextDefaultColor : cantAffordTextColor;
+                    buyButtonText.color = canAfford ? _buyTextDefaultColor : cantAffordTextColor;
             }
         }
     }
@@ -460,7 +515,7 @@ public class SkinCarousel : MonoBehaviour,
         buyButton.gameObject.SetActive(true);
 
         if (_buyFeedback != null)
-            _buyFeedback.Appear(buyAppearDelay, buyAppearOffset);
+            _buyFeedback.Appear(buyAppearDelay, buyAppearOffset, buyInLayoutGroup);
     }
 
     public void PulseCurrentItem()
@@ -524,6 +579,7 @@ public class SkinCarousel : MonoBehaviour,
     {
         SkinService.Unlock(skin);
         SkinService.Equip(skin);
+        SkinService.Flush();
         SaveSkinForIndex(index);
         SelectionChanged?.Invoke(skin);
 
@@ -553,6 +609,7 @@ public class SkinCarousel : MonoBehaviour,
         _unlockRoutine = null;
         RefreshUI();
     }
+
     void ShowNotEnoughPoints()
     {
         if (notEnoughText == null)
@@ -583,7 +640,7 @@ public class SkinCarousel : MonoBehaviour,
         float t = 0f;
         while (t < popDuration)
         {
-            t += Time.unscaledDeltaTime;
+            t += FrameTime;
             float k = Mathf.Clamp01(t / Mathf.Max(popDuration, 0.0001f));
             float s = Mathf.LerpUnclamped(popStartScale, 1f, EaseOutBack(k, popOvershoot));
             _popupRect.localScale = Vector3.one * s;
@@ -597,14 +654,14 @@ public class SkinCarousel : MonoBehaviour,
         float hold = 0f;
         while (hold < popHoldTime)
         {
-            hold += Time.unscaledDeltaTime;
+            hold += FrameTime;
             yield return null;
         }
 
         float f = 0f;
         while (f < popFadeTime)
         {
-            f += Time.unscaledDeltaTime;
+            f += FrameTime;
             float k = Mathf.Clamp01(f / Mathf.Max(popFadeTime, 0.0001f));
             float e = Mathf.SmoothStep(0f, 1f, k);
             _popupGroup.alpha = 1f - e;
@@ -645,6 +702,7 @@ public class SkinCarousel : MonoBehaviour,
 
         notEnoughText.gameObject.SetActive(false);
     }
+
     void Layout()
     {
         if (_items == null)
@@ -661,14 +719,16 @@ public class SkinCarousel : MonoBehaviour,
             float fade = 1f - Mathf.SmoothStep(0f, 1f, Mathf.InverseLerp(1f, fadeEnd, abs));
 
             float scale = Mathf.Lerp(centerScale, sideScale, t) * fade * panelVis;
-            float brightness = Mathf.Lerp(1f, sideBrightness, t);
-
             bool visible = abs < fadeEnd && scale > 0.01f;
 
-            var rt = _items[i].Rect;
-            rt.anchoredPosition = new Vector2(d * spacing, 0f);
-            rt.localScale = Vector3.one;
+            if (!visible && !_itemVisible[i])
+                continue;
 
+            _itemVisible[i] = visible;
+
+            float brightness = Mathf.Lerp(1f, sideBrightness, t);
+
+            _items[i].Rect.anchoredPosition = new Vector2(d * spacing, 0f);
             _items[i].SetScale(scale);
             _items[i].SetVisual(brightness, visible);
         }
@@ -678,17 +738,28 @@ public class SkinCarousel : MonoBehaviour,
         if (nearest != _lastNearest)
         {
             _lastNearest = nearest;
-
-            foreach (var item in _items.OrderByDescending(x => Mathf.Abs(x.Index - nearest)))
-            {
-                item.Rect.SetAsLastSibling();
-            }
+            ReorderSiblings(nearest);
 
             if (priceText != null)
                 priceText.rectTransform.SetAsLastSibling();
         }
 
         UpdatePriceLabel(panelVis);
+    }
+
+    void ReorderSiblings(int nearest)
+    {
+        int maxDist = Mathf.Max(nearest, Count - 1 - nearest);
+
+        for (int dist = maxDist; dist >= 1; dist--)
+        {
+            int l = nearest - dist;
+            int r = nearest + dist;
+            if (l >= 0) _items[l].Rect.SetAsLastSibling();
+            if (r < Count) _items[r].Rect.SetAsLastSibling();
+        }
+
+        _items[nearest].Rect.SetAsLastSibling();
     }
 
     void UpdatePriceLabel(float panelVis)
@@ -710,10 +781,8 @@ public class SkinCarousel : MonoBehaviour,
         if (!priceText.gameObject.activeSelf)
             priceText.gameObject.SetActive(true);
 
-        float d = _targetIndex - _pos;
-
         RectTransform rt = priceText.rectTransform;
-        rt.anchoredPosition = new Vector2(d * spacing, priceOffsetY);
+        rt.anchoredPosition = new Vector2((_targetIndex - _pos) * spacing, priceOffsetY);
         rt.localScale = Vector3.one * panelVis;
 
         if (_priceShown != skin.price)
@@ -721,11 +790,5 @@ public class SkinCarousel : MonoBehaviour,
             priceText.text = skin.price.ToString();
             _priceShown = skin.price;
         }
-
-        int playerPoints = PointsManager.Instance != null ? PointsManager.Instance.GetCurrentScore() : 0;
-        priceText.color = _priceDefaultColor;
-
-        if (buyButtonText != null)
-            buyButtonText.color = playerPoints >= skin.price ? _buyTextDefaultColor : cantAffordTextColor;
     }
 }
