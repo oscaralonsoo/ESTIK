@@ -74,6 +74,7 @@ public class BallController : MonoBehaviour
     [SerializeField] private float currentSlowmoScale = 0.2f;
     [SerializeField] private float currentSlowmoJoinTransitionDuration = 0.5f;
 
+    private Coroutine shootCoroutine;
     private const string SkinKey = "SelectedBall";
 
     private void Awake()
@@ -180,7 +181,7 @@ public class BallController : MonoBehaviour
                     {
                         isShooting = true;
                         draging = false;
-                        StartCoroutine(PerformShootSequence());
+                        shootCoroutine = StartCoroutine(PerformShootSequence());
                     }
                 }
             }
@@ -516,7 +517,7 @@ public class BallController : MonoBehaviour
     {
         if (other.CompareTag("Area"))
         {
-            StopCoroutine(PerformShootSequence());
+            StopCoroutine(shootCoroutine);
             isShooting = false;
             draging = false;
             HideTrace();
