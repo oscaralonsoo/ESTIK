@@ -8141,7 +8141,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 15319413612131148, guid: e774fcf81796dbc468edb10e2b459979, type: 3}
       propertyPath: m_Cameras.Array.size
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 15319413612131148, guid: e774fcf81796dbc468edb10e2b459979, type: 3}
       propertyPath: 'm_Cameras.Array.data[1]'
@@ -8227,13 +8227,8 @@ PrefabInstance:
       propertyPath: m_LocalPosition.z
       value: -75.39
       objectReference: {fileID: 0}
-    - target: {fileID: 7771225633940897449, guid: e774fcf81796dbc468edb10e2b459979, type: 3}
-      propertyPath: m_Camera
-      value: 
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
-    m_RemovedGameObjects:
-    - {fileID: 937507854431703166, guid: e774fcf81796dbc468edb10e2b459979, type: 3}
+    m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 3883290511581537261, guid: e774fcf81796dbc468edb10e2b459979, type: 3}
