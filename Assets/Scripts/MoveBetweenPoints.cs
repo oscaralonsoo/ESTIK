@@ -35,9 +35,9 @@ public class MoveBetweenPoints : MonoBehaviour
         {
             Vector3 targetPosition = points[currentTargetIndex];
 
-            transform.position = Vector3.MoveTowards(transform.position, targetPosition, speed * Time.deltaTime);
+            transform.localPosition = Vector3.MoveTowards(transform.localPosition, targetPosition, speed * Time.deltaTime);
 
-            if (Vector3.Distance(transform.position, targetPosition) < 0.001f)
+            if (Vector3.Distance(transform.localPosition, targetPosition) < 0.001f)
             {
                 SetNextTarget();
             }
