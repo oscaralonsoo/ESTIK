@@ -2,14 +2,22 @@ using UnityEngine;
 
 public class SandTornadoMotion : MonoBehaviour
 {
+    [Header("Recorrido")]
+    [Tooltip("Punto de inicio. Puede ser hijo del tornado: su posicion se fija al empezar.")]
+    public Transform pointA;
+    [Tooltip("Punto final. Puede ser hijo del tornado: su posicion se fija al empezar.")]
+    public Transform pointB;
+    [Tooltip("Si esta activo, A y B se siguen en vivo (solo para puntos que NO sean hijos del tornado y se muevan solos). Por defecto se fijan al empezar.")]
+    public bool followPointsLive = false;
+
     [Header("Movimiento")]
     public float speed = 2.5f;
     public float sway = 0.5f;
     public float swayFrequency = 0.8f;
+    [Tooltip("Va de A a B y vuelve de B a A.")]
     public bool pingPong = true;
+    [Tooltip("Solo si PingPong esta desactivado: al llegar a B reaparece en A y repite.")]
     public bool loop = true;
-    public float startX = 12f;
-    public float endX = -12f;
     public float tilt = 6f;
     public float leanWobble = 4f;
     public float leanSpeed = 2.2f;
@@ -30,9 +38,24 @@ public class SandTornadoMotion : MonoBehaviour
     float phase;
     float height;
 
-    bool goingToEnd = true;
-    float dir = -1f;
-    float facing = -1f;
+    bool goingToB = true;
+    float facing = 1f;
+    Vector3 basePos;
+
+    // Posiciones del mundo de A y B, fijadas en Awake (antes de que el tornado se mueva)
+    Vector3 worldA;
+    Vector3 worldB;
+    bool hasPoints;
+
+    Vector3 GetA() => followPointsLive && pointA != null ? pointA.position : worldA;
+    Vector3 GetB() => followPointsLive && pointB != null ? pointB.position : worldB;
+
+    void Awake()
+    {
+        hasPoints = pointA != null && pointB != null;
+        if (pointA != null) worldA = pointA.position;
+        if (pointB != null) worldB = pointB.position;
+    }
 
     void OnEnable() { Init(); }
 
@@ -40,10 +63,12 @@ public class SandTornadoMotion : MonoBehaviour
     {
         phase = Random.value * 10f;
 
-        goingToEnd = true;
-        dir = Mathf.Sign(endX - startX);
-        if (dir == 0f) dir = -1f;
-        facing = dir;
+        goingToB = true;
+        facing = 1f;
+        basePos = hasPoints ? GetA() : transform.position;
+
+        if (!hasPoints)
+            Debug.LogWarning($"[SandTornadoMotion] Asigna Point A y Point B en {name}.", this);
 
         if (body == null) body = transform.Find("Body");
         if (body == null) { tiers = new Transform[0]; return; }
@@ -72,25 +97,41 @@ public class SandTornadoMotion : MonoBehaviour
 
     void Update()
     {
-        Vector3 p = transform.position;
+        if (!hasPoints) return;
 
-        float targetX = goingToEnd ? endX : startX;
-        if (!Mathf.Approximately(targetX, p.x)) dir = Mathf.Sign(targetX - p.x);
+        Vector3 a = GetA();
+        Vector3 b = GetB();
+        Vector3 target = goingToB ? b : a;
 
-        p.x = Mathf.MoveTowards(p.x, targetX, speed * Time.deltaTime);
-        p.z += Mathf.Cos((Time.time + phase) * swayFrequency) * sway * Time.deltaTime;
+        // Avance sobre la linea A <-> B
+        basePos = Vector3.MoveTowards(basePos, target, speed * Time.deltaTime);
 
-        if (Mathf.Approximately(p.x, targetX))
+        if ((basePos - target).sqrMagnitude < 0.0001f)
         {
-            if (pingPong) goingToEnd = !goingToEnd;
-            else if (loop) p.x = startX;
+            if (pingPong) goingToB = !goingToB;
+            else if (loop) basePos = a;
         }
 
-        transform.position = p;
+        // Direccion horizontal del recorrido (A -> B)
+        Vector3 pathH = b - a;
+        pathH.y = 0f;
+        if (pathH.sqrMagnitude < 0.0001f) pathH = Vector3.right;
+        else pathH.Normalize();
 
+        // Balanceo lateral, perpendicular al recorrido
+        Vector3 lateral = Vector3.Cross(Vector3.up, pathH);
+        float amp = swayFrequency > 0.0001f ? sway / swayFrequency : 0f;
+        float side = Mathf.Sin((Time.time + phase) * swayFrequency) * amp;
+
+        transform.position = basePos + lateral * side;
+
+        // Inclinacion: la parte de arriba se queda atras respecto al avance
+        float dir = goingToB ? 1f : -1f;
         facing = Mathf.MoveTowards(facing, dir, turnSpeed * Time.deltaTime);
-        float lean = tilt * facing + Mathf.Sin(Time.time * leanSpeed + phase) * leanWobble;
-        transform.rotation = Quaternion.Euler(0f, 0f, lean);
+
+        float lean = (tilt * facing + Mathf.Sin(Time.time * leanSpeed + phase) * leanWobble) * Mathf.Deg2Rad;
+        Vector3 tiltedUp = (Vector3.up * Mathf.Cos(lean) - pathH * Mathf.Sin(lean)).normalized;
+        transform.rotation = Quaternion.FromToRotation(Vector3.up, tiltedUp);
     }
 
     void LateUpdate()
@@ -112,5 +153,32 @@ public class SandTornadoMotion : MonoBehaviour
             float k = Mathf.Sin(time * squashSpeed - i * 0.9f) * squash;
             tiers[i].localScale = new Vector3(1f - k * 0.5f, 1f + k, 1f - k * 0.5f);
         }
+    }
+
+    // Recorrido en la Scene al seleccionar el tornado: verde = A, rojo = B
+    void OnDrawGizmosSelected()
+    {
+        Vector3 a, b;
+
+        if (Application.isPlaying && hasPoints)
+        {
+            a = GetA();
+            b = GetB();
+        }
+        else
+        {
+            if (pointA == null || pointB == null) return;
+            a = pointA.position;
+            b = pointB.position;
+        }
+
+        Gizmos.color = Color.yellow;
+        Gizmos.DrawLine(a, b);
+
+        Gizmos.color = Color.green;
+        Gizmos.DrawWireSphere(a, 0.6f);
+
+        Gizmos.color = Color.red;
+        Gizmos.DrawWireSphere(b, 0.6f);
     }
 }
