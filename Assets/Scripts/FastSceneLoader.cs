@@ -105,22 +105,19 @@ public class FastSceneLoader : MonoBehaviour
         if (isTransitioning) return;
         StartCoroutine(ExitSceneRoutine(LevelLoader.LoadMenu));
     }
-
     public void RetryAfterGameOver()
     {
         if (isTransitioning) return;
 
         isTransitioning = true;
         LivesManager.Instance.ResetLives();
-        StartCoroutine(ExitSceneRoutine(LevelLoader.Reload));
+        StartCoroutine(ExitSceneRoutine(LevelLoader.RestartFromFirstLevel));
     }
-
     public void SetTutorialPlayed()
     {
         PlayerPrefs.SetInt("HasCompletedTutorial", 1);
         PlayerPrefs.Save();
     }
-
     private IEnumerator GameOverRoutine()
     {
         yield return new WaitForSecondsRealtime(lifeLostDelay);

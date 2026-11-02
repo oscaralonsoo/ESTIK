@@ -64,6 +64,7 @@ public class LivesManager : MonoBehaviour
         currentLives = maxLives;
 
         ComboManager.Instance.ResetAll();
+        PointsManager.ResetRun();
 
         OnLivesChanged?.Invoke(currentLives, maxLives);
     }

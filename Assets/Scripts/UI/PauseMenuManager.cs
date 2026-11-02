@@ -215,6 +215,7 @@ public class PauseMenuManager : MonoBehaviour
         HideHud();
         if (gameOverPanel) gameOverPanel.SetActive(true);
     }
+
     public void OnGameOverRetryPressed()
     {
         if (transitioning) return;
@@ -230,26 +231,7 @@ public class PauseMenuManager : MonoBehaviour
             GamePaused = false;
             GameOver = false;
             Time.timeScale = 1f;
-            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
-        }
-    }
-    public void OnGameOverMenuPressed()
-    {
-        if (transitioning) return;
-        transitioning = true;
-
-        LivesManager.Instance.ResetLives();
-
-        if (FastSceneLoader.Instance != null)
-        {
-            FastSceneLoader.Instance.GoToMenu();
-        }
-        else
-        {
-            GamePaused = false;
-            GameOver = false;
-            Time.timeScale = 1f;
-            SceneManager.LoadScene(0);
+            LevelLoader.RestartFromFirstLevel();
         }
     }
 

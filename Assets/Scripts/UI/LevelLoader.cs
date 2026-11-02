@@ -30,6 +30,14 @@ public static class LevelLoader
     };
 
     static int currentLevel = 0;
+    static int recordAtRunStart = int.MaxValue;
+
+    public static bool IsNewRecord => currentLevel > 0 && currentLevel > recordAtRunStart;
+
+    static void SnapshotRecord()
+    {
+        recordAtRunStart = PlayerPrefs.GetInt("Record", 1);
+    }
 
     static int consecutiveLevels = 0;
 
@@ -39,7 +47,13 @@ public static class LevelLoader
 
         currentLevel = completedTutorial ? PlayerPrefs.GetInt("SelectedLevel", 0) : -tutorialScenes.Count;
 
+        SnapshotRecord();
         return LoadCurrent();
+    }
+    public static AsyncOperation RestartFromFirstLevel()
+    {
+        SnapshotRecord();
+        return LoadSpecificLevel(0);
     }
 
     public static AsyncOperation LoadNext()
