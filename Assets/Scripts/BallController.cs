@@ -66,6 +66,7 @@ public class BallController : MonoBehaviour
     private StickBehaviour stickBehaviour;
     private Camera mainCamera;
     private string currentSkinName;
+    private bool isOnRamp = false;
 
     [SerializeField] private float currentSlowmoScale = 0.2f;
     [SerializeField] private float currentSlowmoJoinTransitionDuration = 0.5f;
@@ -198,6 +199,11 @@ public class BallController : MonoBehaviour
         {
             ballRigidbody.linearDamping = shootLinearDamping;
             ballRigidbody.angularDamping = shootAngularDamping;
+        }
+        else if (isOnRamp)
+        {
+            ballRigidbody.linearDamping = airLinearDamping;
+            ballRigidbody.angularDamping = airAngularDamping;
         }
         else if (grounded)
         {
@@ -513,6 +519,22 @@ public class BallController : MonoBehaviour
             {
                 FastSceneLoader.Instance.NotifyGoalScored();
             }
+        }
+    }
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        if (collision.gameObject.CompareTag("Ramp"))
+        {
+            isOnRamp = true;
+        }
+    }
+
+    private void OnCollisionExit(Collision collision)
+    {
+        if (collision.gameObject.CompareTag("Ramp"))
+        {
+            isOnRamp = false;
         }
     }
 
