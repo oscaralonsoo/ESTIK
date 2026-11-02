@@ -40,9 +40,6 @@ public class GoalController : MonoBehaviour
                 pointCollector.SpawnPointsEffect(hitPosition);
             }
 
-            ComboManager.Instance.RegisterLevelCompleted();
-
-
             StartCoroutine(TriggerChangeCoroutine());
         }
     }

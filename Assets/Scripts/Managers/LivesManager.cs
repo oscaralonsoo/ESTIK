@@ -53,8 +53,6 @@ public class LivesManager : MonoBehaviour
     {
         currentLives = Mathf.Max(0, currentLives - 1);
 
-        ComboManager.Instance.OnLifeLost();
-
         OnLivesChanged?.Invoke(currentLives, maxLives);
         return currentLives > 0;
     }
@@ -63,7 +61,7 @@ public class LivesManager : MonoBehaviour
     {
         currentLives = maxLives;
 
-        ComboManager.Instance.ResetAll();
+        PointsManager.ResetRun();
 
         OnLivesChanged?.Invoke(currentLives, maxLives);
     }

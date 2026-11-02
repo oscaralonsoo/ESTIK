@@ -852,7 +852,7 @@ GameObject:
   - component: {fileID: 826004864560279865}
   - component: {fileID: 638222751070353142}
   m_Layer: 5
-  m_Name: PointsCound
+  m_Name: ActualLevel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2237,6 +2237,7 @@ GameObject:
   - component: {fileID: 5934470977836888564}
   - component: {fileID: 5150575676568828628}
   - component: {fileID: 9167993865990018394}
+  - component: {fileID: 7068809936049336734}
   m_Layer: 5
   m_Name: GameOverPanel
   m_TagString: Untagged
@@ -2345,6 +2346,28 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!114 &7068809936049336734
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3289255682359310346}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 79b4bd970727b944d900aab98db6c94f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::GameOverPanel
+  pointsText: {fileID: 6064791467542387996}
+  pointsRoot: {fileID: 1570491965484549674}
+  levelText: {fileID: 638222751070353142}
+  newRecordObject: {fileID: 2908720367844026623}
+  startDelay: 0.15
+  stagger: 0.18
+  popDuration: 0.4
+  popOvershoot: 1.7
+  pulseScale: 1.15
+  pulseSpeed: 5
 --- !u!1 &3588116458280974195
 GameObject:
   m_ObjectHideFlags: 0
@@ -2956,7 +2979,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 3980351509264611583}
         m_TargetAssemblyTypeName: PauseMenuManager, Assembly-CSharp
-        m_MethodName: OnResumePressed
+        m_MethodName: OnGameOverRetryPressed
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -4711,7 +4734,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: '::'
   scoreText: {fileID: 2930881062921783884}
-  scorePrefix: 
   alwaysShowScore: 0
   hideDelay: 1
   baseDuration: 0.5
@@ -5078,7 +5100,7 @@ GameObject:
   - component: {fileID: 8868714604373742693}
   - component: {fileID: 6064791467542387996}
   m_Layer: 5
-  m_Name: PointsCound
+  m_Name: PointsCount
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -5827,8 +5849,8 @@ MonoBehaviour:
   reloadDelay: 0.2
   punchScale: 1.8
   growTime: 0.4
-  holdTime: 0.5
-  shrinkTime: 0.6
+  holdTime: 0.2
+  shrinkTime: 0.4
   bounce: 2.5
   flashColor: {r: 1, g: 0.25, b: 0.25, a: 1}
 --- !u!114 &5289497960380403241

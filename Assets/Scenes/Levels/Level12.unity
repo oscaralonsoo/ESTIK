@@ -22458,6 +22458,11 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1678918805}
   m_Mesh: {fileID: 4300000, guid: 73aa7616dce3cd04b99dea94d15942b1, type: 2}
+--- !u!1 &1717648096 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 5174513598886521548, guid: e774fcf81796dbc468edb10e2b459979, type: 3}
+  m_PrefabInstance: {fileID: 1040718195317552809}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1914073715
 GameObject:
   m_ObjectHideFlags: 0
@@ -48612,6 +48617,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 918253379424972825, guid: e774fcf81796dbc468edb10e2b459979, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: OnMainMenuPressed
+      objectReference: {fileID: 0}
     - target: {fileID: 959417652384233707, guid: e774fcf81796dbc468edb10e2b459979, type: 3}
       propertyPath: m_LocalPosition.z
       value: -123.06
@@ -48696,6 +48705,14 @@ PrefabInstance:
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
       objectReference: {fileID: 2100000, guid: 8e3251d988092df47b9fb4914463a0c2, type: 2}
+    - target: {fileID: 3467041103582600568, guid: e774fcf81796dbc468edb10e2b459979, type: 3}
+      propertyPath: pointsRoot
+      value: 
+      objectReference: {fileID: 1717648096}
+    - target: {fileID: 3791549302999741214, guid: e774fcf81796dbc468edb10e2b459979, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: OnGameOverRetryPressed
+      objectReference: {fileID: 0}
     - target: {fileID: 5168966013311176255, guid: e774fcf81796dbc468edb10e2b459979, type: 3}
       propertyPath: targetUIPoint
       value: 
@@ -48736,16 +48753,9 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.y
       value: -8.275
       objectReference: {fileID: 0}
-    - target: {fileID: 7923155940373106249, guid: e774fcf81796dbc468edb10e2b459979, type: 3}
-      propertyPath: holdTime
-      value: 0.2
-      objectReference: {fileID: 0}
-    - target: {fileID: 7923155940373106249, guid: e774fcf81796dbc468edb10e2b459979, type: 3}
-      propertyPath: shrinkTime
-      value: 0.4
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
-    m_RemovedGameObjects: []
+    m_RemovedGameObjects:
+    - {fileID: 9049381661847000623, guid: e774fcf81796dbc468edb10e2b459979, type: 3}
     m_AddedGameObjects: []
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 3883290511581537261, guid: e774fcf81796dbc468edb10e2b459979, type: 3}
