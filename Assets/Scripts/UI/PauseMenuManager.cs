@@ -7,6 +7,7 @@ using UnityEngine.UI;
 public class PauseMenuManager : MonoBehaviour
 {
     public static bool GamePaused { get; private set; }
+    public static bool GameOver { get; private set; }
 
     [Header("HUD")]
     public GameObject hudPanel;
@@ -15,6 +16,7 @@ public class PauseMenuManager : MonoBehaviour
     public GameObject pausePanel;
     public GameObject optionsPanel;
     public GameObject customBallPanel;
+    public GameObject gameOverPanel;
 
     [Header("HUD Buttons Anim")]
     [SerializeField] float hudButtonStagger = 0.05f;
@@ -41,12 +43,14 @@ public class PauseMenuManager : MonoBehaviour
     void OnDisable()
     {
         GamePaused = false;
+        GameOver = false;
         Time.timeScale = 1f;
     }
 
     void ResetState()
     {
         GamePaused = false;
+        GameOver = false;
         Time.timeScale = 1f;
         transitioning = false;
         currentPanel = null;
@@ -55,10 +59,13 @@ public class PauseMenuManager : MonoBehaviour
         if (pausePanel) pausePanel.SetActive(false);
         if (optionsPanel) optionsPanel.SetActive(false);
         if (customBallPanel) customBallPanel.SetActive(false);
+        if (gameOverPanel) gameOverPanel.SetActive(false);
     }
 
     void Update()
     {
+        if (GameOver) return;
+
         var keyboard = Keyboard.current;
         if (keyboard == null || !keyboard.escapeKey.wasPressedThisFrame) return;
 
@@ -69,7 +76,7 @@ public class PauseMenuManager : MonoBehaviour
 
     public void OnPausePressed()
     {
-        if (GamePaused || transitioning) return;
+        if (GameOver || GamePaused || transitioning) return;
 
         GamePaused = true;
         Time.timeScale = 0f;
@@ -77,6 +84,7 @@ public class PauseMenuManager : MonoBehaviour
         HideHud();
         if (pausePanel) pausePanel.SetActive(true);
     }
+
     void CacheHudButtons()
     {
         if (hudButtons != null || hudPanel == null) return;
@@ -132,9 +140,10 @@ public class PauseMenuManager : MonoBehaviour
             GetFeedback(hudButtons[i]).Appear(i * hudButtonStagger, hudButtonRise);
         }
     }
+
     public void OnResumePressed()
     {
-        if (!GamePaused || transitioning) return;
+        if (GameOver || !GamePaused || transitioning) return;
 
         if (currentPanel != null)
         {
@@ -148,6 +157,7 @@ public class PauseMenuManager : MonoBehaviour
         GamePaused = false;
         Time.timeScale = 1f;
     }
+
     public void OnMainMenuPressed()
     {
         if (transitioning) return;
@@ -177,10 +187,69 @@ public class PauseMenuManager : MonoBehaviour
         }
         else
         {
-            LivesManager.Instance.LoseLife();
+            if (!LevelLoader.IsTutorialScene(SceneManager.GetActiveScene().name))
+                LivesManager.Instance.LoseLife();
+
             GamePaused = false;
             Time.timeScale = 1f;
             SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+        }
+    }
+
+    public void ShowGameOver()
+    {
+        if (GameOver) return;
+
+        GameOver = true;
+        GamePaused = true;
+        Time.timeScale = 0f;
+        transitioning = false;
+
+        if (currentPanel != null)
+        {
+            currentPanel.SetActive(false);
+            currentPanel = null;
+        }
+        if (pausePanel) pausePanel.SetActive(false);
+
+        HideHud();
+        if (gameOverPanel) gameOverPanel.SetActive(true);
+    }
+    public void OnGameOverRetryPressed()
+    {
+        if (transitioning) return;
+        transitioning = true;
+
+        if (FastSceneLoader.Instance != null)
+        {
+            FastSceneLoader.Instance.RetryAfterGameOver();
+        }
+        else
+        {
+            LivesManager.Instance.ResetLives();
+            GamePaused = false;
+            GameOver = false;
+            Time.timeScale = 1f;
+            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+        }
+    }
+    public void OnGameOverMenuPressed()
+    {
+        if (transitioning) return;
+        transitioning = true;
+
+        LivesManager.Instance.ResetLives();
+
+        if (FastSceneLoader.Instance != null)
+        {
+            FastSceneLoader.Instance.GoToMenu();
+        }
+        else
+        {
+            GamePaused = false;
+            GameOver = false;
+            Time.timeScale = 1f;
+            SceneManager.LoadScene(0);
         }
     }
 

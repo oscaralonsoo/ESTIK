@@ -98,6 +98,7 @@ public static class LevelLoader
         currentLevel = sceneNum;
         return SceneManager.LoadSceneAsync(sceneName);
     }
+
     public static void SyncWithScene(string sceneName)
     {
         int i = mainLevelScenes.IndexOf(sceneName);
@@ -105,6 +106,11 @@ public static class LevelLoader
 
         i = tutorialScenes.IndexOf(sceneName);
         if (i >= 0) currentLevel = i - tutorialScenes.Count;
+    }
+
+    public static bool IsTutorialScene(string sceneName)
+    {
+        return tutorialScenes.Contains(sceneName);
     }
 
     public static string GetTutorialLevelName(int num)

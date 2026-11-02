@@ -1,6 +1,7 @@
 using System.Collections;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class FastSceneLoader : MonoBehaviour
@@ -45,7 +46,6 @@ public class FastSceneLoader : MonoBehaviour
 
         image.gameObject.SetActive(true);
         imageRect.localScale = Vector3.one * maxScale;
-
     }
 
     private IEnumerator Start()
@@ -79,15 +79,21 @@ public class FastSceneLoader : MonoBehaviour
 
     public void RestartLevel()
     {
-        if (isTransitioning || GoalScored) return;
+        if (isTransitioning || GoalScored || PauseMenuManager.GameOver) return;
 
         isTransitioning = true;
+
+        if (LevelLoader.IsTutorialScene(SceneManager.GetActiveScene().name))
+        {
+            StartCoroutine(ExitSceneRoutine(LevelLoader.Reload));
+            return;
+        }
+
         bool livesLeft = LivesManager.Instance.LoseLife();
 
         if (!livesLeft)
         {
-            LivesManager.Instance.ResetLives();
-            StartCoroutine(DelayedExit(LevelLoader.LoadMenu));
+            StartCoroutine(GameOverRoutine());
             return;
         }
 
@@ -100,11 +106,39 @@ public class FastSceneLoader : MonoBehaviour
         StartCoroutine(ExitSceneRoutine(LevelLoader.LoadMenu));
     }
 
+    public void RetryAfterGameOver()
+    {
+        if (isTransitioning) return;
+
+        isTransitioning = true;
+        LivesManager.Instance.ResetLives();
+        StartCoroutine(ExitSceneRoutine(LevelLoader.Reload));
+    }
+
     public void SetTutorialPlayed()
     {
         PlayerPrefs.SetInt("HasCompletedTutorial", 1);
         PlayerPrefs.Save();
     }
+
+    private IEnumerator GameOverRoutine()
+    {
+        yield return new WaitForSecondsRealtime(lifeLostDelay);
+        isTransitioning = false;
+
+        var pause = FindAnyObjectByType<PauseMenuManager>();
+        if (pause != null && pause.gameOverPanel != null)
+        {
+            pause.ShowGameOver();
+        }
+        else
+        {
+            isTransitioning = true;
+            LivesManager.Instance.ResetLives();
+            yield return ExitSceneRoutine(LevelLoader.LoadMenu);
+        }
+    }
+
     private IEnumerator DelayedExit(System.Func<AsyncOperation> loadSceneAsync)
     {
         yield return new WaitForSecondsRealtime(lifeLostDelay);
