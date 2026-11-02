@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -34,6 +35,17 @@ public class PanelAnimator : MonoBehaviour
     const float MaxFrameTime = 1f / 30f;
     public float Visibility { get; private set; } = 1f;
 
+    // Elementos animables cacheados (se calculan una sola vez)
+    struct Item
+    {
+        public ButtonFeedback button;
+        public ToggleFeedback toggle;
+        public bool isBack;
+    }
+
+    Item[] items = System.Array.Empty<Item>();
+    int cascadeCount;
+
     Vector2 restPos;
     CanvasGroup group;
     bool inited, hiding;
@@ -53,6 +65,7 @@ public class PanelAnimator : MonoBehaviour
             }
         }
     }
+
     void Init()
     {
         if (inited) return;
@@ -61,6 +74,51 @@ public class PanelAnimator : MonoBehaviour
         restPos = window.anchoredPosition;
         group = GetComponent<CanvasGroup>();
         if (group == null) group = gameObject.AddComponent<CanvasGroup>();
+        CacheItems();
+    }
+
+    /// <summary>
+    /// Búsqueda de botones/toggles + AddComponent, una sola vez.
+    /// Llama a RefreshItems() si añades o quitas botones en runtime.
+    /// </summary>
+    void CacheItems()
+    {
+        if (window == null) return;
+
+        var selectables = window.GetComponentsInChildren<Selectable>(true);
+        var list = new List<Item>(selectables.Length);
+        cascadeCount = 0;
+
+        for (int i = 0; i < selectables.Length; i++)
+        {
+            var s = selectables[i];
+            var item = new Item { isBack = IsBackButton(s.gameObject.name) };
+
+            if (s is Button b)
+            {
+                var fb = b.GetComponent<ButtonFeedback>();
+                if (fb == null) fb = b.gameObject.AddComponent<ButtonFeedback>();
+                item.button = fb;
+            }
+            else if (s is Toggle t)
+            {
+                var fb = t.GetComponent<ToggleFeedback>();
+                if (fb == null) fb = t.gameObject.AddComponent<ToggleFeedback>();
+                item.toggle = fb;
+            }
+            else continue;
+
+            if (!item.isBack) cascadeCount++;
+            list.Add(item);
+        }
+
+        items = list.ToArray();
+    }
+
+    public void RefreshItems()
+    {
+        Init();
+        CacheItems();
     }
 
     void OnEnable()
@@ -88,11 +146,17 @@ public class PanelAnimator : MonoBehaviour
         Visibility = a;
         group.alpha = a;
     }
+
     IEnumerator Play()
     {
         group.blocksRaycasts = false;
         group.interactable = true;
         float dur = EnterTime;
+
+        // UN solo rebuild de layout para todo el panel (antes era uno por botón)
+        Canvas.ForceUpdateCanvases();
+        LayoutRebuilder.ForceRebuildLayoutImmediate(window);
+        restPos = window.anchoredPosition; // por si cambió el tamaño/layout (rotación, resize web)
 
         SetupButtons(0.08f);
         ApplyEnter(0f);
@@ -159,6 +223,7 @@ public class PanelAnimator : MonoBehaviour
         window.localScale = animateScale ? scale : Vector3.one;
         SetAlpha(alpha);
     }
+
     public void Hide(System.Action onDone = null)
     {
         if (hiding) return;
@@ -179,34 +244,20 @@ public class PanelAnimator : MonoBehaviour
     {
         group.blocksRaycasts = false;
 
-        var selectables = window.GetComponentsInChildren<Selectable>(true);
-        var validElements = System.Array.FindAll(selectables, s => s is Button || s is Toggle);
-
+        int n = items.Length;
         float maxExitWindow = 0.15f;
-        float actualExitStagger = validElements.Length > 1
-            ? Mathf.Min(exitButtonStagger, maxExitWindow / (validElements.Length - 1))
+        float actualExitStagger = n > 1
+            ? Mathf.Min(exitButtonStagger, maxExitWindow / (n - 1))
             : exitButtonStagger;
 
-        for (int i = 0; i < validElements.Length; i++)
+        for (int i = 0; i < n; i++)
         {
-            var elem = validElements[i];
-            if (elem is Button b)
-            {
-                var feedback = b.GetComponent<ButtonFeedback>();
-                if (feedback == null) feedback = b.gameObject.AddComponent<ButtonFeedback>();
-                feedback.Disappear((validElements.Length - 1 - i) * actualExitStagger);
-            }
-            else if (elem is Toggle toggle)
-            {
-                var feedback = toggle.GetComponent<ToggleFeedback>();
-                if (feedback == null) feedback = toggle.gameObject.AddComponent<ToggleFeedback>();
-                feedback.Disappear((validElements.Length - 1 - i) * actualExitStagger);
-            }
+            float delay = (n - 1 - i) * actualExitStagger;
+            if (items[i].button != null) items[i].button.Disappear(delay);
+            else if (items[i].toggle != null) items[i].toggle.Disappear(delay);
         }
 
-        float buttonsTime = validElements.Length > 0
-            ? (validElements.Length - 1) * actualExitStagger + 0.12f
-            : 0f;
+        float buttonsTime = n > 0 ? (n - 1) * actualExitStagger + 0.12f : 0f;
         float total = Mathf.Max(exitDuration, buttonsTime);
 
         float t = 0f;
@@ -241,6 +292,7 @@ public class PanelAnimator : MonoBehaviour
 
         SetAlpha(1f - f * f);
     }
+
     static bool IsBackButton(string objectName)
     {
         string n = objectName.ToLower();
@@ -249,43 +301,26 @@ public class PanelAnimator : MonoBehaviour
 
     void SetupButtons(float delayStart)
     {
-        var selectables = window.GetComponentsInChildren<Selectable>(true);
-        var validElements = System.Array.FindAll(selectables, s => s is Button || s is Toggle);
-        if (validElements.Length == 0) return;
-
-        int cascadeCount = 0;
-        foreach (var s in validElements)
-            if (!IsBackButton(s.gameObject.name)) cascadeCount++;
+        if (items.Length == 0 || buttonsAppear == ButtonsAppear.WithPanel) return;
 
         float actualStagger = cascadeCount > 1
             ? Mathf.Min(buttonStagger, maxCascadeWindow / (cascadeCount - 1))
             : buttonStagger;
 
         int cascadeIndex = 0;
-        for (int i = 0; i < validElements.Length; i++)
+        for (int i = 0; i < items.Length; i++)
         {
-            var elem = validElements[i];
-            bool isBack = IsBackButton(elem.gameObject.name);
-            float delay = isBack ? 0f : delayStart + (cascadeIndex++) * actualStagger;
+            float delay = items[i].isBack ? 0f : delayStart + (cascadeIndex++) * actualStagger;
 
             Vector2 offset = buttonsAppear == ButtonsAppear.CascadeUp
                 ? new Vector2(0f, -buttonRise)
                 : new Vector2((i % 2 == 0 ? -1f : 1f) * buttonRise, 0f);
 
-            if (elem is Button b)
-            {
-                var feedback = b.GetComponent<ButtonFeedback>();
-                if (feedback == null) feedback = b.gameObject.AddComponent<ButtonFeedback>();
-                if (buttonsAppear != ButtonsAppear.WithPanel) feedback.Appear(delay, offset);
-            }
-            else if (elem is Toggle t)
-            {
-                var feedback = t.GetComponent<ToggleFeedback>();
-                if (feedback == null) feedback = t.gameObject.AddComponent<ToggleFeedback>();
-                if (buttonsAppear != ButtonsAppear.WithPanel) feedback.Appear(delay, offset);
-            }
+            if (items[i].button != null) items[i].button.Appear(delay, offset, false);
+            else if (items[i].toggle != null) items[i].toggle.Appear(delay, offset);
         }
     }
+
     static float EaseOutCubic(float x) => 1f - Mathf.Pow(1f - Mathf.Clamp01(x), 3f);
 
     static float EaseOutBack(float x, float c1)

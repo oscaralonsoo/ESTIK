@@ -1,6 +1,7 @@
 using System.Collections;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class FastSceneLoader : MonoBehaviour
@@ -74,7 +75,28 @@ public class FastSceneLoader : MonoBehaviour
     public void LoadNextLevel()
     {
         if (isTransitioning) return;
+
+        // Ultimo nivel completado: en vez de la transicion, sale el YouWinPanel
+        // y no se hace ninguna transicion hasta que el jugador elija (jugar de nuevo / menu)
+        if (!HasNextLevel())
+        {
+            PauseMenuManager pm = FindAnyObjectByType<PauseMenuManager>();
+            if (pm != null && pm.ShowYouWin()) return;
+        }
+
         StartCoroutine(ExitSceneRoutine(LevelLoader.LoadNext));
+    }
+
+    // True si despues del nivel actual hay otro que cargar (tutoriales incluidos)
+    private bool HasNextLevel()
+    {
+        LevelLoader.SyncWithScene(SceneManager.GetActiveScene().name);
+
+        int cur = LevelLoader.GetCurrentLevel();
+        if (cur < 0) return true; // tutorial: siempre hay siguiente
+
+        // GetLevelName devuelve el ultimo nivel cuando te pasas de la lista
+        return LevelLoader.GetLevelName(cur + 1) != LevelLoader.GetLevelName(cur);
     }
 
     public void RestartLevel()

@@ -6,7 +6,7 @@ using UnityEngine.UI;
 public class ButtonFeedback : MonoBehaviour,
     IPointerEnterHandler, IPointerExitHandler, IPointerDownHandler, IPointerUpHandler
 {
-    [Header("Al pasar el ratón")]
+    [Header("Al pasar el ratón (solo ratón/lápiz)")]
     [SerializeField] float hoverScale = 1.05f;
     [SerializeField] Vector2 hoverOffset = new Vector2(0f, 4f);
     [SerializeField] float hoverPulse = 0f;
@@ -19,8 +19,9 @@ public class ButtonFeedback : MonoBehaviour,
 
     [Header("General")]
     [SerializeField] float speed = 16f;
-    [SerializeField] float appearDuration = 0.38f;  
-    [SerializeField] float appearOvershoot = 1.18f; 
+    [SerializeField] float pressSpeed = 28f;
+    [SerializeField] float appearDuration = 0.38f;
+    [SerializeField] float appearOvershoot = 1.18f;
     [SerializeField] float disappearDuration = 0.16f;
     [SerializeField] Vector2 disappearOffset = new Vector2(0f, -30f);
 
@@ -28,6 +29,7 @@ public class ButtonFeedback : MonoBehaviour,
     RectTransform rt;
     float current = 1f;
     float squash;
+    float tilt;
 
     Vector2 restPos;
     Vector2 offset;
@@ -43,6 +45,11 @@ public class ButtonFeedback : MonoBehaviour,
     float fromScale;
 
     bool hover, pressed, inited;
+
+    bool settled;
+    bool lastInteractable = true;
+
+    const float Eps = 0.0005f;
 
     void Init()
     {
@@ -65,15 +72,19 @@ public class ButtonFeedback : MonoBehaviour,
         offset = Vector2.zero;
         current = 1f;
         squash = 0f;
+        tilt = 0f;
+        settled = true;
         transform.localScale = Vector3.one;
         transform.localRotation = Quaternion.identity;
     }
 
-    public void Appear(float delay) => Appear(delay, new Vector2(0f, -40f));
+    public void Appear(float delay) => Appear(delay, new Vector2(0f, -40f), true);
 
-    public void Appear(float delay, Vector2 startOffset)
+    /// <param name="rebuildLayout"></param>
+    public void Appear(float delay, Vector2 startOffset, bool rebuildLayout = true)
     {
         Init();
+        settled = false;
 
         disappearing = false;
         exited = false;
@@ -92,9 +103,10 @@ public class ButtonFeedback : MonoBehaviour,
         appearing = false;
         current = 1f;
         squash = 0f;
+        tilt = 0f;
         transform.localRotation = Quaternion.identity;
 
-        CaptureRest();
+        CaptureRest(rebuildLayout);
 
         transform.localScale = Vector3.zero;
     }
@@ -102,20 +114,21 @@ public class ButtonFeedback : MonoBehaviour,
     public void Disappear(float delay)
     {
         Init();
+        settled = false;
         disappearTimer = Mathf.Max(delay, 0.0001f);
         appearTimer = 0f;
         appearing = false;
         hover = pressed = false;
     }
 
-    void CaptureRest()
+    void CaptureRest(bool rebuild = true)
     {
         if (rt == null) return;
 
         Vector2 currentAnchored = rt.anchoredPosition;
         if (offsetActive) currentAnchored -= offset;
 
-        if (transform.parent is RectTransform parent)
+        if (rebuild && transform.parent is RectTransform parent)
         {
             Canvas.ForceUpdateCanvases();
             LayoutRebuilder.ForceRebuildLayoutImmediate(parent);
@@ -126,9 +139,19 @@ public class ButtonFeedback : MonoBehaviour,
 
     void Update()
     {
-        float dt = Mathf.Min(Time.unscaledDeltaTime, 1f / 30f);
-
         if (exited) return;
+
+        bool interactable = button != null && button.interactable;
+        if (interactable != lastInteractable)
+        {
+            lastInteractable = interactable;
+            settled = false;
+        }
+
+        if (settled && disappearTimer <= 0f && appearTimer <= 0f && !appearing && !disappearing)
+            return;
+
+        float dt = Mathf.Min(Time.unscaledDeltaTime, 1f / 30f);
 
         if (disappearTimer > 0f)
         {
@@ -172,7 +195,7 @@ public class ButtonFeedback : MonoBehaviour,
                 transform.localScale = Vector3.zero;
                 return;
             }
-            CaptureRest();
+            CaptureRest(false); 
             appearing = true;
             appearT = 0f;
         }
@@ -198,6 +221,7 @@ public class ButtonFeedback : MonoBehaviour,
                 current = 1f;
                 rt.anchoredPosition = restPos;
                 transform.localScale = Vector3.one;
+                settled = !hover && !pressed;
             }
             return;
         }
@@ -206,8 +230,9 @@ public class ButtonFeedback : MonoBehaviour,
         float targetScale = 1f;
         float targetSquash = 0f;
         float targetTilt = 0f;
+        bool animatedHover = false;
 
-        if (button != null && button.interactable)
+        if (interactable)
         {
             if (pressed)
             {
@@ -217,19 +242,32 @@ public class ButtonFeedback : MonoBehaviour,
             else if (hover)
             {
                 targetOffset = hoverOffset;
-                targetScale = hoverScale + Mathf.Sin(Time.unscaledTime * pulseSpeed) * hoverPulse;
-                targetTilt = Mathf.Sin(Time.unscaledTime * pulseSpeed * 0.5f) * hoverTilt;
+                targetScale = hoverScale;
+
+                if (hoverPulse != 0f)
+                {
+                    targetScale += Mathf.Sin(Time.unscaledTime * pulseSpeed) * hoverPulse;
+                    animatedHover = true;
+                }
+                if (hoverTilt != 0f)
+                {
+                    targetTilt = Mathf.Sin(Time.unscaledTime * pulseSpeed * 0.5f) * hoverTilt;
+                    animatedHover = true;
+                }
             }
         }
 
-        float lerp = 1f - Mathf.Exp(-speed * dt);
+        float lerp = 1f - Mathf.Exp(-(pressed ? pressSpeed : speed) * dt);
         current = Mathf.Lerp(current, targetScale, lerp);
         squash = Mathf.Lerp(squash, targetSquash, lerp);
 
         transform.localScale = new Vector3(current * (1f + squash), current * (1f - squash), 1f);
 
-        Quaternion targetRot = Quaternion.Euler(0f, 0f, targetTilt);
-        transform.localRotation = Quaternion.Slerp(transform.localRotation, targetRot, lerp);
+        if (hoverTilt != 0f || Mathf.Abs(tilt) > Eps)
+        {
+            tilt = Mathf.LerpAngle(tilt, targetTilt, lerp);
+            transform.localRotation = Quaternion.Euler(0f, 0f, tilt);
+        }
 
         bool moving = offset.sqrMagnitude > 0.0001f || targetOffset != Vector2.zero;
         if (moving)
@@ -250,15 +288,58 @@ public class ButtonFeedback : MonoBehaviour,
                 offsetActive = false;
             }
         }
+        if (!animatedHover
+            && Mathf.Abs(current - targetScale) < Eps
+            && Mathf.Abs(squash - targetSquash) < Eps
+            && Mathf.Abs(tilt - targetTilt) < Eps
+            && (offset - targetOffset).sqrMagnitude < 0.0001f)
+        {
+            current = targetScale;
+            squash = targetSquash;
+            tilt = targetTilt;
+            if (!moving || targetOffset == Vector2.zero)
+            {
+                offset = targetOffset;
+                if (offsetActive && targetOffset == Vector2.zero)
+                {
+                    rt.anchoredPosition = restPos;
+                    offsetActive = false;
+                }
+            }
+            transform.localScale = new Vector3(current * (1f + squash), current * (1f - squash), 1f);
+            transform.localRotation = Quaternion.Euler(0f, 0f, tilt);
+            settled = true;
+        }
+    }
+    static bool IsTouch(PointerEventData e) => e.pointerId >= 0;
+
+    public void OnPointerEnter(PointerEventData e)
+    {
+        if (IsTouch(e)) return;
+        hover = true;
+        settled = false;
     }
 
-    public void OnPointerEnter(PointerEventData e) => hover = true;
-    public void OnPointerExit(PointerEventData e) => hover = false;
-    public void OnPointerDown(PointerEventData e) => pressed = true;
+    public void OnPointerExit(PointerEventData e)
+    {
+        hover = false;
+        settled = false;
+    }
+
+    public void OnPointerDown(PointerEventData e)
+    {
+        pressed = true;
+        settled = false;
+    }
+
     public void OnPointerUp(PointerEventData e)
     {
         if (pressed && button != null && button.interactable && !appearing && !disappearing)
             current = hoverScale + 0.05f;
+
         pressed = false;
+        settled = false;
+
+        if (IsTouch(e)) hover = false;
     }
 }
