@@ -8,7 +8,7 @@ Material:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: Lava
-  m_Shader: {fileID: 4800000, guid: 12691e8156f658d439ceb253a21599f4, type: 3}
+  m_Shader: {fileID: 4800000, guid: 6c10b858775931c43848731dd29eabe7, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords: []
@@ -64,6 +64,10 @@ Material:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
+    - _NoiseTex:
+        m_Texture: {fileID: 2800000, guid: 5f3fa452f77069a4999ce887b9a9906c, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     - _OcclusionMap:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
@@ -114,7 +118,7 @@ Material:
     - _Distort: 0
     - _DstBlend: 0
     - _DstBlendAlpha: 0
-    - _Emission: 2.5
+    - _Emission: 3
     - _EnvironmentReflections: 1
     - _FlowSpeed: 0.15
     - _FoamAmount: 0.8
@@ -134,11 +138,11 @@ Material:
     - _QueueControl: 0
     - _QueueOffset: -50
     - _ReceiveShadows: 1
-    - _Scale: 25
+    - _Scale: 6
     - _Smoothness: 0.5
     - _SmoothnessTextureChannel: 0
     - _SpecularHighlights: 1
-    - _Speed: 0.15
+    - _Speed: 0.01
     - _SrcBlend: 1
     - _SrcBlendAlpha: 1
     - _Steps: 6
@@ -160,7 +164,7 @@ Material:
     - _CaustiColor: {r: 1, g: 1, b: 1, a: 1}
     - _Color: {r: 1, g: 1, b: 1, a: 1}
     - _ColorBright: {r: 1, g: 0.85, b: 0.19999996, a: 1}
-    - _ColorDark: {r: 0.54999995, g: 0.049999982, b: 0.02, a: 1}
+    - _ColorDark: {r: 0.8113208, g: 0.25479496, b: 0, a: 1}
     - _ColorMid: {r: 1, g: 0.34999996, b: 0.049999982, a: 1}
     - _CrustColor: {r: 0.049999982, g: 0.02, b: 0.02, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
