@@ -1456,13 +1456,14 @@ GameObject:
   - component: {fileID: 1256836001}
   - component: {fileID: 1256836003}
   - component: {fileID: 1256836002}
+  - component: {fileID: 1256836004}
   m_Layer: 5
   m_Name: NotifyCustomBall
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1256836001
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1479,8 +1480,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 52.2, y: 60.8}
-  m_SizeDelta: {x: 100, y: 100}
+  m_AnchoredPosition: {x: 59.4, y: 68.9}
+  m_SizeDelta: {x: 120, y: 120}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1256836002
 MonoBehaviour:
@@ -1520,6 +1521,28 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1256836000}
   m_CullTransparentMesh: 1
+--- !u!95 &1256836004
+Animator:
+  serializedVersion: 7
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1256836000}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: a4b28788783f29e4c83f7b51043238be, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_AnimatePhysics: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!1001 &1287005663
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -3560,6 +3583,7 @@ MonoBehaviour:
   pressedScale: 0.95
   pressedSquash: 0.06
   speed: 18
+  pressSpeed: 28
   appearDuration: 0.2
   appearOvershoot: 1.7
   disappearDuration: 0.16
@@ -3845,6 +3869,7 @@ MonoBehaviour:
   pressedScale: 0.95
   pressedSquash: 0.06
   speed: 18
+  pressSpeed: 28
   appearDuration: 0.2
   appearOvershoot: 1.7
   disappearDuration: 0.16
@@ -4224,6 +4249,7 @@ MonoBehaviour:
   pressedScale: 0.95
   pressedSquash: 0.04
   speed: 16
+  pressSpeed: 28
   appearDuration: 0.38
   appearOvershoot: 1.18
   disappearDuration: 0.16
@@ -5088,6 +5114,7 @@ MonoBehaviour:
   pressedScale: 0.95
   pressedSquash: 0.06
   speed: 18
+  pressSpeed: 28
   appearDuration: 0.2
   appearOvershoot: 1.7
   disappearDuration: 0.16
@@ -5483,6 +5510,7 @@ MonoBehaviour:
   pressedScale: 0.95
   pressedSquash: 0.06
   speed: 18
+  pressSpeed: 28
   appearDuration: 0.2
   appearOvershoot: 1.7
   disappearDuration: 0.16
@@ -5730,6 +5758,7 @@ MonoBehaviour:
   pressedScale: 0.95
   pressedSquash: 0.04
   speed: 16
+  pressSpeed: 28
   appearDuration: 0.38
   appearOvershoot: 1.18
   disappearDuration: 0.16
@@ -5869,6 +5898,7 @@ MonoBehaviour:
   cantAffordTextColor: {r: 1, g: 0.35, b: 0.35, a: 1}
   buyAppearDelay: 0.15
   buyAppearOffset: {x: 0, y: -40}
+  buyInLayoutGroup: 0
   priceText: {fileID: 2073640382}
   priceOffsetY: 250
   notEnoughText: {fileID: 7514868030944673163}

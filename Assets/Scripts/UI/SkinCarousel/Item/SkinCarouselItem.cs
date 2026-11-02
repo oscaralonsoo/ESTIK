@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using UnityEngine;
+
 [RequireComponent(typeof(RectTransform))]
 public class SkinCarouselItem : MonoBehaviour
 {
@@ -22,6 +23,8 @@ public class SkinCarouselItem : MonoBehaviour
     public RectTransform Rect { get; private set; }
     public int Index { get; private set; }
 
+    const float MaxFrameTime = 1f / 30f;
+
     Vector3 _baseBallScale = Vector3.one;
     Vector3 _lockBaseScale = Vector3.one;
     Quaternion _lockBaseRot = Quaternion.identity;
@@ -30,6 +33,14 @@ public class SkinCarouselItem : MonoBehaviour
     bool _selected;
     bool _locked;
     bool _unlocking;
+    bool _visible;
+
+    float _scale = 1f;
+
+    float _appliedBall = float.NaN;
+    float _appliedLockScale = float.NaN;
+    float _appliedLockRot = float.NaN;
+    float _appliedBrightness = float.NaN;
 
     Coroutine _unlockCo;
     Action _onUnlockDone;
@@ -77,14 +88,25 @@ public class SkinCarouselItem : MonoBehaviour
 
     void Update()
     {
-        float dt = Time.unscaledDeltaTime;
+        if (!_valid) return;
+
+        // Un item oculto no necesita animarse
+        if (!_visible && !_unlocking) return;
+
+        float dt = Mathf.Min(Time.unscaledDeltaTime, MaxFrameTime);
 
         receivePulse.Tick(dt);
         glow.Tick(dt);
 
-        if (_valid && _selected)
+        if (_selected)
             ball.Rotate(0f, spinSpeed * dt, 0f, Space.Self);
+
+        ApplyScale();
+
+        if (_visible)
+            tinter.ApplyIfChanged();
     }
+
     public void Init(SkinData data, int index)
     {
         Index = index;
@@ -116,6 +138,7 @@ public class SkinCarouselItem : MonoBehaviour
         else
             Debug.LogWarning($"Skin '{data.id}' no tiene Ball Material asignado", data);
     }
+
     public void PlayReceivePulse()
     {
         if (!_valid) return;
@@ -177,6 +200,10 @@ public class SkinCarouselItem : MonoBehaviour
             lockIcon.transform.localRotation = _lockBaseRot;
             lockIcon.SetActive(false);
         }
+        _appliedBall = float.NaN;
+        _appliedLockScale = float.NaN;
+        _appliedLockRot = float.NaN;
+        if (_valid) ApplyScale();
 
         visual.SetParticlesActive(true);
         tinter.Refresh();
@@ -185,6 +212,7 @@ public class SkinCarouselItem : MonoBehaviour
         _onUnlockDone = null;
         cb?.Invoke();
     }
+
     public Vector3 GetBallPosition()
     {
         return ball != null ? ball.position : transform.position;
@@ -192,6 +220,8 @@ public class SkinCarouselItem : MonoBehaviour
 
     public void SetSelected(bool selected)
     {
+        if (_selected == selected) return;
+
         _selected = selected;
         if (!selected && _valid)
             ball.localRotation = Quaternion.identity;
@@ -200,21 +230,48 @@ public class SkinCarouselItem : MonoBehaviour
     public void SetScale(float s)
     {
         if (!_valid) return;
+        _scale = s;
+        ApplyScale();
+    }
 
-        ball.localScale = _baseBallScale * s * unlockAnim.BallPunch;
+    void ApplyScale()
+    {
+        float ballS = _scale * unlockAnim.BallPunch;
+        if (!Mathf.Approximately(ballS, _appliedBall))
+        {
+            _appliedBall = ballS;
+            ball.localScale = _baseBallScale * ballS;
+        }
 
         if (lockIcon != null)
         {
-            lockIcon.transform.localScale = _lockBaseScale * s * (1f + receivePulse.Punch) * unlockAnim.LockScale;
-            lockIcon.transform.localRotation = _lockBaseRot * Quaternion.Euler(0f, 0f, unlockAnim.LockRot);
+            float lockS = _scale * (1f + receivePulse.Punch) * unlockAnim.LockScale;
+            if (!Mathf.Approximately(lockS, _appliedLockScale))
+            {
+                _appliedLockScale = lockS;
+                lockIcon.transform.localScale = _lockBaseScale * lockS;
+            }
+
+            float rot = unlockAnim.LockRot;
+            if (!Mathf.Approximately(rot, _appliedLockRot))
+            {
+                _appliedLockRot = rot;
+                lockIcon.transform.localRotation = _lockBaseRot * Quaternion.Euler(0f, 0f, rot);
+            }
         }
 
-        glow.Apply(_baseBallScale.x * s, visual.Shown);
+        glow.Apply(_baseBallScale.x * _scale, visual.Shown);
     }
 
     public void SetVisual(float brightness, bool visible)
     {
         if (!_valid) return;
+
+        if (visible == _visible && Mathf.Approximately(brightness, _appliedBrightness))
+            return;
+
+        _visible = visible;
+        _appliedBrightness = brightness;
 
         tinter.Brightness = brightness;
 
