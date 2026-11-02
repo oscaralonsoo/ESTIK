@@ -1945,6 +1945,16 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 2044349507974931151, guid: 60133be2c5bd1fa48a4de05b0e30adac, type: 3}
   m_PrefabInstance: {fileID: 438373460}
   m_PrefabAsset: {fileID: 0}
+--- !u!224 &438373462 stripped
+RectTransform:
+  m_CorrespondingSourceObject: {fileID: 1967277774973479518, guid: 60133be2c5bd1fa48a4de05b0e30adac, type: 3}
+  m_PrefabInstance: {fileID: 438373460}
+  m_PrefabAsset: {fileID: 0}
+--- !u!224 &438373463 stripped
+RectTransform:
+  m_CorrespondingSourceObject: {fileID: 4011382895059093220, guid: 60133be2c5bd1fa48a4de05b0e30adac, type: 3}
+  m_PrefabInstance: {fileID: 438373460}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &450194066 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 3711905928230151870, guid: 7b6280cb6b0ff75479d8b8175cc6f6c4, type: 3}
@@ -7328,6 +7338,14 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 3610039185142173143, guid: 5e73398fff4312c40ae2d8abd8430912, type: 3}
+      propertyPath: 'blockedZones.Array.data[0]'
+      value: 
+      objectReference: {fileID: 438373463}
+    - target: {fileID: 3610039185142173143, guid: 5e73398fff4312c40ae2d8abd8430912, type: 3}
+      propertyPath: 'blockedZones.Array.data[1]'
+      value: 
+      objectReference: {fileID: 438373462}
     - target: {fileID: 5288847343622499762, guid: 5e73398fff4312c40ae2d8abd8430912, type: 3}
       propertyPath: m_Name
       value: Ball

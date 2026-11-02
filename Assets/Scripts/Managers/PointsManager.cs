@@ -22,10 +22,6 @@ public class PointsManager : MonoBehaviour
     [Header("Puntuación")]
     [SerializeField] private int points = 0;
     private const string SCORE_KEY = "PlayerScore";
-
-    // Puntos ganados SOLO en la run actual (lo que muestra el GameOverPanel).
-    // Es static para sobrevivir a las recargas de escena; se pone a 0 con ResetRun()
-    // (LivesManager.ResetLives lo llama al empezar partida, al reintentar y al volver al menu).
     public static int RunTotal { get; private set; }
 
     public static void ResetRun()

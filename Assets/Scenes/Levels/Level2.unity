@@ -8219,6 +8219,14 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3132214115227445516, guid: e774fcf81796dbc468edb10e2b459979, type: 3}
+      propertyPath: 'blockedZones.Array.data[0]'
+      value: 
+      objectReference: {fileID: 1901311991}
+    - target: {fileID: 3132214115227445516, guid: e774fcf81796dbc468edb10e2b459979, type: 3}
+      propertyPath: 'blockedZones.Array.data[1]'
+      value: 
+      objectReference: {fileID: 1901311990}
     - target: {fileID: 3883290511581537261, guid: e774fcf81796dbc468edb10e2b459979, type: 3}
       propertyPath: m_Name
       value: NumberLevel
@@ -8260,6 +8268,16 @@ RectTransform:
 --- !u!20 &1901311989 stripped
 Camera:
   m_CorrespondingSourceObject: {fileID: 2337495837257231932, guid: e774fcf81796dbc468edb10e2b459979, type: 3}
+  m_PrefabInstance: {fileID: 1901311987}
+  m_PrefabAsset: {fileID: 0}
+--- !u!224 &1901311990 stripped
+RectTransform:
+  m_CorrespondingSourceObject: {fileID: 5280820321229751992, guid: e774fcf81796dbc468edb10e2b459979, type: 3}
+  m_PrefabInstance: {fileID: 1901311987}
+  m_PrefabAsset: {fileID: 0}
+--- !u!224 &1901311991 stripped
+RectTransform:
+  m_CorrespondingSourceObject: {fileID: 7327173875493743106, guid: e774fcf81796dbc468edb10e2b459979, type: 3}
   m_PrefabInstance: {fileID: 1901311987}
   m_PrefabAsset: {fileID: 0}
 --- !u!4 &1910186405 stripped
