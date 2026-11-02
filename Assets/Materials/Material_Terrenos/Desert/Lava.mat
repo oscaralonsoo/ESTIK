@@ -1,0 +1,188 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!21 &2100000
+Material:
+  serializedVersion: 8
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: Lava
+  m_Shader: {fileID: 4800000, guid: 12691e8156f658d439ceb253a21599f4, type: 3}
+  m_Parent: {fileID: 0}
+  m_ModifiedSerializedProperties: 0
+  m_ValidKeywords: []
+  m_InvalidKeywords: []
+  m_LightmapFlags: 4
+  m_EnableInstancingVariants: 0
+  m_DoubleSidedGI: 0
+  m_CustomRenderQueue: -1
+  stringTagMap: {}
+  disabledShaderPasses:
+  - MOTIONVECTORS
+  m_LockedProperties: 
+  m_SavedProperties:
+    serializedVersion: 3
+    m_TexEnvs:
+    - _BaseMap:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _BumpMap:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Caustic_Texture:
+        m_Texture: {fileID: 2800000, guid: 2d3c36338fb8d9d458d2858f2776f889, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _DetailAlbedoMap:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _DetailMask:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _DetailNormalMap:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _EmissionMap:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _FoamTexture:
+        m_Texture: {fileID: 2800000, guid: 3f493800b17158a4889123979e0f5376, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _MainTex:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _MetallicGlossMap:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _OcclusionMap:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _ParallaxMap:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _SpecGlossMap:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - unity_Lightmaps:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - unity_LightmapsInd:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - unity_ShadowMasks:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    m_Ints: []
+    m_Floats:
+    - _AddPrecomputedVelocity: 0
+    - _AlphaClip: 0
+    - _AlphaToMask: 0
+    - _Blend: 0
+    - _BlendModePreserveSpecular: 1
+    - _BumpScale: 1
+    - _CausticCutout: 0.3
+    - _CausticsSpeed: 0.01
+    - _CausticsTiling: 7.01
+    - _ClearCoatMask: 0
+    - _ClearCoatSmoothness: 0
+    - _CrustAmount: 0
+    - _CrustSoft: 0.2
+    - _CrustSoftness: 0.288
+    - _CrustThreshold: 0.449
+    - _Cull: 2
+    - _Cutoff: 0.5
+    - _Depth: 7.09
+    - _DepthFalloff: 4.55
+    - _DetailAlbedoMapScale: 1
+    - _DetailNormalMapScale: 1
+    - _Distort: 0
+    - _DstBlend: 0
+    - _DstBlendAlpha: 0
+    - _Emission: 2.5
+    - _EnvironmentReflections: 1
+    - _FlowSpeed: 0.15
+    - _FoamAmount: 0.8
+    - _FoamCutout: 0.13
+    - _FoamDepth: 2.39
+    - _FoamFalloff: 3
+    - _FoamShoreWidth: 0.67
+    - _FoamTiling: 0.41
+    - _GlossMapScale: 0
+    - _Glossiness: 0
+    - _GlossyReflections: 0
+    - _Metallic: 0
+    - _OcclusionStrength: 1
+    - _Parallax: 0.005
+    - _PulseAmount: 1
+    - _PulseSpeed: 0.8
+    - _QueueControl: 0
+    - _QueueOffset: -50
+    - _ReceiveShadows: 1
+    - _Scale: 25
+    - _Smoothness: 0.5
+    - _SmoothnessTextureChannel: 0
+    - _SpecularHighlights: 1
+    - _Speed: 0.15
+    - _SrcBlend: 1
+    - _SrcBlendAlpha: 1
+    - _Steps: 6
+    - _Surface: 0
+    - _VertexDisp: 0.1
+    - _VertexFreq: 1.5
+    - _WaveIntensity: 0.04
+    - _WaveSpeed: 0.02
+    - _WobbleAmp: 2
+    - _WobbleFreq: 2
+    - _WobbleSpeed: 0.5
+    - _WorkflowMode: 1
+    - _WorldTiling: 0.1
+    - _WorldUV: 0
+    - _XRMotionVectorsPass: 1
+    - _ZWrite: 1
+    m_Colors:
+    - _BaseColor: {r: 1, g: 1, b: 1, a: 1}
+    - _CaustiColor: {r: 1, g: 1, b: 1, a: 1}
+    - _Color: {r: 1, g: 1, b: 1, a: 1}
+    - _ColorBright: {r: 1, g: 0.85, b: 0.19999996, a: 1}
+    - _ColorDark: {r: 0.54999995, g: 0.049999982, b: 0.02, a: 1}
+    - _ColorMid: {r: 1, g: 0.34999996, b: 0.049999982, a: 1}
+    - _CrustColor: {r: 0.049999982, g: 0.02, b: 0.02, a: 1}
+    - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
+    - _FoamColor: {r: 1, g: 1, b: 1, a: 1}
+    - _FoamSpeed: {r: 0, g: 0.1, b: 0, a: 0}
+    - _HotColor: {r: 3.375481, g: 0.5678419, b: 0, a: 1}
+    - _MainColor: {r: 0.16745283, g: 0.54082733, b: 0.6698113, a: 1}
+    - _MidColor: {r: 0.9824163, g: 0.15154295, b: 0, a: 1}
+    - _ShoreColor: {r: 0.091224626, g: 0.39853016, b: 0.4716981, a: 1}
+    - _SpecColor: {r: 0.19999996, g: 0.19999996, b: 0.19999996, a: 1}
+  m_BuildTextureStacks: []
+  m_AllowLocking: 1
+--- !u!114 &7724037440622104382
+MonoBehaviour:
+  m_ObjectHideFlags: 11
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d0353a89b1f911e48b9e16bdc9f2e058, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.RenderPipelines.Universal.Editor::UnityEditor.Rendering.Universal.AssetVersion
+  version: 10
