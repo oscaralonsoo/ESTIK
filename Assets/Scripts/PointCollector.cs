@@ -9,6 +9,10 @@ public class PointCollector : MonoBehaviour
     [SerializeField] private GameObject point2DPrefab;
     [SerializeField] private RectTransform targetUIPoint;
 
+    [Header("Cámara Secundaria")]
+    [Tooltip("Cámara secundaria donde está el punto de la UI que hay que seguir.")]
+    [SerializeField] private Camera secondaryCamera;
+
     [Header("Parámetros por Defecto")]
     [SerializeField] private int minPoints = 5;
     [SerializeField] private int maxPoints = 10;
@@ -26,7 +30,7 @@ public class PointCollector : MonoBehaviour
     [SerializeField] private string sortingLayerName = "Default";
     [SerializeField] private int sortingOrder = 100;
 
-    private Camera mainCamera;
+    private Camera mainCamera; // Cámara que sigue el juego
 
     private void Awake()
     {
@@ -37,6 +41,7 @@ public class PointCollector : MonoBehaviour
         else
         {
             Destroy(gameObject);
+            return;
         }
 
         mainCamera = Camera.main;
@@ -57,11 +62,24 @@ public class PointCollector : MonoBehaviour
         StartCoroutine(SpawnRoutine(worldSpawnPosition, min, max, finalDuration, multiplier));
     }
 
+    // Posición en mundo (según la cámara principal) del punto de la UI visto por la cámara secundaria
+    private Vector3 GetTargetWorldPosition()
+    {
+        Vector2 uiScreenPos = RectTransformUtility.WorldToScreenPoint(secondaryCamera, targetUIPoint.position);
+        return mainCamera.ScreenToWorldPoint(new Vector3(uiScreenPos.x, uiScreenPos.y, mainCamera.nearClipPlane + 5f));
+    }
+
     private IEnumerator SpawnRoutine(Vector3 worldSpawnPosition, int min, int max, float flightDuration, int multiplier)
     {
-        if (point2DPrefab == null || targetUIPoint == null || mainCamera == null)
+        // Por si la cámara principal cambia o no existía en Awake
+        if (mainCamera == null)
         {
-            Debug.LogWarning("PointCollector: Faltan referencias por asignar.");
+            mainCamera = Camera.main;
+        }
+
+        if (point2DPrefab == null || targetUIPoint == null || mainCamera == null || secondaryCamera == null)
+        {
+            Debug.LogWarning("PointCollector: Faltan referencias por asignar (prefab, targetUIPoint, Main Camera o Secondary Camera).");
             yield break;
         }
 
@@ -88,23 +106,13 @@ public class PointCollector : MonoBehaviour
             spriteRenderer.sortingOrder = sortingOrder;
         }
 
-        if (mainCamera != null)
-        {
-            pointInstance.transform.rotation = mainCamera.transform.rotation;
-        }
+        pointInstance.transform.rotation = mainCamera.transform.rotation;
 
         Vector3 targetScale = pointInstance.transform.localScale;
         pointInstance.transform.localScale = Vector3.zero;
-        Vector3 uiScreenPos = RectTransformUtility.WorldToScreenPoint(null, targetUIPoint.position);
-        Vector3 targetWorldPos = mainCamera.ScreenToWorldPoint(new Vector3(uiScreenPos.x, uiScreenPos.y, mainCamera.nearClipPlane + 5f));
 
         Vector3 startPos3D = startWorldPos;
-        Vector3 midPoint = (startPos3D + targetWorldPos) / 2f;
-
-
-        Vector3 curveOffset = new Vector3(Random.Range(-curveHeight, curveHeight) * 0.5f, curveHeight, 0f);
-        Vector3 controlPoint = midPoint + curveOffset;
-
+        float curveSideOffset = Random.Range(-curveHeight, curveHeight) * 0.5f;
 
         float spawnElapsedTime = 0f;
         while (spawnElapsedTime < spawnScaleDuration && pointInstance != null)
@@ -117,7 +125,6 @@ public class PointCollector : MonoBehaviour
 
         if (pointInstance == null) yield break;
 
-
         float flightElapsedTime = 0f;
 
         while (flightElapsedTime < flightDuration && pointInstance != null)
@@ -126,16 +133,17 @@ public class PointCollector : MonoBehaviour
             float t = flightElapsedTime / flightDuration;
             float smoothT = Mathf.SmoothStep(0f, 1f, t);
 
+            // Se recalcula cada frame porque la cámara principal sigue al juego y se mueve
+            Vector3 targetWorldPos = GetTargetWorldPosition();
+            Vector3 midPoint = (startPos3D + targetWorldPos) / 2f;
+            Vector3 controlPoint = midPoint + new Vector3(curveSideOffset, curveHeight, 0f);
+
             Vector3 currentPos = Mathf.Pow(1f - smoothT, 2f) * startPos3D +
                                  2f * (1f - smoothT) * smoothT * controlPoint +
                                  Mathf.Pow(smoothT, 2f) * targetWorldPos;
 
             pointInstance.transform.position = currentPos;
-
-            if (mainCamera != null)
-            {
-                pointInstance.transform.rotation = mainCamera.transform.rotation;
-            }
+            pointInstance.transform.rotation = mainCamera.transform.rotation;
 
             if (t > 0.5f)
             {
