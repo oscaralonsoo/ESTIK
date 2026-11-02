@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 3400623642868607542}
   - component: {fileID: 7761925288819645968}
   - component: {fileID: 6461522594297584201}
+  - component: {fileID: 7986766478631800795}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -162,6 +163,24 @@ MonoBehaviour:
   shootHeight: 9.8
   shootSpeed: 5.76
   lookAtHeightOffset: 1.23
+--- !u!114 &7986766478631800795
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1442303993254009491}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8aa66f0f7be90534eb511a45ec35fc1d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ObstacleFader
+  target: {fileID: 0}
+  obstacleLayer:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  fadeSpeed: 5
+  targetAlpha: 0.5
 --- !u!1 &7386813154199190818
 GameObject:
   m_ObjectHideFlags: 0
