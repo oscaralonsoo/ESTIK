@@ -23,6 +23,9 @@ public class BallController : MonoBehaviour
     [SerializeField] private float stickHitDuration = 0.1f;
     [SerializeField] private float stickFollowThrough = 0.05f;
 
+    [Header("AUDIO")]
+    [SerializeField] private BallSoundController ballSoundController;
+
     [Header("SLOWMO PROPERTIES")]
     [SerializeField] public float slowMotionScale = 0.2f;
     [SerializeField] private float slowmoJoinTransitionDuration = 0.5f;
@@ -119,6 +122,11 @@ public class BallController : MonoBehaviour
         //BALL RIGIDBODY
         ballRigidbody = GetComponent<Rigidbody>();
         if (!ballRigidbody) initialized = false;
+
+        if (ballSoundController == null)
+        {
+            ballSoundController = GetComponent<BallSoundController>();
+        }
 
         //SKIN
         LoadSavedSkin();
@@ -334,6 +342,11 @@ public class BallController : MonoBehaviour
             }
         }
 
+        if (ballSoundController != null)
+        {
+            ballSoundController.PlayHitSound();
+        }
+
         ballRigidbody.WakeUp();
         ballRigidbody.linearVelocity = shootDir * currentShootSpeed;
 
@@ -352,7 +365,6 @@ public class BallController : MonoBehaviour
 
     private IEnumerator FailShoot()
     {
-
         yield return new WaitForSeconds(2f);
 
         if (goal) yield break;
@@ -361,7 +373,7 @@ public class BallController : MonoBehaviour
 
         FastSceneLoader.Instance.RestartLevel();
     }
-    
+
     private IEnumerator ShootDelay()
     {
         isShooting = true;
@@ -532,7 +544,7 @@ public class BallController : MonoBehaviour
             aerealShot = true;
             remainingShots = 1;
             gestureBlocked = false;
-            
+
             if (mainCamera.TryGetComponent<CameraFollow>(out CameraFollow cameraFollow))
             {
                 cameraFollow.SetShooting(true);
@@ -563,5 +575,4 @@ public class BallController : MonoBehaviour
             isOnRamp = false;
         }
     }
-
 }
