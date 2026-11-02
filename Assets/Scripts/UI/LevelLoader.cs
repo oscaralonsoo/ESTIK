@@ -31,6 +31,8 @@ public static class LevelLoader
 
     static int currentLevel = 0;
 
+    static int consecutiveLevels = 0;
+
     public static AsyncOperation StartGame()
     {
         bool completedTutorial = PlayerPrefs.GetInt("HasCompletedTutorial", 0) == 1;
@@ -42,6 +44,11 @@ public static class LevelLoader
 
     public static AsyncOperation LoadNext()
     {
+        if (currentLevel >= 0)
+        {
+            consecutiveLevels++;
+        }
+
         currentLevel++;
 
         if (currentLevel == 0)
@@ -53,7 +60,9 @@ public static class LevelLoader
         if (currentLevel >= mainLevelScenes.Count)
         {
             currentLevel = 0;
-            return LoadMenu();
+
+            Time.timeScale = 1f;
+            return SceneManager.LoadSceneAsync(MenuSceneName);
         }
 
         if (currentLevel > 0)
@@ -74,6 +83,7 @@ public static class LevelLoader
 
     public static AsyncOperation LoadMenu()
     {
+        consecutiveLevels = 0;
         return SceneManager.LoadSceneAsync(MenuSceneName);
     }
 
@@ -84,6 +94,7 @@ public static class LevelLoader
 
     public static AsyncOperation Reload()
     {
+        consecutiveLevels = 0;
         Time.timeScale = 1f;
         return SceneManager.LoadSceneAsync(SceneManager.GetActiveScene().name);
     }
@@ -130,5 +141,10 @@ public static class LevelLoader
     public static int GetCurrentLevel()
     {
         return currentLevel;
+    }
+
+    public static int GetConsecutiveLevels()
+    {
+        return consecutiveLevels;
     }
 }

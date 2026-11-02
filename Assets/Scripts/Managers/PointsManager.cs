@@ -22,7 +22,7 @@ public class PointsManager : MonoBehaviour
     [SerializeField] private AnimationCurve priceDurationCurve = AnimationCurve.EaseInOut(0f, 0f, 1f, 1f);
 
     [Header("Puntuación")]
-    [SerializeField] private int points= 0;
+    [SerializeField] private int points = 0;
     private const string SCORE_KEY = "PlayerScore";
 
     private Vector3 originalScale;
@@ -45,12 +45,12 @@ public class PointsManager : MonoBehaviour
         {
             originalScale = scoreText.transform.localScale;
         }
+
+        points = PlayerPrefs.GetInt(SCORE_KEY, 0);
     }
 
     private void Start()
     {
-        points = PlayerPrefs.GetInt(SCORE_KEY, 0);
-        points = 0;
         UpdateScoreUI();
 
         if (scoreText != null)
@@ -80,6 +80,7 @@ public class PointsManager : MonoBehaviour
         PlayerPrefs.SetInt(SCORE_KEY, points);
         PlayerPrefs.Save();
     }
+
     public void AnimateScoreSpend(int skinPrice)
     {
         float priceFactor = Mathf.Clamp01((float)skinPrice / referenceMaxPrice);

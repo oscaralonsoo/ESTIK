@@ -52,12 +52,17 @@ public class PointCollector : MonoBehaviour
         int min = customMin != -1 ? customMin : minPoints;
         int max = customMax != -1 ? customMax : maxPoints;
         float finalDuration = customDuration != -1f ? customDuration : duration;
+
         if (PointsManager.Instance != null)
         {
             PointsManager.Instance.ShowScore();
         }
 
-        int multiplier = ComboManager.Instance.CurrentMultiplier;
+        // Obtenemos los niveles consecutivos y calculamos el multiplicador:
+        // LevelLoader.GetConsecutiveLevels() arranca en 0 para el primer nivel -> Multiplicador = 1 + 0 = 1 (x1)
+        // Al pasar al segundo nivel consecutivo, consecutiveLevels = 1 -> Multiplicador = 1 + 1 = 2 (x2), y así sucesivamente sin límite.
+        int consecutive = LevelLoader.GetConsecutiveLevels();
+        int multiplier = 1 + consecutive;
 
         StartCoroutine(SpawnRoutine(worldSpawnPosition, min, max, finalDuration, multiplier));
     }
@@ -133,7 +138,6 @@ public class PointCollector : MonoBehaviour
             float t = flightElapsedTime / flightDuration;
             float smoothT = Mathf.SmoothStep(0f, 1f, t);
 
-            // Se recalcula cada frame porque la cámara principal sigue al juego y se mueve
             Vector3 targetWorldPos = GetTargetWorldPosition();
             Vector3 midPoint = (startPos3D + targetWorldPos) / 2f;
             Vector3 controlPoint = midPoint + new Vector3(curveSideOffset, curveHeight, 0f);
