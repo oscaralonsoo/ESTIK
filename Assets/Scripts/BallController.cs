@@ -194,7 +194,7 @@ public class BallController : MonoBehaviour
 
         grounded = Physics.Raycast(ballRigidbody.position, Vector3.down, groundCheckDistance, groundLayer);
 
-        if (aerealShot)
+        if (aerealShot && grounded)
         {
             ballRigidbody.linearDamping = shootLinearDamping;
             ballRigidbody.angularDamping = shootAngularDamping;
