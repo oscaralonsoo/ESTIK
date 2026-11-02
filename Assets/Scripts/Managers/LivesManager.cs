@@ -48,15 +48,23 @@ public class LivesManager : MonoBehaviour
 
         currentLives = maxLives;
     }
+
     public bool LoseLife()
     {
         currentLives = Mathf.Max(0, currentLives - 1);
+
+        ComboManager.Instance.OnLifeLost();
+
         OnLivesChanged?.Invoke(currentLives, maxLives);
         return currentLives > 0;
     }
+
     public void ResetLives()
     {
         currentLives = maxLives;
+
+        ComboManager.Instance.ResetAll();
+
         OnLivesChanged?.Invoke(currentLives, maxLives);
     }
 }

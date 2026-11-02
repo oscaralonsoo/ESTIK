@@ -52,10 +52,12 @@ public class PointCollector : MonoBehaviour
             PointsManager.Instance.ShowScore();
         }
 
-        StartCoroutine(SpawnRoutine(worldSpawnPosition, min, max, finalDuration));
+        int multiplier = ComboManager.Instance.CurrentMultiplier;
+
+        StartCoroutine(SpawnRoutine(worldSpawnPosition, min, max, finalDuration, multiplier));
     }
 
-    private IEnumerator SpawnRoutine(Vector3 worldSpawnPosition, int min, int max, float flightDuration)
+    private IEnumerator SpawnRoutine(Vector3 worldSpawnPosition, int min, int max, float flightDuration, int multiplier)
     {
         if (point2DPrefab == null || targetUIPoint == null || mainCamera == null)
         {
@@ -67,12 +69,12 @@ public class PointCollector : MonoBehaviour
 
         for (int i = 0; i < pointsToSpawn; i++)
         {
-            StartCoroutine(AnimatePoint2DRoutine(worldSpawnPosition, flightDuration));
+            StartCoroutine(AnimatePoint2DRoutine(worldSpawnPosition, flightDuration, multiplier));
             yield return new WaitForSeconds(spawnDelay);
         }
     }
 
-    private IEnumerator AnimatePoint2DRoutine(Vector3 worldPos, float flightDuration)
+    private IEnumerator AnimatePoint2DRoutine(Vector3 worldPos, float flightDuration, int multiplier)
     {
         Vector2 randomOffset = Random.insideUnitCircle * spreadRadius;
         Vector3 startWorldPos = worldPos + new Vector3(randomOffset.x, randomOffset.y, 0f);
@@ -148,7 +150,7 @@ public class PointCollector : MonoBehaviour
         {
             if (PointsManager.Instance != null)
             {
-                PointsManager.Instance.AddPoints(1);
+                PointsManager.Instance.AddPoints(multiplier);
             }
 
             Destroy(pointInstance);

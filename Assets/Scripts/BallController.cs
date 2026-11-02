@@ -17,7 +17,7 @@ public class BallController : MonoBehaviour
 
     [Header("STICK PROPERTIES")]
     [SerializeField] private GameObject stickPrefab;
-    [SerializeField] private Vector3 stickDistance = new Vector3(1.469f,1.597f,0.5f);
+    [SerializeField] private Vector3 stickDistance = new Vector3(1.469f, 1.597f, 0.5f);
     [SerializeField] private float stickHitDuration = 0.1f;
     [SerializeField] private float stickFollowThrough = 0.05f;
 
@@ -201,14 +201,14 @@ public class BallController : MonoBehaviour
         }
         else if (grounded)
         {
-            ballRigidbody.linearDamping =  groundLinearDamping;
-            ballRigidbody.angularDamping =  groundAngularDamping;
+            ballRigidbody.linearDamping = groundLinearDamping;
+            ballRigidbody.angularDamping = groundAngularDamping;
         }
         else
         {
             ballRigidbody.linearDamping = airLinearDamping;
             ballRigidbody.angularDamping = airAngularDamping;
-        }  
+        }
     }
 
     private float GetPower01(float dragMagnitude)
@@ -339,7 +339,12 @@ public class BallController : MonoBehaviour
     private IEnumerator FailShoot()
     {
         yield return new WaitForSeconds(2f);
-        if (!goal) FastSceneLoader.Instance.RestartLevel();
+
+        if (goal) yield break;
+        if (FastSceneLoader.Instance == null) yield break;
+        if (FastSceneLoader.Instance.GoalScored) yield break;
+
+        FastSceneLoader.Instance.RestartLevel();
     }
 
     #region Skin
@@ -498,6 +503,11 @@ public class BallController : MonoBehaviour
         if (other.CompareTag("Goal"))
         {
             goal = true;
+
+            if (FastSceneLoader.Instance != null)
+            {
+                FastSceneLoader.Instance.NotifyGoalScored();
+            }
         }
     }
 

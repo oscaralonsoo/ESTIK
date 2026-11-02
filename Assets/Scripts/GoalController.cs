@@ -21,6 +21,11 @@ public class GoalController : MonoBehaviour
         {
             goalTriggered = true;
 
+            if (FastSceneLoader.Instance != null)
+            {
+                FastSceneLoader.Instance.NotifyGoalScored();
+            }
+
             Vector3 hitPosition = other.ClosestPoint(transform.position);
 
             if (goalParticles != null)
@@ -34,6 +39,8 @@ public class GoalController : MonoBehaviour
             {
                 pointCollector.SpawnPointsEffect(hitPosition);
             }
+
+            ComboManager.Instance.RegisterLevelCompleted();
 
 
             StartCoroutine(TriggerChangeCoroutine());

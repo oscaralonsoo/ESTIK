@@ -16,9 +16,8 @@ public class FastSceneLoader : MonoBehaviour
     private BallController ballController;
     private bool initialized = true;
     private bool isTransitioning = false;
-
-    /// <summary>True mientras dura la transicion de salida (el circulo cubriendo la pantalla).</summary>
     public bool IsTransitioning => isTransitioning;
+    public bool GoalScored { get; private set; }
 
     private void Awake()
     {
@@ -54,12 +53,16 @@ public class FastSceneLoader : MonoBehaviour
         }
     }
 
+    public void NotifyGoalScored()
+    {
+        GoalScored = true;
+    }
+
     public void StartPlaying()
     {
         if (isTransitioning) return;
         isTransitioning = true;
 
-        // Nueva partida: vidas al maximo
         LivesManager.Instance.ResetLives();
 
         StartCoroutine(ExitSceneRoutine(() => LevelLoader.StartGame()));
@@ -73,17 +76,14 @@ public class FastSceneLoader : MonoBehaviour
 
     public void RestartLevel()
     {
-        if (isTransitioning) return;
+        if (isTransitioning || GoalScored) return;
 
-        // Se marca antes de restar la vida para que el HUD no muestre el cambio durante la transicion
         isTransitioning = true;
 
-        // Cada reinicio cuesta una vida (boton de restart y tiro fallido)
         bool livesLeft = LivesManager.Instance.LoseLife();
 
         if (!livesLeft)
         {
-            // Sin vidas: game over. Por ahora vuelve al menu con las vidas restauradas.
             LivesManager.Instance.ResetLives();
             StartCoroutine(ExitSceneRoutine(LevelLoader.LoadMenu));
             return;
