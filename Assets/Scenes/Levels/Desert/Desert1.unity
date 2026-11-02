@@ -10866,8 +10866,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::SandTornadoAppear
   appearOnStart: 1
   startDelay: 0
-  appearDuration: 1.2
-  disappearDuration: 0.7
+  appearDuration: 1.5
+  disappearDuration: 0.4
   stagger: 0.6
   startWidth: 0.04
   gustiness: 0.6
@@ -48607,6 +48607,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 699180260108907138, guid: e774fcf81796dbc468edb10e2b459979, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: fa2f5880889eb084ea05a5602829a8d3, type: 3}
     - target: {fileID: 959417652384233707, guid: e774fcf81796dbc468edb10e2b459979, type: 3}
       propertyPath: m_LocalPosition.z
       value: -123.06
@@ -48642,6 +48646,54 @@ PrefabInstance:
     - target: {fileID: 1623715076691488473, guid: e774fcf81796dbc468edb10e2b459979, type: 3}
       propertyPath: m_Name
       value: LevelBase
+      objectReference: {fileID: 0}
+    - target: {fileID: 1975955377080001231, guid: e774fcf81796dbc468edb10e2b459979, type: 3}
+      propertyPath: m_fontSize
+      value: 60
+      objectReference: {fileID: 0}
+    - target: {fileID: 1975955377080001231, guid: e774fcf81796dbc468edb10e2b459979, type: 3}
+      propertyPath: m_margin.w
+      value: -15.555176
+      objectReference: {fileID: 0}
+    - target: {fileID: 1975955377080001231, guid: e774fcf81796dbc468edb10e2b459979, type: 3}
+      propertyPath: m_margin.y
+      value: -14.496094
+      objectReference: {fileID: 0}
+    - target: {fileID: 1975955377080001231, guid: e774fcf81796dbc468edb10e2b459979, type: 3}
+      propertyPath: m_fontAsset
+      value: 
+      objectReference: {fileID: 11400000, guid: 10113838f6939784cb0f459b385afeec, type: 2}
+    - target: {fileID: 1975955377080001231, guid: e774fcf81796dbc468edb10e2b459979, type: 3}
+      propertyPath: m_fontColor.b
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1975955377080001231, guid: e774fcf81796dbc468edb10e2b459979, type: 3}
+      propertyPath: m_fontColor.g
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1975955377080001231, guid: e774fcf81796dbc468edb10e2b459979, type: 3}
+      propertyPath: m_fontColor.r
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1975955377080001231, guid: e774fcf81796dbc468edb10e2b459979, type: 3}
+      propertyPath: m_fontSizeBase
+      value: 60
+      objectReference: {fileID: 0}
+    - target: {fileID: 1975955377080001231, guid: e774fcf81796dbc468edb10e2b459979, type: 3}
+      propertyPath: m_sharedMaterial
+      value: 
+      objectReference: {fileID: -6553086594465919240, guid: 10113838f6939784cb0f459b385afeec, type: 2}
+    - target: {fileID: 1975955377080001231, guid: e774fcf81796dbc468edb10e2b459979, type: 3}
+      propertyPath: m_enableAutoSizing
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1975955377080001231, guid: e774fcf81796dbc468edb10e2b459979, type: 3}
+      propertyPath: m_fontColor32.rgba
+      value: 4294967295
+      objectReference: {fileID: 0}
+    - target: {fileID: 1975955377080001231, guid: e774fcf81796dbc468edb10e2b459979, type: 3}
+      propertyPath: m_hasFontAssetChanged
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1989840822234337630, guid: e774fcf81796dbc468edb10e2b459979, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
@@ -48706,6 +48758,10 @@ PrefabInstance:
     - target: {fileID: 5448539592642219362, guid: e774fcf81796dbc468edb10e2b459979, type: 3}
       propertyPath: m_LocalPosition.z
       value: 35
+      objectReference: {fileID: 0}
+    - target: {fileID: 5602522186177483994, guid: e774fcf81796dbc468edb10e2b459979, type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 70
       objectReference: {fileID: 0}
     - target: {fileID: 7473459385272052192, guid: e774fcf81796dbc468edb10e2b459979, type: 3}
       propertyPath: m_LocalPosition.x
@@ -49855,8 +49911,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::SandTornadoAppear
   appearOnStart: 1
   startDelay: 0
-  appearDuration: 1.2
-  disappearDuration: 0.7
+  appearDuration: 1.5
+  disappearDuration: 0.4
   stagger: 0.6
   startWidth: 0.04
   gustiness: 0.6
@@ -49885,8 +49941,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::SandTornadoAppear
   appearOnStart: 1
   startDelay: 0
-  appearDuration: 1.2
-  disappearDuration: 0.7
+  appearDuration: 1.5
+  disappearDuration: 0.4
   stagger: 0.6
   startWidth: 0.04
   gustiness: 0.6
