@@ -4363,7 +4363,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ed4ec68ed1bfb2f41b97db55f168d11a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Immobilizer
-  dampingSpeed: 5
+  dampingSpeed: 15
 --- !u!65 &1076099918
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -4383,8 +4383,8 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 10, y: 20, z: 10}
-  m_Center: {x: 0, y: -10, z: 0}
+  m_Size: {x: 10, y: 74.37123, z: 10}
+  m_Center: {x: 0, y: -37.185616, z: 0}
 --- !u!4 &1084049709 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 3557458090953990572, guid: 3dfd41f8cac604e42b5422bc5b79cd3b, type: 3}

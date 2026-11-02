@@ -164,7 +164,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ed4ec68ed1bfb2f41b97db55f168d11a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Immobilizer
-  dampingSpeed: 5
+  dampingSpeed: 15
 --- !u!65 &5144246
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -184,8 +184,8 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 10, y: 20, z: 10}
-  m_Center: {x: 0, y: -10, z: 0}
+  m_Size: {x: 10, y: 48.531685, z: 10}
+  m_Center: {x: 0, y: -24.265842, z: 0}
 --- !u!1001 &21254147
 PrefabInstance:
   m_ObjectHideFlags: 0

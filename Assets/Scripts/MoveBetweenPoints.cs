@@ -10,9 +10,12 @@ public class MoveBetweenPoints : MonoBehaviour
 
     [Header("MOVEMENT PROPERTIES")]
     [SerializeField] private float speed;
+    [SerializeField] private float waitTime;
 
     private int currentTargetIndex = 0;
     private bool movingForward = true;
+
+    private bool canMove = false;
 
     private void Start()
     {

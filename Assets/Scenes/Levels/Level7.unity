@@ -10257,6 +10257,22 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 966726237}
     m_Modifications:
+    - target: {fileID: 98500071906757931, guid: 02f2ea64cbfcdc9418d1f9a8c89768f1, type: 3}
+      propertyPath: m_Size.x
+      value: 10.000004
+      objectReference: {fileID: 0}
+    - target: {fileID: 98500071906757931, guid: 02f2ea64cbfcdc9418d1f9a8c89768f1, type: 3}
+      propertyPath: m_Size.y
+      value: 78.545166
+      objectReference: {fileID: 0}
+    - target: {fileID: 98500071906757931, guid: 02f2ea64cbfcdc9418d1f9a8c89768f1, type: 3}
+      propertyPath: m_Size.z
+      value: 10.000004
+      objectReference: {fileID: 0}
+    - target: {fileID: 98500071906757931, guid: 02f2ea64cbfcdc9418d1f9a8c89768f1, type: 3}
+      propertyPath: m_Center.y
+      value: -34.272583
+      objectReference: {fileID: 0}
     - target: {fileID: 2127957734730705896, guid: 02f2ea64cbfcdc9418d1f9a8c89768f1, type: 3}
       propertyPath: m_Name
       value: Agua
@@ -10316,6 +10332,10 @@ PrefabInstance:
     - target: {fileID: 5955138728902223992, guid: 02f2ea64cbfcdc9418d1f9a8c89768f1, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6571910344860918305, guid: 02f2ea64cbfcdc9418d1f9a8c89768f1, type: 3}
+      propertyPath: dampingSpeed
+      value: 15
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
