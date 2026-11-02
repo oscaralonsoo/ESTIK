@@ -8,7 +8,6 @@ public class PointsManager : MonoBehaviour
 
     [Header("UI del Marcador")]
     [SerializeField] private TextMeshProUGUI scoreText;
-    [SerializeField] private string scorePrefix = "";
     [SerializeField] private bool alwaysShowScore = false;
 
     [Header("Animación y Tiempos del Texto")]
@@ -18,7 +17,6 @@ public class PointsManager : MonoBehaviour
     [SerializeField] private float baseDuration = 0.5f;
     [SerializeField] private float maxDuration = 2.0f;
     [SerializeField] private int referenceMaxPrice = 500;
-    [Tooltip("Curva para modular cómo afecta el precio al tiempo de animación de forma personalizada.")]
     [SerializeField] private AnimationCurve priceDurationCurve = AnimationCurve.EaseInOut(0f, 0f, 1f, 1f);
 
     [Header("Puntuación")]
@@ -124,7 +122,7 @@ public class PointsManager : MonoBehaviour
 
             if (scoreText != null)
             {
-                scoreText.text = scorePrefix + displayedScore.ToString();
+                scoreText.text = displayedScore.ToString();
             }
 
             yield return null;
@@ -146,7 +144,7 @@ public class PointsManager : MonoBehaviour
     {
         if (scoreText != null)
         {
-            scoreText.text = scorePrefix + points.ToString();
+            scoreText.text = points.ToString();
         }
     }
 
