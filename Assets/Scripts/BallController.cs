@@ -33,12 +33,13 @@ public class BallController : MonoBehaviour
     [SerializeField] private float groundCheckDistance = 0.2f;
 
     [Header("ZONAS SIN LANZAMIENTO")]
-    [Tooltip("Boton de pausa (o un area mayor a su alrededor). Un click que empieza aqui no lanza la bola.")]
     [SerializeField] private RectTransform[] blockedZones;
 
     [Header("GROUND FRICTION")]
     [SerializeField] private float groundLinearDamping = 1.5f;
     [SerializeField] private float groundAngularDamping = 1.0f;
+    [SerializeField] private float shootLinearDamping = 0.75f;
+    [SerializeField] private float shootAngularDamping = 0.5f;
     [SerializeField] private float airLinearDamping = 0f;
     [SerializeField] private float airAngularDamping = 0.05f;
 
@@ -48,6 +49,7 @@ public class BallController : MonoBehaviour
     [SerializeField] private bool isShooting = false;
     [SerializeField] private bool gestureBlocked = false;
     [SerializeField] private bool aerealShot = false;
+    [SerializeField] private bool goal = false;
     [SerializeField] private bool slowmo = false;
     [SerializeField] private bool grounded = false;
     [SerializeField] private int remainingShots = 1000;
@@ -192,12 +194,23 @@ public class BallController : MonoBehaviour
 
         grounded = Physics.Raycast(ballRigidbody.position, Vector3.down, groundCheckDistance, groundLayer);
 
-        // Durante el disparo aéreo (slowmo/área) no queremos fricción de suelo
-        bool applyGroundFriction = grounded && !aerealShot;
-
-        ballRigidbody.linearDamping = applyGroundFriction ? groundLinearDamping : airLinearDamping;
-        ballRigidbody.angularDamping = applyGroundFriction ? groundAngularDamping : airAngularDamping;
+        if (aerealShot)
+        {
+            ballRigidbody.linearDamping = shootLinearDamping;
+            ballRigidbody.angularDamping = shootAngularDamping;
+        }
+        else if (grounded)
+        {
+            ballRigidbody.linearDamping =  groundLinearDamping;
+            ballRigidbody.angularDamping =  groundAngularDamping;
+        }
+        else
+        {
+            ballRigidbody.linearDamping = airLinearDamping;
+            ballRigidbody.angularDamping = airAngularDamping;
+        }  
     }
+
     private float GetPower01(float dragMagnitude)
     {
         return Mathf.InverseLerp(minDragDistance, maxDragDistance, dragMagnitude);
@@ -326,7 +339,7 @@ public class BallController : MonoBehaviour
     private IEnumerator FailShoot()
     {
         yield return new WaitForSeconds(2f);
-        FastSceneLoader.Instance.RestartLevel();
+        if (!goal) FastSceneLoader.Instance.RestartLevel();
     }
 
     #region Skin
@@ -480,6 +493,11 @@ public class BallController : MonoBehaviour
                     cameraFollow.SetShooting(true);
                 }
             }
+        }
+
+        if (other.CompareTag("Goal"))
+        {
+            goal = true;
         }
     }
 
