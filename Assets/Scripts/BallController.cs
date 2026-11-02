@@ -36,6 +36,7 @@ public class BallController : MonoBehaviour
     [Header("GROUND CHECK")]
     [SerializeField] private LayerMask groundLayer;
     [SerializeField] private float groundCheckDistance = 0.2f;
+    [SerializeField] private float maxGroundAngle = 10f;
 
     [Header("ZONAS SIN LANZAMIENTO")]
     [SerializeField] private RectTransform[] blockedZones;
@@ -60,6 +61,7 @@ public class BallController : MonoBehaviour
     [SerializeField] private int remainingShots = 1000;
     [SerializeField] private float currentShootSpeed = 0f;
     [SerializeField] private float currentShootAngle = 0f;
+    [SerializeField] private float currentGroundAngle = 0f;
     [SerializeField] private Vector2 dragStartPosition = Vector2.zero;
     [SerializeField] private Vector2 dragEndPosition = Vector2.zero;
     [SerializeField] private Vector2 dragCurrentPosition = Vector2.zero;
@@ -208,8 +210,15 @@ public class BallController : MonoBehaviour
     private void FixedUpdate()
     {
         if (!initialized || ballRigidbody == null) return;
+        
+        grounded = false;
+        currentGroundAngle = 0f;
 
-        grounded = Physics.Raycast(ballRigidbody.position, Vector3.down, groundCheckDistance, groundLayer);
+        if (Physics.Raycast(ballRigidbody.position, Vector3.down, out RaycastHit hit, groundCheckDistance, groundLayer))
+        {
+            currentGroundAngle = Vector3.Angle(hit.normal, Vector3.up);
+            grounded = currentGroundAngle <= maxGroundAngle;
+        }
 
         if (aerealShot && grounded)
         {
