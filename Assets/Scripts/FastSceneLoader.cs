@@ -1,7 +1,6 @@
 using System.Collections;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class FastSceneLoader : MonoBehaviour
@@ -13,7 +12,7 @@ public class FastSceneLoader : MonoBehaviour
     [SerializeField] private float maxScale = 30f;
 
     [Header("PERDER VIDA")]
-    [SerializeField] private float lifeLostDelay = 0.9f;
+    [SerializeField] private float lifeLostDelay = 1.6f;
 
     private Camera mainCam;
     private Image image;
@@ -46,6 +45,7 @@ public class FastSceneLoader : MonoBehaviour
 
         image.gameObject.SetActive(true);
         imageRect.localScale = Vector3.one * maxScale;
+
     }
 
     private IEnumerator Start()
@@ -79,15 +79,9 @@ public class FastSceneLoader : MonoBehaviour
 
     public void RestartLevel()
     {
-        if (isTransitioning || GoalScored || PauseMenuManager.GameOver) return;
+        if (isTransitioning || GoalScored) return;
 
         isTransitioning = true;
-
-        if (LevelLoader.IsTutorialScene(SceneManager.GetActiveScene().name))
-        {
-            StartCoroutine(ExitSceneRoutine(LevelLoader.Reload));
-            return;
-        }
 
         bool livesLeft = LivesManager.Instance.LoseLife();
 
@@ -105,35 +99,42 @@ public class FastSceneLoader : MonoBehaviour
         if (isTransitioning) return;
         StartCoroutine(ExitSceneRoutine(LevelLoader.LoadMenu));
     }
+    private IEnumerator GameOverRoutine()
+    {
+        yield return new WaitForSecondsRealtime(lifeLostDelay);
+
+        PauseMenuManager pm = FindAnyObjectByType<PauseMenuManager>();
+        if (pm != null)
+        {
+            isTransitioning = false;
+            pm.ShowGameOver();
+        }
+        else
+        {
+            LivesManager.Instance.ResetLives();
+            yield return ExitSceneRoutine(LevelLoader.LoadMenu);
+        }
+    }
     public void RetryAfterGameOver()
     {
         if (isTransitioning) return;
-
         isTransitioning = true;
+
         LivesManager.Instance.ResetLives();
-        StartCoroutine(ExitSceneRoutine(LevelLoader.RestartFromFirstLevel));
+        StartCoroutine(ExitSceneRoutine(() => LevelLoader.StartGame()));
     }
+    public void MenuAfterGameOver()
+    {
+        if (isTransitioning) return;
+
+        LivesManager.Instance.ResetLives();
+        GoToMenu();
+    }
+
     public void SetTutorialPlayed()
     {
         PlayerPrefs.SetInt("HasCompletedTutorial", 1);
         PlayerPrefs.Save();
-    }
-    private IEnumerator GameOverRoutine()
-    {
-        yield return new WaitForSecondsRealtime(lifeLostDelay);
-        isTransitioning = false;
-
-        var pause = FindAnyObjectByType<PauseMenuManager>();
-        if (pause != null && pause.gameOverPanel != null)
-        {
-            pause.ShowGameOver();
-        }
-        else
-        {
-            isTransitioning = true;
-            LivesManager.Instance.ResetLives();
-            yield return ExitSceneRoutine(LevelLoader.LoadMenu);
-        }
     }
 
     private IEnumerator DelayedExit(System.Func<AsyncOperation> loadSceneAsync)

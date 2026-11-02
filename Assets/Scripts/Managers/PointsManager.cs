@@ -23,6 +23,22 @@ public class PointsManager : MonoBehaviour
     [SerializeField] private int points = 0;
     private const string SCORE_KEY = "PlayerScore";
 
+    // Puntos ganados SOLO en la run actual (lo que muestra el GameOverPanel).
+    // Es static para sobrevivir a las recargas de escena; se pone a 0 con ResetRun()
+    // (LivesManager.ResetLives lo llama al empezar partida, al reintentar y al volver al menu).
+    public static int RunTotal { get; private set; }
+
+    public static void ResetRun()
+    {
+        RunTotal = 0;
+    }
+
+    [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
+    private static void ResetStatics()
+    {
+        RunTotal = 0;
+    }
+
     private Vector3 originalScale;
     private Coroutine hideCoroutine;
     private Coroutine scoreAnimCoroutine;
@@ -65,6 +81,7 @@ public class PointsManager : MonoBehaviour
     public void AddPoints(int amount)
     {
         points += amount;
+        if (amount > 0) RunTotal += amount;
         PlayerPrefs.SetInt(SCORE_KEY, points);
         PlayerPrefs.Save();
         UpdateScoreUI();
