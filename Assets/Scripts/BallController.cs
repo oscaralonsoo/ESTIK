@@ -86,7 +86,6 @@ public class BallController : MonoBehaviour
     {
         initialized = true;
 
-        //TRACE
         GameObject trace = Instantiate(tracePrefab);
         trace.SetActive(false);
         traceBehaviour = trace.GetComponentInChildren<TraceBehaviour>();
@@ -95,7 +94,6 @@ public class BallController : MonoBehaviour
         traceShadowObj = Instantiate(traceShadowPrefab);
         traceShadowObj.SetActive(false);
 
-        //STICK
         GameObject stick = Instantiate(stickPrefab);
         stick.SetActive(false);
         stickBehaviour = stick.GetComponentInChildren<StickBehaviour>();
@@ -117,11 +115,9 @@ public class BallController : MonoBehaviour
 
     void Start()
     {
-        //POST PROCESSING
         postProcessSlowmo = FindAnyObjectByType<DesaturationSlowmo>();
         if (!postProcessSlowmo) initialized = false;
 
-        //BALL RIGIDBODY
         ballRigidbody = GetComponent<Rigidbody>();
         if (!ballRigidbody) initialized = false;
 
@@ -130,7 +126,6 @@ public class BallController : MonoBehaviour
             ballSoundController = GetComponent<BallSoundController>();
         }
 
-        //SKIN
         LoadSavedSkin();
         mainCamera = Camera.main;
         if (mainCamera == null) initialized = false;
@@ -210,7 +205,7 @@ public class BallController : MonoBehaviour
     private void FixedUpdate()
     {
         if (!initialized || ballRigidbody == null) return;
-        
+
         grounded = false;
         currentGroundAngle = 0f;
 
@@ -353,7 +348,7 @@ public class BallController : MonoBehaviour
 
         if (ballSoundController != null)
         {
-            ballSoundController.PlayHitSound();
+            ballSoundController.PlayHitSound(fillPercentage);
         }
 
         ballRigidbody.WakeUp();
@@ -575,6 +570,14 @@ public class BallController : MonoBehaviour
         {
             isOnRamp = true;
         }
+
+        if (other.CompareTag("Post"))
+        {
+            if (ballSoundController != null)
+            {
+                ballSoundController.PlayPostSound(ballRigidbody.linearVelocity.magnitude / shootSpeed);
+            }
+        }
     }
 
     private void OnTriggerExit(Collider other)
@@ -582,6 +585,17 @@ public class BallController : MonoBehaviour
         if (other.gameObject.CompareTag("Ramp"))
         {
             isOnRamp = false;
+        }
+    }
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        if (collision.gameObject.CompareTag("Wood"))
+        {
+            if (ballSoundController != null)
+            {
+                ballSoundController.PlayWoodSound(collision.relativeVelocity.magnitude / shootSpeed);
+            }
         }
     }
 }

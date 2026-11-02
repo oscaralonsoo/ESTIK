@@ -119,6 +119,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 8
   groundCheckDistance: 1
+  maxGroundAngle: 10
   blockedZones:
   - {fileID: 0}
   - {fileID: 0}
@@ -138,6 +139,7 @@ MonoBehaviour:
   remainingShots: 1000
   currentShootSpeed: 0
   currentShootAngle: 0
+  currentGroundAngle: 0
   dragStartPosition: {x: 0, y: 0}
   dragEndPosition: {x: 0, y: 0}
   dragCurrentPosition: {x: 0, y: 0}
@@ -154,7 +156,7 @@ AudioSource:
   m_GameObject: {fileID: 5288847343622499762}
   m_Enabled: 1
   serializedVersion: 4
-  OutputAudioMixerGroup: {fileID: 0}
+  OutputAudioMixerGroup: {fileID: -3593654482492574578, guid: 26334b540b17f884d8f0904207b27d93, type: 2}
   m_audioClip: {fileID: 0}
   m_Resource: {fileID: 0}
   m_PlayOnAwake: 1
@@ -258,3 +260,13 @@ MonoBehaviour:
   - {fileID: 8300000, guid: a59f2b68eb0c7d54aa0cd1484eb36337, type: 3}
   - {fileID: 8300000, guid: 83a08e83868884048875825b70c9604d, type: 3}
   - {fileID: 8300000, guid: c65ae2540683d4a4da9bc6096f69481b, type: 3}
+  minVolume: 0.2
+  maxVolume: 1
+  postAudioClips:
+  - {fileID: 8300000, guid: e189ca23470dd734f93a3e977e5c5469, type: 3}
+  postMinVolume: 0
+  postMaxVolume: 1
+  woodAudioClips:
+  - {fileID: 8300000, guid: 53d284a413b005e408f0d5b0b8138e99, type: 3}
+  woodMinVolume: 0
+  woodMaxVolume: 1
