@@ -19,7 +19,16 @@ public class SkinCarousel : MonoBehaviour,
     [Header("Buy Refs")]
     [SerializeField] Button buyButton;
     [SerializeField] TextMeshProUGUI buyButtonText;
+    [SerializeField] string buyLabel = "BUY";
     [SerializeField] Color cantAffordTextColor = new Color(1f, 0.35f, 0.35f, 1f);
+
+    [Header("Buy Button Animation")]
+    [SerializeField] float buyAppearDelay = 0f;
+    [SerializeField] Vector2 buyAppearOffset = new Vector2(0f, -40f);
+
+    [Header("Price Label (encima de la bola)")]
+    [SerializeField] TextMeshProUGUI priceText;
+    [SerializeField] float priceOffsetY = 170f;
 
     [Header("Not Enough Points Popup")]
     [SerializeField] TextMeshProUGUI notEnoughText;
@@ -74,6 +83,11 @@ public class SkinCarousel : MonoBehaviour,
     Vector2 _popupBasePos;
     Coroutine _popupRoutine;
     Color _buyTextDefaultColor = Color.white;
+    Color _priceDefaultColor = Color.white;
+    int _priceShown = -1;
+
+    ButtonFeedback _buyFeedback;
+    bool _buyVisible;
 
     int Count => catalog.skins.Length;
 
@@ -113,10 +127,21 @@ public class SkinCarousel : MonoBehaviour,
             nextButton.onClick.AddListener(() => SelectIndex(_targetIndex + 1));
 
         if (buyButton != null)
+        {
             buyButton.onClick.AddListener(BuyCurrentSkin);
+
+            _buyFeedback = buyButton.GetComponent<ButtonFeedback>();
+        }
 
         if (buyButtonText != null)
             _buyTextDefaultColor = buyButtonText.color;
+
+        if (priceText != null)
+        {
+            _priceDefaultColor = priceText.color;
+            priceText.raycastTarget = false;
+            priceText.gameObject.SetActive(false);
+        }
 
         if (notEnoughText != null)
         {
@@ -183,6 +208,9 @@ public class SkinCarousel : MonoBehaviour,
         _lastSavedIndex = -1;
 
         HidePopupImmediate();
+        _buyVisible = false;
+        if (buyButton != null)
+            buyButton.gameObject.SetActive(false);
 
         Layout();
         RefreshUI();
@@ -208,6 +236,8 @@ public class SkinCarousel : MonoBehaviour,
         }
 
         _unlocking = false;
+
+        _buyVisible = false;
 
         HidePopupImmediate();
 
@@ -387,15 +417,17 @@ public class SkinCarousel : MonoBehaviour,
 
             if (isUnlocked)
             {
-                buyButton.gameObject.SetActive(false);
+                SetBuyButtonVisible(false);
             }
             else
             {
-                buyButton.gameObject.SetActive(true);
+                SetBuyButtonVisible(true);
+
+                bool priceOnBall = priceText != null;
 
                 if (buyButtonText != null)
                 {
-                    buyButtonText.text = currentSkin.price.ToString();
+                    buyButtonText.text = priceOnBall ? buyLabel : currentSkin.price.ToString();
                 }
 
                 int playerPoints = PointsManager.Instance != null ? PointsManager.Instance.GetCurrentScore() : 0;
@@ -404,9 +436,31 @@ public class SkinCarousel : MonoBehaviour,
                 buyButton.interactable = !_unlocking;
 
                 if (buyButtonText != null)
-                    buyButtonText.color = canAfford ? _buyTextDefaultColor : cantAffordTextColor;
+                    buyButtonText.color = (priceOnBall || canAfford) ? _buyTextDefaultColor : cantAffordTextColor;
             }
         }
+    }
+
+    void SetBuyButtonVisible(bool visible)
+    {
+        if (buyButton == null)
+            return;
+
+        if (visible == _buyVisible && buyButton.gameObject.activeSelf == visible)
+            return;
+
+        _buyVisible = visible;
+
+        if (!visible)
+        {
+            buyButton.gameObject.SetActive(false);
+            return;
+        }
+
+        buyButton.gameObject.SetActive(true);
+
+        if (_buyFeedback != null)
+            _buyFeedback.Appear(buyAppearDelay, buyAppearOffset);
     }
 
     public void PulseCurrentItem()
@@ -499,7 +553,6 @@ public class SkinCarousel : MonoBehaviour,
         _unlockRoutine = null;
         RefreshUI();
     }
-
     void ShowNotEnoughPoints()
     {
         if (notEnoughText == null)
@@ -592,7 +645,6 @@ public class SkinCarousel : MonoBehaviour,
 
         notEnoughText.gameObject.SetActive(false);
     }
-
     void Layout()
     {
         if (_items == null)
@@ -631,6 +683,49 @@ public class SkinCarousel : MonoBehaviour,
             {
                 item.Rect.SetAsLastSibling();
             }
+
+            if (priceText != null)
+                priceText.rectTransform.SetAsLastSibling();
         }
+
+        UpdatePriceLabel(panelVis);
+    }
+
+    void UpdatePriceLabel(float panelVis)
+    {
+        if (priceText == null)
+            return;
+
+        SkinData skin = Current;
+        bool show = skin != null && !_unlocking && !SkinService.IsUnlocked(skin);
+
+        if (!show)
+        {
+            if (priceText.gameObject.activeSelf)
+                priceText.gameObject.SetActive(false);
+            _priceShown = -1;
+            return;
+        }
+
+        if (!priceText.gameObject.activeSelf)
+            priceText.gameObject.SetActive(true);
+
+        float d = _targetIndex - _pos;
+
+        RectTransform rt = priceText.rectTransform;
+        rt.anchoredPosition = new Vector2(d * spacing, priceOffsetY);
+        rt.localScale = Vector3.one * panelVis;
+
+        if (_priceShown != skin.price)
+        {
+            priceText.text = skin.price.ToString();
+            _priceShown = skin.price;
+        }
+
+        int playerPoints = PointsManager.Instance != null ? PointsManager.Instance.GetCurrentScore() : 0;
+        priceText.color = _priceDefaultColor;
+
+        if (buyButtonText != null)
+            buyButtonText.color = playerPoints >= skin.price ? _buyTextDefaultColor : cantAffordTextColor;
     }
 }
