@@ -48700,6 +48700,10 @@ PrefabInstance:
       propertyPath: targetUIPoint
       value: 
       objectReference: {fileID: 771922800}
+    - target: {fileID: 5168966013311176255, guid: e774fcf81796dbc468edb10e2b459979, type: 3}
+      propertyPath: secondaryCamera
+      value: 
+      objectReference: {fileID: 1040718195317552810}
     - target: {fileID: 5280820321229751992, guid: e774fcf81796dbc468edb10e2b459979, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -48745,6 +48749,11 @@ PrefabInstance:
       insertIndex: -1
       addedObject: {fileID: 0}
   m_SourcePrefab: {fileID: 100100000, guid: e774fcf81796dbc468edb10e2b459979, type: 3}
+--- !u!20 &1040718195317552810 stripped
+Camera:
+  m_CorrespondingSourceObject: {fileID: 2337495837257231932, guid: e774fcf81796dbc468edb10e2b459979, type: 3}
+  m_PrefabInstance: {fileID: 1040718195317552809}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1057249866554188834
 GameObject:
   m_ObjectHideFlags: 0
