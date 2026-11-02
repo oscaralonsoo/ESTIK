@@ -1,4 +1,5 @@
 using UnityEngine;
+using static UnityEngine.GraphicsBuffer;
 
 public class SandTornadoPull : MonoBehaviour
 {
@@ -50,7 +51,13 @@ public class SandTornadoPull : MonoBehaviour
     void Awake()
     {
         appear = GetComponent<SandTornadoAppear>();
+        ball = FindAnyObjectByType<BallController>().GetComponent<Rigidbody>();
         lastPos = transform.position;
+    }
+
+    private void Start()
+    {
+        
     }
 
     void FixedUpdate()
@@ -61,11 +68,6 @@ public class SandTornadoPull : MonoBehaviour
         Vector3 flatVel = new Vector3(tornadoVel.x, 0f, tornadoVel.z);
         if (flatVel.sqrMagnitude > 0.0001f) travelDir = flatVel.normalized;
 
-        if (ball == null)
-        {
-            GameObject go = GameObject.FindWithTag("Player");
-            if (go != null) ball = go.GetComponent<Rigidbody>();
-        }
         if (ball == null || ball.isKinematic) return;
 
         bool visible = appear == null || appear.IsVisible;
