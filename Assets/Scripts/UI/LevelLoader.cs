@@ -24,7 +24,9 @@ public static class LevelLoader
         "Level6",
         "Level7",
         "Level8",
-        "Level9"
+        "Level9",
+        "Desert1",
+
     };
 
     static int currentLevel = 0;
@@ -92,9 +94,17 @@ public static class LevelLoader
         string sceneName = "";
         if (sceneNum < 0) sceneName = GetTutorialLevelName(sceneNum);
         else sceneName = GetLevelName(sceneNum);
-        
+
         currentLevel = sceneNum;
         return SceneManager.LoadSceneAsync(sceneName);
+    }
+    public static void SyncWithScene(string sceneName)
+    {
+        int i = mainLevelScenes.IndexOf(sceneName);
+        if (i >= 0) { currentLevel = i; return; }
+
+        i = tutorialScenes.IndexOf(sceneName);
+        if (i >= 0) currentLevel = i - tutorialScenes.Count;
     }
 
     public static string GetTutorialLevelName(int num)

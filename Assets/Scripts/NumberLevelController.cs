@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using TMPro;
 
 public class NumberLevelController : MonoBehaviour
@@ -9,8 +10,11 @@ public class NumberLevelController : MonoBehaviour
     {
         level = GetComponent<TMP_Text>();
 
+        LevelLoader.SyncWithScene(SceneManager.GetActiveScene().name);
+
         int levelNum = LevelLoader.GetCurrentLevel();
-        if (levelNum <= 0) level.text = "Tutorial";
-        else level.text = LevelLoader.GetCurrentLevel().ToString();
+
+        if (levelNum < 0) level.text = "Tutorial";
+        else level.text = (levelNum + 1).ToString();
     }
 }
