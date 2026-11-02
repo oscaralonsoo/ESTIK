@@ -11,9 +11,11 @@ public class BallController : MonoBehaviour
     [SerializeField] private float maxAerealDragDistance = 0.3f;
     [SerializeField] private float shootAngle = 30f;
     [SerializeField] private float shootMovingSpeed = 5f;
+    [SerializeField] private float shootDelay = 1f;
 
     [Header("TRACE PROPERTIES")]
     [SerializeField] private GameObject tracePrefab;
+    [SerializeField] private GameObject traceShadowPrefab;
 
     [Header("STICK PROPERTIES")]
     [SerializeField] private GameObject stickPrefab;
@@ -63,6 +65,7 @@ public class BallController : MonoBehaviour
 
     private DesaturationSlowmo postProcessSlowmo;
     private TraceBehaviour traceBehaviour;
+    private GameObject traceShadowObj;
     private StickBehaviour stickBehaviour;
     private Camera mainCamera;
     private string currentSkinName;
@@ -83,6 +86,10 @@ public class BallController : MonoBehaviour
         traceBehaviour = trace.GetComponentInChildren<TraceBehaviour>();
         if (!traceBehaviour) initialized = false;
 
+        traceShadowObj = Instantiate(traceShadowPrefab);
+        traceShadowObj.SetActive(false);
+
+        //STICK
         GameObject stick = Instantiate(stickPrefab);
         stick.SetActive(false);
         stickBehaviour = stick.GetComponentInChildren<StickBehaviour>();
@@ -344,6 +351,7 @@ public class BallController : MonoBehaviour
 
     private IEnumerator FailShoot()
     {
+
         yield return new WaitForSeconds(2f);
 
         if (goal) yield break;
@@ -351,6 +359,13 @@ public class BallController : MonoBehaviour
         if (FastSceneLoader.Instance.GoalScored) yield break;
 
         FastSceneLoader.Instance.RestartLevel();
+    }
+    
+    private IEnumerator ShootDelay()
+    {
+        isShooting = true;
+        yield return new WaitForSecondsRealtime(shootDelay);
+        isShooting = false;
     }
 
     #region Skin
@@ -410,11 +425,18 @@ public class BallController : MonoBehaviour
         }
 
         Vector3 shootDir = GetCameraRelativeDirection(dragDir);
+        Vector3 tracePosition = ballRigidbody.transform.position;
 
         if (currentShootAngle > 0f)
         {
+            traceShadowObj.SetActive(true);
+            traceShadowObj.transform.SetPositionAndRotation(tracePosition, Quaternion.LookRotation(shootDir));
             Vector3 rightAxis = Vector3.Cross(Vector3.up, shootDir);
             shootDir = Quaternion.AngleAxis(-currentShootAngle, rightAxis) * shootDir;
+        }
+        else
+        {
+            traceShadowObj.SetActive(false);
         }
 
         if (shootDir.sqrMagnitude < 0.0001f || currentShootSpeed <= 0f)
@@ -425,21 +447,24 @@ public class BallController : MonoBehaviour
 
         float fillPercentatge = currentShootSpeed / shootSpeed;
 
-        Vector3 tracePosition = ballRigidbody.transform.position;
+
         Quaternion traceRotation = Quaternion.identity;
         if (shootDir != Vector3.zero) traceRotation = Quaternion.LookRotation(shootDir);
 
         traceBehaviour.SetFillAmount(fillPercentatge);
         traceBehaviour.gameObject.SetActive(true);
         traceBehaviour.transform.SetPositionAndRotation(tracePosition, traceRotation);
-
     }
 
     private void HideTrace()
     {
-        if (traceBehaviour != null)
+        if (traceBehaviour)
         {
             traceBehaviour.gameObject.SetActive(false);
+        }
+        if (traceShadowObj)
+        {
+            traceShadowObj.SetActive(false);
         }
     }
 
@@ -485,11 +510,13 @@ public class BallController : MonoBehaviour
     #endregion
 
 
+
+
     private void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("Area"))
         {
-            StopAllCoroutines();
+            StopCoroutine(PerformShootSequence());
             isShooting = false;
             draging = false;
             HideTrace();
@@ -504,11 +531,12 @@ public class BallController : MonoBehaviour
             aerealShot = true;
             remainingShots = 1;
             gestureBlocked = false;
-
+            
             if (mainCamera.TryGetComponent<CameraFollow>(out CameraFollow cameraFollow))
             {
                 cameraFollow.SetShooting(true);
             }
+            StartCoroutine(ShootDelay());
         }
 
         if (other.CompareTag("Goal"))

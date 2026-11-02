@@ -100,7 +100,9 @@ MonoBehaviour:
   maxAerealDragDistance: 0.3
   shootAngle: 25
   shootMovingSpeed: 2
+  shootDelay: 0.3
   tracePrefab: {fileID: 2832149820851652839, guid: cea40a733ecaf3342ba41d69d2cd71b0, type: 3}
+  traceShadowPrefab: {fileID: 7094031415077564790, guid: 63a0d6f4254192b4ea81c128c4389ecc, type: 3}
   stickPrefab: {fileID: 1688498936391417964, guid: 3765d05533e34284e8780eaa5f912628, type: 3}
   stickDistance: {x: 1.469, y: 1.597, z: 0.5}
   stickHitDuration: 0.05
@@ -117,10 +119,17 @@ MonoBehaviour:
   blockedZones:
   - {fileID: 0}
   - {fileID: 0}
+  groundLinearDamping: 1.5
+  groundAngularDamping: 1
+  shootLinearDamping: 0.75
+  shootAngularDamping: 0.5
+  airLinearDamping: 0
+  airAngularDamping: 0.05
   draging: 0
   isShooting: 0
   gestureBlocked: 0
   aerealShot: 0
+  goal: 0
   slowmo: 0
   grounded: 0
   remainingShots: 1000
