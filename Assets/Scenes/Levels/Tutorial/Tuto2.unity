@@ -273,8 +273,12 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 642726158661726747, guid: cdafbd9b89fc25f4a83120e28bec3afd, type: 3}
       propertyPath: m_Cameras.Array.size
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 642726158661726747, guid: cdafbd9b89fc25f4a83120e28bec3afd, type: 3}
+      propertyPath: 'm_Cameras.Array.data[0]'
+      value: 
+      objectReference: {fileID: 678867106}
     - target: {fileID: 701271866950158760, guid: cdafbd9b89fc25f4a83120e28bec3afd, type: 3}
       propertyPath: m_Layer
       value: 3
