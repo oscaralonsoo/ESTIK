@@ -209,8 +209,8 @@ public class BallController : MonoBehaviour
         }
         else if (isOnRamp)
         {
-            ballRigidbody.linearDamping = airLinearDamping;
-            ballRigidbody.angularDamping = airAngularDamping;
+            ballRigidbody.linearDamping = shootLinearDamping;
+            ballRigidbody.angularDamping = shootAngularDamping;
         }
         else if (grounded)
         {
@@ -548,19 +548,16 @@ public class BallController : MonoBehaviour
                 FastSceneLoader.Instance.NotifyGoalScored();
             }
         }
-    }
 
-    private void OnCollisionEnter(Collision collision)
-    {
-        if (collision.gameObject.CompareTag("Ramp"))
+        if (other.gameObject.CompareTag("Ramp"))
         {
             isOnRamp = true;
         }
     }
 
-    private void OnCollisionExit(Collision collision)
+    private void OnTriggerExit(Collider other)
     {
-        if (collision.gameObject.CompareTag("Ramp"))
+        if (other.gameObject.CompareTag("Ramp"))
         {
             isOnRamp = false;
         }
