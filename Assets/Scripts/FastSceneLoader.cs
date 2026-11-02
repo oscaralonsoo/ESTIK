@@ -82,8 +82,8 @@ public class FastSceneLoader : MonoBehaviour
         if (isTransitioning || GoalScored) return;
 
         isTransitioning = true;
-
-        bool livesLeft = LivesManager.Instance.LoseLife();
+        bool inTutorial = PlayerPrefs.GetInt("HasCompletedTutorial", 0) == 0;
+        bool livesLeft = inTutorial ? true : LivesManager.Instance.LoseLife();
 
         if (!livesLeft)
         {
@@ -135,6 +135,8 @@ public class FastSceneLoader : MonoBehaviour
     {
         PlayerPrefs.SetInt("HasCompletedTutorial", 1);
         PlayerPrefs.Save();
+
+        LivesManager.Instance.ResetLives(false);
     }
 
     private IEnumerator DelayedExit(System.Func<AsyncOperation> loadSceneAsync)
