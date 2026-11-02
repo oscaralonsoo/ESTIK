@@ -483,20 +483,25 @@ public class BallController : MonoBehaviour
     {
         if (other.CompareTag("Area"))
         {
-            if (remainingShots != 0)
-            {
-                Vector3 currentVelocity = ballRigidbody.linearVelocity.normalized;
-                currentVelocity *= shootMovingSpeed;
-                ballRigidbody.linearVelocity = currentVelocity;
+            StopAllCoroutines();
+            isShooting = false;
+            draging = false;
+            HideTrace();
+            HideStick();
 
-                currentSlowmoScale = slowMotionAerealScale;
-                currentSlowmoJoinTransitionDuration = slowmoAerealJoinTransitionDuration;
-                aerealShot = true;
-                remainingShots = 1;
-                if (mainCamera.TryGetComponent<CameraFollow>(out CameraFollow cameraFollow))
-                {
-                    cameraFollow.SetShooting(true);
-                }
+            Vector3 currentVelocity = ballRigidbody.linearVelocity.normalized;
+            currentVelocity *= shootMovingSpeed;
+            ballRigidbody.linearVelocity = currentVelocity;
+
+            currentSlowmoScale = slowMotionAerealScale;
+            currentSlowmoJoinTransitionDuration = slowmoAerealJoinTransitionDuration;
+            aerealShot = true;
+            remainingShots = 1;
+            gestureBlocked = false;
+
+            if (mainCamera.TryGetComponent<CameraFollow>(out CameraFollow cameraFollow))
+            {
+                cameraFollow.SetShooting(true);
             }
         }
 
