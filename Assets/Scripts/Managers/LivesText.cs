@@ -5,21 +5,17 @@ using UnityEngine;
 [RequireComponent(typeof(TMP_Text))]
 public class LivesText : MonoBehaviour
 {
-    [Tooltip("{0} = vidas actuales, {1} = vidas maximas. Ejemplos: \"{0}\", \"x{0}\", \"{0}/{1}\"")]
     [SerializeField] private string format = "{0}";
 
     [Header("ANIMACION AL PERDER VIDA")]
-    [SerializeField] private float reloadDelay = 0.2f;     // solo si la animacion se reproduce tras recargar la escena
-    [SerializeField] private float punchScale = 1.8f;      // tamaño maximo
+    [SerializeField] private float reloadDelay = 0.2f;
+    [SerializeField] private float punchScale = 1.8f;
     [SerializeField] private float growTime = 0.4f;
-    [SerializeField] private float holdTime = 0.5f;       // pausa con el numero grande, ya restado
+    [SerializeField] private float holdTime = 0.5f;
     [SerializeField] private float shrinkTime = 0.6f;
-    [Tooltip("Fuerza del rebote (0 = sin rebote, 1.7 = normal, 3+ = muy exagerado)")]
     [SerializeField] private float bounce = 2.5f;
     [SerializeField] private Color flashColor = new Color(1f, 0.25f, 0.25f);
 
-    // Ultimo valor mostrado. Es static para sobrevivir a la recarga de escena
-    // (al perder una vida se recarga el nivel y este objeto se destruye).
     private static int lastShownLives = -1;
 
     private TMP_Text label;
@@ -45,7 +41,6 @@ public class LivesText : MonoBehaviour
     {
         int current = manager.CurrentLives;
 
-        // Venimos de una recarga tras perder una vida: mostramos el valor antiguo y animamos
         if (lastShownLives > current)
         {
             SetText(lastShownLives, manager.MaxLives);
@@ -84,7 +79,6 @@ public class LivesText : MonoBehaviour
         }
         else
         {
-            // Reset o ganancia de vidas: sin animacion
             if (anim != null) { StopCoroutine(anim); anim = null; }
             transform.localScale = baseScale;
             label.color = baseColor;
@@ -103,13 +97,10 @@ public class LivesText : MonoBehaviour
 
     IEnumerator LoseLifeRoutine(int newValue, int max, float delay)
     {
-        // Espera inicial (con tiempo no escalado)
         float t = 0f;
         while (t < delay) { t += Time.unscaledDeltaTime; yield return null; }
 
         Vector3 big = baseScale * punchScale;
-
-        // 1) Crece con el numero antiguo
         t = 0f;
         while (t < growTime)
         {
@@ -120,7 +111,6 @@ public class LivesText : MonoBehaviour
             yield return null;
         }
 
-        // 2) Se resta (cambia el numero) estando grande
         SetText(newValue, max);
         lastShownLives = newValue;
         transform.localScale = big;
@@ -129,7 +119,6 @@ public class LivesText : MonoBehaviour
         t = 0f;
         while (t < holdTime) { t += Time.unscaledDeltaTime; yield return null; }
 
-        // 3) Vuelve a su tamaño
         t = 0f;
         while (t < shrinkTime)
         {
@@ -144,8 +133,6 @@ public class LivesText : MonoBehaviour
         label.color = baseColor;
         anim = null;
     }
-
-    // Ease out back: se pasa del objetivo y vuelve (efecto rebote)
     float EaseOut(float x)
     {
         float c3 = bounce + 1f;

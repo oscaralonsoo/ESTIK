@@ -12,7 +12,6 @@ public class FastSceneLoader : MonoBehaviour
     [SerializeField] private float maxScale = 30f;
 
     [Header("PERDER VIDA")]
-    [Tooltip("Tiempo que se espera antes de empezar la transicion para que se vea la animacion de las vidas")]
     [SerializeField] private float lifeLostDelay = 0.9f;
 
     private Camera mainCam;
@@ -83,8 +82,6 @@ public class FastSceneLoader : MonoBehaviour
         if (isTransitioning || GoalScored) return;
 
         isTransitioning = true;
-
-        // LoseLife dispara la animacion del texto de vidas al instante
         bool livesLeft = LivesManager.Instance.LoseLife();
 
         if (!livesLeft)
@@ -108,8 +105,6 @@ public class FastSceneLoader : MonoBehaviour
         PlayerPrefs.SetInt("HasCompletedTutorial", 1);
         PlayerPrefs.Save();
     }
-
-    // Espera a que se vea la animacion de perder vida antes de tapar la pantalla
     private IEnumerator DelayedExit(System.Func<AsyncOperation> loadSceneAsync)
     {
         yield return new WaitForSecondsRealtime(lifeLostDelay);

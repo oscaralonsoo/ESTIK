@@ -20,6 +20,17 @@ public class SandTornadoPull : MonoBehaviour
     [Header("Suelta")]
     public float releaseCooldown = 1.5f;
 
+    [Header("Lanzamiento al desaparecer")]
+    public bool launchOnDisappear = true;
+    [Tooltip("Velocidad extra proporcional a la velocidad que lleva la bola (0.6 = +60%)")]
+    public float speedBoost = 0.6f;
+    [Tooltip("Velocidad extra mínima, por si la bola va muy lenta")]
+    public float minLaunch = 5f;
+    [Tooltip("Cuánto dura la suelta. Más tiempo = más suave y natural")]
+    public float releaseTime = 0.7f;
+    [Tooltip("Velocidad extra hacia arriba repartida durante la suelta")]
+    public float launchUp = 3f;
+
     [Header("Visualización")]
     public bool showRadius = true;
 
@@ -28,7 +39,13 @@ public class SandTornadoPull : MonoBehaviour
     Vector3 tornadoVel;
     Vector3 travelDir = Vector3.left;
     float cooldown;
-    bool warned;
+    bool wasVisible = true;
+    bool inside;
+
+    bool releasing;
+    float releaseT;
+    float extraSpeed;
+    Vector3 releaseDir;
 
     void Awake()
     {
@@ -49,10 +66,17 @@ public class SandTornadoPull : MonoBehaviour
             GameObject go = GameObject.FindWithTag("Player");
             if (go != null) ball = go.GetComponent<Rigidbody>();
         }
-        if (ball.isKinematic) return;
+        if (ball == null || ball.isKinematic) return;
+
+        bool visible = appear == null || appear.IsVisible;
+        if (launchOnDisappear && wasVisible && !visible && inside) StartRelease();
+        wasVisible = visible;
+        inside = false;
+
+        ApplyRelease();
 
         if (cooldown > 0f) { cooldown -= Time.fixedDeltaTime; return; }
-        if (appear != null && !appear.IsVisible) return;
+        if (!visible) return;
 
         Vector3 to = ball.position - transform.position;
         Vector3 flat = new Vector3(to.x, 0f, to.z);
@@ -82,6 +106,36 @@ public class SandTornadoPull : MonoBehaviour
         Vector3 forward = travelDir * push * pushRamp;
 
         ball.AddForce((inward + spin + up + match + forward) * k, ForceMode.Acceleration);
+        inside = true;
+    }
+
+    void StartRelease()
+    {
+        Vector3 v = ball.linearVelocity;
+        Vector3 flatV = new Vector3(v.x, 0f, v.z);
+        float speed = flatV.magnitude;
+
+        releaseDir = speed > 0.5f ? flatV / speed : travelDir;
+        extraSpeed = Mathf.Max(minLaunch, speed * speedBoost);
+        releaseT = 0f;
+        releasing = true;
+    }
+    void ApplyRelease()
+    {
+        if (!releasing) return;
+
+        float T = Mathf.Max(0.05f, releaseTime);
+        releaseT += Time.fixedDeltaTime;
+        float s = releaseT / T;
+        if (s >= 1f) { releasing = false; return; }
+
+        float bell = 6f * s * (1f - s) / T;
+
+        Vector3 v = ball.linearVelocity;
+        Vector3 flatV = new Vector3(v.x, 0f, v.z);
+        Vector3 dir = flatV.sqrMagnitude > 0.25f ? flatV.normalized : releaseDir;
+
+        ball.AddForce((dir * extraSpeed + Vector3.up * launchUp) * bell, ForceMode.Acceleration);
     }
 
     void DrawRing(Vector3 c, float r)
