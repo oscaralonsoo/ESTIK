@@ -3619,6 +3619,10 @@ PrefabInstance:
       propertyPath: hideDistance
       value: 100
       objectReference: {fileID: 0}
+    - target: {fileID: 3737852097213968134, guid: b99809ad53dbca54fa9853d716278dc6, type: 3}
+      propertyPath: targetCamera
+      value: 
+      objectReference: {fileID: 1875652455}
     - target: {fileID: 7264020905017548102, guid: b99809ad53dbca54fa9853d716278dc6, type: 3}
       propertyPath: m_LocalScale.y
       value: 5.638061
@@ -5885,12 +5889,28 @@ PrefabInstance:
       value: 12.52
       objectReference: {fileID: 0}
     - target: {fileID: 2478384654239499504, guid: b99809ad53dbca54fa9853d716278dc6, type: 3}
+      propertyPath: m_Size.x
+      value: 1.0000006
+      objectReference: {fileID: 0}
+    - target: {fileID: 2478384654239499504, guid: b99809ad53dbca54fa9853d716278dc6, type: 3}
       propertyPath: m_Size.y
-      value: 1.72
+      value: 1.9453809
       objectReference: {fileID: 0}
     - target: {fileID: 2478384654239499504, guid: b99809ad53dbca54fa9853d716278dc6, type: 3}
       propertyPath: m_Size.z
-      value: 0.49
+      value: 0.48999992
+      objectReference: {fileID: 0}
+    - target: {fileID: 2478384654239499504, guid: b99809ad53dbca54fa9853d716278dc6, type: 3}
+      propertyPath: m_Center.x
+      value: -2.4911508e-15
+      objectReference: {fileID: 0}
+    - target: {fileID: 2478384654239499504, guid: b99809ad53dbca54fa9853d716278dc6, type: 3}
+      propertyPath: m_Center.y
+      value: -0.11269035
+      objectReference: {fileID: 0}
+    - target: {fileID: 2478384654239499504, guid: b99809ad53dbca54fa9853d716278dc6, type: 3}
+      propertyPath: m_Center.z
+      value: -5.787636e-16
       objectReference: {fileID: 0}
     - target: {fileID: 3219900071249661556, guid: b99809ad53dbca54fa9853d716278dc6, type: 3}
       propertyPath: m_Name
@@ -5900,6 +5920,10 @@ PrefabInstance:
       propertyPath: hideDistance
       value: 100
       objectReference: {fileID: 0}
+    - target: {fileID: 3737852097213968134, guid: b99809ad53dbca54fa9853d716278dc6, type: 3}
+      propertyPath: targetCamera
+      value: 
+      objectReference: {fileID: 1875652455}
     - target: {fileID: 7264020905017548102, guid: b99809ad53dbca54fa9853d716278dc6, type: 3}
       propertyPath: m_LocalScale.y
       value: 2.684255
@@ -9008,6 +9032,10 @@ PrefabInstance:
       propertyPath: hideDistance
       value: 100
       objectReference: {fileID: 0}
+    - target: {fileID: 3737852097213968134, guid: b99809ad53dbca54fa9853d716278dc6, type: 3}
+      propertyPath: targetCamera
+      value: 
+      objectReference: {fileID: 1875652455}
     - target: {fileID: 7264020905017548102, guid: b99809ad53dbca54fa9853d716278dc6, type: 3}
       propertyPath: m_LocalScale.y
       value: 2.684255
@@ -13198,6 +13226,11 @@ Camera:
 --- !u!224 &1875652454 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 5646088584304250409, guid: e774fcf81796dbc468edb10e2b459979, type: 3}
+  m_PrefabInstance: {fileID: 1875652452}
+  m_PrefabAsset: {fileID: 0}
+--- !u!20 &1875652455 stripped
+Camera:
+  m_CorrespondingSourceObject: {fileID: 4077004000440880614, guid: e774fcf81796dbc468edb10e2b459979, type: 3}
   m_PrefabInstance: {fileID: 1875652452}
   m_PrefabAsset: {fileID: 0}
 --- !u!4 &1882797861 stripped
