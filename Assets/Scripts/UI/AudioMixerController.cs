@@ -11,7 +11,7 @@ public class AudioMixerController : MonoBehaviour
     [SerializeField] Toggle musicToggle;
     [SerializeField] Toggle sfxToggle;
 
-    [Header("Parámetros del Mixer")]
+    [Header("Parámetros del Mixer (deben estar expuestos)")]
     [SerializeField] string musicParam = "MusicVolume";
     [SerializeField] string sfxParam = "SfxVolume";
 
@@ -21,51 +21,70 @@ public class AudioMixerController : MonoBehaviour
     const string musicKey = "MusicSavedState";
     const string sfxKey = "SfxSavedState";
 
+    bool musicOn = true;
+    bool sfxOn = true;
+
+    void Awake()
+    {
+        musicOn = PlayerPrefs.GetInt(musicKey, 1) == 1;
+        sfxOn = PlayerPrefs.GetInt(sfxKey, 1) == 1;
+    }
+
+    void OnEnable()
+    {
+        if (musicToggle != null)
+        {
+            musicToggle.SetIsOnWithoutNotify(musicOn);
+            musicToggle.onValueChanged.AddListener(OnMusicToggleChanged);
+        }
+
+        if (sfxToggle != null)
+        {
+            sfxToggle.SetIsOnWithoutNotify(sfxOn);
+            sfxToggle.onValueChanged.AddListener(OnSfxToggleChanged);
+        }
+    }
+
+    void OnDisable()
+    {
+        if (musicToggle != null)
+            musicToggle.onValueChanged.RemoveListener(OnMusicToggleChanged);
+
+        if (sfxToggle != null)
+            sfxToggle.onValueChanged.RemoveListener(OnSfxToggleChanged);
+    }
+
     void Start()
     {
-        bool musicSavedState = PlayerPrefs.GetInt(musicKey, 1) == 1;
-        bool sfxSavedState = PlayerPrefs.GetInt(sfxKey, 1) == 1;
-
-        if (musicToggle != null)
-            musicToggle.onValueChanged.AddListener(SetMusicVolume);
-
-        if (sfxToggle != null)
-            sfxToggle.onValueChanged.AddListener(SetSfxVolume);
-
-        if (musicToggle != null)
-            musicToggle.isOn = musicSavedState;
-
-        if (sfxToggle != null)
-            sfxToggle.isOn = sfxSavedState;
-
-        SetMusicVolume(musicSavedState);
-        SetSfxVolume(sfxSavedState);
+        ApplyVolume(musicParam, musicOn);
+        ApplyVolume(sfxParam, sfxOn);
     }
 
-    void OnDestroy()
+    void OnMusicToggleChanged(bool isOn)
     {
-        if (musicToggle != null)
-            musicToggle.onValueChanged.RemoveListener(SetMusicVolume);
-
-        if (sfxToggle != null)
-            sfxToggle.onValueChanged.RemoveListener(SetSfxVolume);
+        musicOn = isOn;
+        ApplyVolume(musicParam, isOn);
+        Save(musicKey, isOn);
     }
 
-    public void SetMusicVolume(bool isOn)
+    void OnSfxToggleChanged(bool isOn)
     {
-        if (audioMixer != null)
-            audioMixer.SetFloat(musicParam, isOn ? volumeOn : volumeOff);
-
-        PlayerPrefs.SetInt(musicKey, isOn ? 1 : 0);
-        PlayerPrefs.Save();
+        sfxOn = isOn;
+        ApplyVolume(sfxParam, isOn);
+        Save(sfxKey, isOn);
     }
 
-    public void SetSfxVolume(bool isOn)
+    void ApplyVolume(string param, bool isOn)
     {
-        if (audioMixer != null)
-            audioMixer.SetFloat(sfxParam, isOn ? volumeOn : volumeOff);
+        if (audioMixer == null) return;
 
-        PlayerPrefs.SetInt(sfxKey, isOn ? 1 : 0);
+        if (!audioMixer.SetFloat(param, isOn ? volumeOn : volumeOff))
+            Debug.LogWarning($"El parámetro '{param}' no existe o no está expuesto en el AudioMixer.");
+    }
+
+    void Save(string key, bool isOn)
+    {
+        PlayerPrefs.SetInt(key, isOn ? 1 : 0);
         PlayerPrefs.Save();
     }
 }

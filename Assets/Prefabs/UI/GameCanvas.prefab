@@ -5951,6 +5951,7 @@ MonoBehaviour:
   content: {fileID: 4387208385171030273}
   prevButton: {fileID: 9052710636560699163}
   nextButton: {fileID: 7162377212062031279}
+  confirmButton: {fileID: 0}
   buyButton: {fileID: 0}
   buyButtonText: {fileID: 0}
   buyLabel: BUY
@@ -6547,6 +6548,7 @@ GameObject:
   - component: {fileID: 4169456010730410575}
   - component: {fileID: 8639617739302831709}
   - component: {fileID: 8384608358932467278}
+  - component: {fileID: 1532665689489381926}
   m_Layer: 5
   m_Name: GameCanvas
   m_TagString: Untagged
@@ -6640,6 +6642,23 @@ MonoBehaviour:
   m_BlockingMask:
     serializedVersion: 2
     m_Bits: 4294967295
+--- !u!114 &1532665689489381926
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8360041603307240670}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fed61e4f40aaa3447b30d03f0da957e2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::AudioMixerController
+  audioMixer: {fileID: 24100000, guid: 26334b540b17f884d8f0904207b27d93, type: 2}
+  musicToggle: {fileID: 7744099044389815270}
+  sfxToggle: {fileID: 3694700153770770096}
+  musicParam: MusicVolume
+  sfxParam: SfxVolume
 --- !u!1 &8744211254475435722
 GameObject:
   m_ObjectHideFlags: 0
