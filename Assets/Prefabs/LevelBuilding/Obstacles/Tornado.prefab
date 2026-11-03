@@ -10480,6 +10480,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::SandTornadoAppear
   appearOnStart: 1
   startDelay: 0
+  staggerBetweenTornadoes: 1
+  minGap: 0.3
+  maxGap: 1.5
   appearDuration: 1.5
   disappearDuration: 0.4
   stagger: 0.6
@@ -10490,10 +10493,6 @@ MonoBehaviour:
   repeat: 1
   hiddenTime: 1.75
   destroyWhenHidden: 0
-  randomIntervals: 1
-  lifetimeRange: {x: 8, y: 15}
-  hiddenRange: {x: 4, y: 10}
-  startDelayRange: {x: 0, y: 3}
   onAppeared:
     m_PersistentCalls:
       m_Calls: []
@@ -10521,8 +10520,7 @@ MonoBehaviour:
   carry: 3.3
   push: 15
   swirlDirection: 1
-  pullStartProgress: 0.9
-  spawnGrace: 0.3
+  pullStart: 0.7
   releaseCooldown: 2
   launchOnDisappear: 1
   speedBoost: 0.8

@@ -8,6 +8,11 @@ public class SandTornadoAppear : MonoBehaviour
     public bool appearOnStart = true;
     public float startDelay = 0f;
 
+    [Header("Escalonado entre tornados")]
+    public bool staggerBetweenTornadoes = true;
+    public float minGap = 0.3f;
+    public float maxGap = 1.5f;
+
     [Header("Animación")]
     public float appearDuration = 3f;
     public float disappearDuration = 2.5f;
@@ -28,11 +33,16 @@ public class SandTornadoAppear : MonoBehaviour
 
     static readonly string[] ColorProps = { "_BaseColor", "_Color", "_TintColor" };
 
+    static float nextSlotTime;
+
+    [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
+    static void ResetStatics() { nextSlotTime = 0f; }
+
     Transform[] tiers;
     float[] tierU;
+    float[] tierA;
     bool hasMotion;
 
-    // Partículas
     ParticleSystem[] systems;
     int[] sysTier;
     float[] sysBaseRate;
@@ -42,7 +52,7 @@ public class SandTornadoAppear : MonoBehaviour
 
     Renderer[] meshRenderers;
     int[] meshTier;
-    string[] meshProp;
+    int[] meshPropId;
     Color[] meshColor;
     MaterialPropertyBlock mpb;
 
@@ -54,6 +64,9 @@ public class SandTornadoAppear : MonoBehaviour
     float hiddenTimer;
     bool autoHidden;
 
+    bool settledApplied;
+    float settledP = -1f;
+
     public bool IsVisible { get { return target >= 1f; } }
 
     public void Appear() { target = 1f; shownTime = 0f; autoHidden = false; }
@@ -62,6 +75,22 @@ public class SandTornadoAppear : MonoBehaviour
 
     [ContextMenu("Aparecer")] void CtxAppear() { Appear(); }
     [ContextMenu("Desaparecer")] void CtxDisappear() { Disappear(); }
+
+    float ReserveSlot(float wait)
+    {
+        float now = Time.time;
+        float slot = now + Mathf.Max(0f, wait);
+
+        if (staggerBetweenTornadoes)
+        {
+            slot = Mathf.Max(slot, nextSlotTime);
+            float lo = Mathf.Max(0f, minGap);
+            float hi = Mathf.Max(lo, maxGap);
+            nextSlotTime = slot + Random.Range(lo, hi);
+        }
+
+        return slot - now;
+    }
 
     int TierOf(Transform body, Transform t)
     {
@@ -93,6 +122,7 @@ public class SandTornadoAppear : MonoBehaviour
         }
         else tiers = new Transform[0];
         tierU = new float[tiers.Length];
+        tierA = new float[tiers.Length];
 
         systems = GetComponentsInChildren<ParticleSystem>(true);
         int ns = systems.Length;
@@ -117,7 +147,7 @@ public class SandTornadoAppear : MonoBehaviour
         foreach (var r in all) if (!(r is ParticleSystemRenderer)) count++;
         meshRenderers = new Renderer[count];
         meshTier = new int[count];
-        meshProp = new string[count];
+        meshPropId = new int[count];
         meshColor = new Color[count];
         int k = 0;
         foreach (var r in all)
@@ -125,6 +155,7 @@ public class SandTornadoAppear : MonoBehaviour
             if (r is ParticleSystemRenderer) continue;
             meshRenderers[k] = r;
             meshTier[k] = TierOf(body, r.transform);
+            meshPropId[k] = -1;
             Material m = r.sharedMaterial;
             if (m != null)
             {
@@ -132,7 +163,7 @@ public class SandTornadoAppear : MonoBehaviour
                 {
                     if (m.HasProperty(prop))
                     {
-                        meshProp[k] = prop;
+                        meshPropId[k] = Shader.PropertyToID(prop);
                         meshColor[k] = m.GetColor(prop);
                         break;
                     }
@@ -144,8 +175,8 @@ public class SandTornadoAppear : MonoBehaviour
 
         p = appearOnStart ? 0f : 1f;
         target = p;
-        delay = startDelay;
         pendingAppear = appearOnStart;
+        delay = appearOnStart ? ReserveSlot(startDelay) : startDelay;
     }
 
     void Start()
@@ -181,7 +212,11 @@ public class SandTornadoAppear : MonoBehaviour
         else if (target <= 0f && repeat && autoHidden && !pendingAppear)
         {
             hiddenTimer += Time.deltaTime;
-            if (hiddenTimer >= hiddenTime) Appear();
+            if (hiddenTimer >= hiddenTime)
+            {
+                pendingAppear = true;
+                delay = ReserveSlot(0f);
+            }
         }
     }
 
@@ -197,6 +232,7 @@ public class SandTornadoAppear : MonoBehaviour
             if (destroyWhenHidden && !repeat) Destroy(gameObject);
         }
     }
+
     float Alpha(float u, int seed)
     {
         float a = Mathf.SmoothStep(0f, 1f, u);
@@ -211,6 +247,9 @@ public class SandTornadoAppear : MonoBehaviour
 
     void LateUpdate()
     {
+        bool settled = p == target && (p >= 1f || p <= 0f);
+        if (settled && settledApplied && settledP == p) return;
+
         int n = tiers.Length;
         float span = Mathf.Max(0.05f, 1f - stagger);
 
@@ -219,6 +258,7 @@ public class SandTornadoAppear : MonoBehaviour
             float start = n > 1 ? stagger * i / (n - 1f) : 0f;
             float u = Mathf.Clamp01((p - start) / span);
             tierU[i] = u;
+            tierA[i] = Alpha(u, i);
 
             if (tiers[i] == null) continue;
 
@@ -227,21 +267,23 @@ public class SandTornadoAppear : MonoBehaviour
             tiers[i].localScale = new Vector3(baseScale.x * w, baseScale.y, baseScale.z * w);
         }
 
+        float globalMeshA = meshRenderers.Length > 0 ? Alpha(p, 99) : 0f;
+
         for (int i = 0; i < meshRenderers.Length; i++)
         {
             Renderer r = meshRenderers[i];
             if (r == null) continue;
 
             int t = meshTier[i];
-            float a = t >= 0 && t < n ? Alpha(tierU[t], t) : Alpha(p, 99);
+            float a = t >= 0 && t < n ? tierA[t] : globalMeshA;
             r.enabled = a > 0.001f;
 
-            if (meshProp[i] != null)
+            if (meshPropId[i] != -1)
             {
                 Color c = meshColor[i];
                 c.a *= a;
                 r.GetPropertyBlock(mpb);
-                mpb.SetColor(meshProp[i], c);
+                mpb.SetColor(meshPropId[i], c);
                 r.SetPropertyBlock(mpb);
             }
         }
@@ -252,7 +294,7 @@ public class SandTornadoAppear : MonoBehaviour
             if (ps == null) continue;
 
             int t = sysTier[i];
-            float a = t >= 0 && t < n ? Alpha(tierU[t], t) : Alpha(p, 50 + i);
+            float a = t >= 0 && t < n ? tierA[t] : Alpha(p, 50 + i);
 
             var em = ps.emission;
             em.enabled = a > 0.001f || p > 0.001f;
@@ -271,5 +313,8 @@ public class SandTornadoAppear : MonoBehaviour
             ps.SetParticles(buffer, cnt);
             sysLastAlpha[i] = a;
         }
+
+        settledApplied = settled;
+        settledP = p;
     }
 }
