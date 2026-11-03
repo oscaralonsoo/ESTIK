@@ -42,10 +42,9 @@ public class RecordShow : MonoBehaviour
         if (!rectTransform) return;
         rectTransform.localPosition = new Vector3(rectTransform.localPosition.x, y, rectTransform.localPosition.z);
     }
-
     public void SetRecord(int record)
     {
         if (!textRecord) return;
-        textRecord.text = "Récord: " + record.ToString();
+        textRecord.text = "Récord: " + (record + 1).ToString();
     }
 }
