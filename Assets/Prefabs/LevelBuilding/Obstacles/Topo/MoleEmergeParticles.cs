@@ -33,6 +33,8 @@ public class MoleEmergeParticles : MonoBehaviour
     [SerializeField] private float upwardLift = 2f;
     [Tooltip("Si es true, cada bola solo es empujada una vez por emergencia.")]
     [SerializeField] private bool hitEachBallOnce = true;
+    [Tooltip("Adelanta la onda: empieza con este tiempo ya transcurrido, así llega antes a la bola (segundos).")]
+    [SerializeField] private float burstLeadTime = 0.15f;
 
     [Header("Collider del cuerpo (sigue la animación)")]
     [SerializeField] private bool enableBodyCollider = true;
@@ -111,7 +113,7 @@ public class MoleEmergeParticles : MonoBehaviour
 
         // Arranca la onda de repulsión (se procesa en FixedUpdate)
         alreadyHit.Clear();
-        burstTimer = 0f;
+        burstTimer = Mathf.Clamp(burstLeadTime, 0f, colliderExpandDuration);
         burstActive = true;
     }
 
