@@ -5,7 +5,7 @@ using UnityEngine;
 public class MoveBetweenPoints : MonoBehaviour
 {
     [Header("ROUTE PROPERTIES")]
-    [SerializeField] private List<Vector3> points;
+    [SerializeField] private List<Transform> points;
     [SerializeField] private bool random = false;
     [SerializeField] private bool restartOnEnd = false;
 
@@ -33,7 +33,7 @@ public class MoveBetweenPoints : MonoBehaviour
 
         if (canMove)
         {
-            Vector3 targetPosition = points[currentTargetIndex];
+            Vector3 targetPosition = points[currentTargetIndex].localPosition;
 
             transform.localPosition = Vector3.MoveTowards(transform.localPosition, targetPosition, speed * Time.deltaTime);
 
