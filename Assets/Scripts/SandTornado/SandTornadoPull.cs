@@ -1,5 +1,4 @@
 using UnityEngine;
-using static UnityEngine.GraphicsBuffer;
 
 public class SandTornadoPull : MonoBehaviour
 {
@@ -17,6 +16,10 @@ public class SandTornadoPull : MonoBehaviour
     public float carry = 1f;
     public float push = 0f;
     public float swirlDirection = 1f;
+
+    [Header("Aparición")]
+    [Tooltip("Fracción de la animación de aparición (0-1) a partir de la cual empieza a atraer. Hasta entonces no toca la bola.")]
+    [Range(0f, 1f)] public float pullStart = 0.7f;
 
     [Header("Suelta")]
     public float releaseCooldown = 1.5f;
@@ -42,6 +45,7 @@ public class SandTornadoPull : MonoBehaviour
     float cooldown;
     bool wasVisible = true;
     bool inside;
+    float visibleTime;
 
     bool releasing;
     float releaseT;
@@ -53,11 +57,9 @@ public class SandTornadoPull : MonoBehaviour
         appear = GetComponent<SandTornadoAppear>();
         ball = FindAnyObjectByType<BallController>().GetComponent<Rigidbody>();
         lastPos = transform.position;
-    }
 
-    private void Start()
-    {
-        
+        // Si no hay animación de aparición al inicio, no hace falta rampa
+        visibleTime = (appear != null && appear.appearOnStart) ? 0f : 999f;
     }
 
     void FixedUpdate()
@@ -71,6 +73,11 @@ public class SandTornadoPull : MonoBehaviour
         if (ball == null || ball.isKinematic) return;
 
         bool visible = appear == null || appear.IsVisible;
+
+        // Tiempo desde que el tornado se hizo visible (se reinicia al desaparecer)
+        if (visible) visibleTime += Time.fixedDeltaTime;
+        else visibleTime = 0f;
+
         if (launchOnDisappear && wasVisible && !visible && inside) StartRelease();
         wasVisible = visible;
         inside = false;
@@ -79,6 +86,15 @@ public class SandTornadoPull : MonoBehaviour
 
         if (cooldown > 0f) { cooldown -= Time.fixedDeltaTime; return; }
         if (!visible) return;
+
+        // 0 mientras el tornado está naciendo, sube a 1 cuando ya está formado
+        float appearK = 1f;
+        if (appear != null)
+        {
+            float progress = Mathf.Clamp01(visibleTime / Mathf.Max(0.01f, appear.appearDuration));
+            appearK = Mathf.SmoothStep(0f, 1f, Mathf.InverseLerp(pullStart, 1f, progress));
+        }
+        if (appearK <= 0f) return;
 
         Vector3 to = ball.position - transform.position;
         Vector3 flat = new Vector3(to.x, 0f, to.z);
@@ -92,7 +108,7 @@ public class SandTornadoPull : MonoBehaviour
             return;
         }
 
-        float k = Mathf.SmoothStep(0f, 1f, (1f - d / radius) * 2f);
+        float k = Mathf.SmoothStep(0f, 1f, (1f - d / radius) * 2f) * appearK;
 
         float climb = Mathf.Clamp01(to.y / height);
 
@@ -122,6 +138,7 @@ public class SandTornadoPull : MonoBehaviour
         releaseT = 0f;
         releasing = true;
     }
+
     void ApplyRelease()
     {
         if (!releasing) return;
