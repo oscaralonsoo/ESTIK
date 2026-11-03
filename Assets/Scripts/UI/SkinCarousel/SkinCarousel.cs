@@ -15,6 +15,9 @@ public class SkinCarousel : MonoBehaviour,
     [SerializeField] Button prevButton;
     [SerializeField] Button nextButton;
 
+    [Header("Confirm / Back")]
+    [SerializeField] Button confirmButton;
+
     [Header("Buy Refs")]
     [SerializeField] Button buyButton;
     [SerializeField] TextMeshProUGUI buyButtonText;
@@ -260,6 +263,9 @@ public class SkinCarousel : MonoBehaviour,
         _unlocking = false;
         _buyVisible = false;
 
+        if (confirmButton != null)
+            confirmButton.interactable = true;
+
         HidePopupImmediate();
 
         CommitSelection();
@@ -455,6 +461,8 @@ public class SkinCarousel : MonoBehaviour,
     void RefreshUI()
     {
         _layoutDirty = true;
+        if (confirmButton != null)
+            confirmButton.interactable = !_unlocking;
 
         if (prevButton != null)
             prevButton.interactable = !_unlocking && _targetIndex > 0;

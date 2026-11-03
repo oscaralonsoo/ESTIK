@@ -39,6 +39,9 @@ public class MainMenuManager : MonoBehaviour
     [Header("Buttons")]
     public GameObject levelSelectorButton;
 
+    [Header("Skins")]
+    public SkinCarousel skinCarousel;
+
     [Header("Selector de niveles")]
     public float closeSelectorDelay = 0.8f;
 
@@ -163,6 +166,8 @@ public class MainMenuManager : MonoBehaviour
     public void OnBackPressed()
     {
         if (currentPanel == null || transitioning) return;
+
+        if (skinCarousel != null && skinCarousel.IsUnlocking) return;
 
         transitioning = true;
         GameObject closing = currentPanel;
