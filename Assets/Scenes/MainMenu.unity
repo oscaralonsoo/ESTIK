@@ -2328,6 +2328,10 @@ PrefabInstance:
       propertyPath: m_Convex
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 7387033531049756437, guid: cdafbd9b89fc25f4a83120e28bec3afd, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -14.54
+      objectReference: {fileID: 0}
     - target: {fileID: 7429425267630459571, guid: cdafbd9b89fc25f4a83120e28bec3afd, type: 3}
       propertyPath: m_Convex
       value: 1
@@ -2665,6 +2669,8 @@ PrefabInstance:
     - {fileID: 8695987833217045213, guid: cdafbd9b89fc25f4a83120e28bec3afd, type: 3}
     - {fileID: 8599797429604005528, guid: cdafbd9b89fc25f4a83120e28bec3afd, type: 3}
     - {fileID: 5410953438549070623, guid: cdafbd9b89fc25f4a83120e28bec3afd, type: 3}
+    - {fileID: 7165780660716345014, guid: cdafbd9b89fc25f4a83120e28bec3afd, type: 3}
+    - {fileID: 3397807314340046026, guid: cdafbd9b89fc25f4a83120e28bec3afd, type: 3}
     m_AddedGameObjects:
     - targetCorrespondingSourceObject: {fileID: 7717938461668224882, guid: cdafbd9b89fc25f4a83120e28bec3afd, type: 3}
       insertIndex: 4
@@ -4510,9 +4516,9 @@ MonoBehaviour:
   outlineParent: {fileID: 0}
   outlineFadeDuration: 0.2
   recordPadding: 330
-  maxLevels: 24
+  maxLevels: 20
   showEveryNumLevels: 4
-  levelPadding: 250
+  levelPadding: 300
   maxHorizontalOffset: 400
   lvlsTopAndBottonPadding: 150
   bkgTopAndBottonPadding: 100
