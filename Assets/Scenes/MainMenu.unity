@@ -6001,7 +6001,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &4756967927380526779
 RectTransform:
   m_ObjectHideFlags: 0
@@ -7757,6 +7757,17 @@ MonoBehaviour:
     existingInScene: {fileID: 0}
     mapPosition: {x: 0, y: 0, z: 0}
     skybox: {fileID: 2100000, guid: 6b4efabec162d7547b0243e9b4cbb270, type: 2}
+    orbitRadius: 110
+    orbitHeight: 35
+    orbitLookHeight: 2
+    instance: {fileID: 0}
+    orbitTarget: {fileID: 0}
+  - name: Lava
+    firstLevel: 16
+    mapPrefab: {fileID: 8796842874438855767, guid: 775d2c33c3cdbc742985750ff6bbd07e, type: 3}
+    existingInScene: {fileID: 0}
+    mapPosition: {x: 0, y: 0, z: 0}
+    skybox: {fileID: 2100000, guid: ec2de3592cebda047a49d57fca4a41d1, type: 2}
     orbitRadius: 110
     orbitHeight: 35
     orbitLookHeight: 2
