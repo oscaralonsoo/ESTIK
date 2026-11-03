@@ -276,7 +276,6 @@ public class MoveBetweenPoints : MonoBehaviour
         return parent != null ? parent.TransformPoint(local) : local;
     }
 
-    // Derivada de la parábola: hacia dónde apunta la curva en t
     private Vector3 EvaluateTangent(int segment, float t)
     {
         Vector3 a = points[segment * 2].localPosition;
