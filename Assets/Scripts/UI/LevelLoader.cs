@@ -33,7 +33,7 @@ public static class LevelLoader
         "Level15",
         "Level16",
         "Level17",
-        "Level18",
+        "Level18"
 
 
     };
