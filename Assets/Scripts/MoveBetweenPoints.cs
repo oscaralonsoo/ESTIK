@@ -15,6 +15,7 @@ public class MoveBetweenPoints : MonoBehaviour
     [Header("MOVEMENT PROPERTIES")]
     [SerializeField] private float speed = 5f;
     [SerializeField] private float waitTime = 1f;
+    [SerializeField] private float waitToStart = 1f;
 
     [Header("ROTATION")]
     [SerializeField] private bool rotateToDirection = true;
@@ -63,7 +64,7 @@ public class MoveBetweenPoints : MonoBehaviour
             currentTargetIndex = Random.Range(0, points.Count);
         }
 
-        StartCoroutine(WaitCoroutine());
+        StartCoroutine(WaitCoroutine(waitToStart));
     }
 
     private void Update()
@@ -105,7 +106,7 @@ public class MoveBetweenPoints : MonoBehaviour
         else if (restartOnEnd)
         {
             currentTargetIndex = (currentTargetIndex + 1) % points.Count;
-            if (currentTargetIndex == 0 && waitOnEnd) StartCoroutine(WaitCoroutine());
+            if (currentTargetIndex == 0 && waitOnEnd) StartCoroutine(WaitCoroutine(waitTime));
         }
         else
         {
@@ -116,7 +117,7 @@ public class MoveBetweenPoints : MonoBehaviour
                 {
                     currentTargetIndex = points.Count - 2;
                     movingForward = false;
-                    if (waitOnEnd) StartCoroutine(WaitCoroutine());
+                    if (waitOnEnd) StartCoroutine(WaitCoroutine(waitTime));
                 }
             }
             else
@@ -126,7 +127,7 @@ public class MoveBetweenPoints : MonoBehaviour
                 {
                     currentTargetIndex = 1;
                     movingForward = true;
-                    if (waitOnEnd) StartCoroutine(WaitCoroutine());
+                    if (waitOnEnd) StartCoroutine(WaitCoroutine(waitTime));
                 }
             }
         }
@@ -197,7 +198,7 @@ public class MoveBetweenPoints : MonoBehaviour
             movingForward = false;
             t = 1f;
         }
-        StartCoroutine(WaitCoroutine());
+        StartCoroutine(WaitCoroutine(waitTime));
     }
 
     private void ArriveAtStart()
@@ -212,7 +213,7 @@ public class MoveBetweenPoints : MonoBehaviour
             movingForward = true;
             t = 0f;
         }
-        StartCoroutine(WaitCoroutine());
+        StartCoroutine(WaitCoroutine(waitTime));
     }
 
     private void CacheLengths()
@@ -233,10 +234,10 @@ public class MoveBetweenPoints : MonoBehaviour
     }
 
 
-    private IEnumerator WaitCoroutine()
+    private IEnumerator WaitCoroutine(float time)
     {
         canMove = false;
-        yield return new WaitForSeconds(waitTime);
+        yield return new WaitForSeconds(time);
         canMove = true;
     }
 
