@@ -6227,6 +6227,7 @@ GameObject:
   - component: {fileID: 1844228820}
   - component: {fileID: 1844228819}
   - component: {fileID: 1844228818}
+  - component: {fileID: 1844228823}
   m_Layer: 0
   m_Name: Agua
   m_TagString: Untagged
@@ -6342,6 +6343,20 @@ Transform:
   - {fileID: 1076099916}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1844228823
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1844228817}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fb7bf5ed0c74ce84ea92c8ee71de4aab, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::WaterSplash
+  splashPrefab: {fileID: 3261701271251825054, guid: 21d7cf22257b78447958de4020963320, type: 3}
+  cooldown: 0.25
 --- !u!4 &1854233753 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1006026855260333206, guid: 848a8c44793fb944fb54177d235e527f, type: 3}

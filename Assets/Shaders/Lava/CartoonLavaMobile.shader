@@ -26,6 +26,13 @@ Shader "Custom/CartoonLavaMobile"
         _FoamFade       ("Foam Outer Fade (0 = corte duro)", Range(0.01, 1)) = 0.5
         _FoamSoft       ("Foam Core Edge Softness", Range(0.001, 0.1)) = 0.02
 
+        [Header(Edge Fade)]
+        _EdgeColor       ("Edge Color (pon el color del skybox/horizonte)", Color) = (0.35, 0.12, 0.08, 1)
+        _EdgeFadeX       ("Edge Fade Width U/X (en UV 0-1, 0 = off)", Range(0, 0.5)) = 0.15
+        _EdgeFadeZ       ("Edge Fade Width V/Z (en UV 0-1, 0 = off)", Range(0, 0.5)) = 0.0
+        _EdgeColorAmount ("Edge Color Amount", Range(0, 1)) = 1
+        _EdgeAlpha       ("Edge Transparency (0 = solo color)", Range(0, 1)) = 1
+
         [Header(Wobble)]
         _WobbleAmp   ("Vertex Wobble Amount (0 = off)", Float) = 0.05
         _WobbleFreq  ("Vertex Wobble Frequency", Float) = 2
@@ -43,6 +50,7 @@ Shader "Custom/CartoonLavaMobile"
             Name "ForwardUnlit"
             Tags { "LightMode"="UniversalForward" }
 
+            Blend SrcAlpha OneMinusSrcAlpha
             ZWrite On
             ZTest LEqual
             Cull Back
@@ -74,6 +82,11 @@ Shader "Custom/CartoonLavaMobile"
                 half   _FoamDistort;
                 half   _FoamSoft;
                 half   _FoamFade;
+                half4  _EdgeColor;
+                half   _EdgeFadeX;
+                half   _EdgeFadeZ;
+                half   _EdgeColorAmount;
+                half   _EdgeAlpha;
                 float  _WobbleAmp;
                 float  _WobbleFreq;
                 float  _WobbleSpeed;
@@ -92,6 +105,7 @@ Shader "Custom/CartoonLavaMobile"
                 float4 positionCS : SV_POSITION;
                 float4 uv         : TEXCOORD0;
                 float  eyeDepth   : TEXCOORD1;
+                float2 uvRaw      : TEXCOORD2;
             };
 
             Varyings vert(Attributes IN)
@@ -108,6 +122,7 @@ Shader "Custom/CartoonLavaMobile"
                 OUT.positionCS = TransformWorldToHClip(posWS);
 
                 OUT.eyeDepth = -TransformWorldToView(posWS).z;
+                OUT.uvRaw = IN.uv;
 
                 float2 uv = IN.uv * _Scale;
                 float  s  = frac(_Time.y * _Speed);
@@ -155,7 +170,18 @@ Shader "Custom/CartoonLavaMobile"
                 col = lerp(col, _FoamColor.rgb, foamOuter);
                 col = lerp(col, _FoamCoreColor.rgb, foamCore);
 
-                return half4(col, 1.0h);
+                float2 edgeDist = min(IN.uvRaw, 1.0 - IN.uvRaw);
+                float inX = (_EdgeFadeX > 0.0001) ? saturate(edgeDist.x / _EdgeFadeX) : 1.0;
+                float inZ = (_EdgeFadeZ > 0.0001) ? saturate(edgeDist.y / _EdgeFadeZ) : 1.0;
+
+                half inside = (half)min(inX, inZ);
+                half fade   = 1.0h - smoothstep(0.0h, 1.0h, inside);
+
+                col = lerp(col, _EdgeColor.rgb, fade * _EdgeColorAmount);
+
+                half alpha = 1.0h - smoothstep(0.4h, 1.0h, fade) * _EdgeAlpha;
+
+                return half4(col, alpha);
             }
             ENDHLSL
         }

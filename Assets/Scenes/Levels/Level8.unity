@@ -14143,6 +14143,7 @@ GameObject:
   - component: {fileID: 898598154}
   - component: {fileID: 898598153}
   - component: {fileID: 898598152}
+  - component: {fileID: 898598157}
   m_Layer: 0
   m_Name: Agua (1)
   m_TagString: Untagged
@@ -14258,6 +14259,20 @@ Transform:
   - {fileID: 697867304}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &898598157
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 898598151}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fb7bf5ed0c74ce84ea92c8ee71de4aab, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::WaterSplash
+  splashPrefab: {fileID: 3261701271251825054, guid: 21d7cf22257b78447958de4020963320, type: 3}
+  cooldown: 0.25
 --- !u!4 &904024016 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 8138634519370129086, guid: 06cbf3621d1b6724ab63ec967b97e977, type: 3}
@@ -19702,6 +19717,7 @@ GameObject:
   - component: {fileID: 2069340944}
   - component: {fileID: 2069340943}
   - component: {fileID: 2069340942}
+  - component: {fileID: 2069340947}
   m_Layer: 0
   m_Name: Agua
   m_TagString: Untagged
@@ -19817,6 +19833,20 @@ Transform:
   - {fileID: 5144244}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2069340947
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2069340941}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fb7bf5ed0c74ce84ea92c8ee71de4aab, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::WaterSplash
+  splashPrefab: {fileID: 3261701271251825054, guid: 21d7cf22257b78447958de4020963320, type: 3}
+  cooldown: 0.25
 --- !u!4 &2083240234 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 8986661495990805777, guid: 8e7aeba03c5ee1d4c8245b027acef2b9, type: 3}
