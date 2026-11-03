@@ -319,7 +319,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: '::'
   transitionTime: 0.5
-  maxScale: 30
+  maxScale: 60
   lifeLostDelay: 1.6
 --- !u!1 &6163337025249562492
 GameObject:
@@ -435,6 +435,7 @@ GameObject:
   - component: {fileID: 7161710793980324800}
   - component: {fileID: 628915976021589175}
   - component: {fileID: 9212523235435497474}
+  - component: {fileID: 8996157987325783948}
   m_Layer: 5
   m_Name: Image
   m_TagString: Untagged
@@ -499,6 +500,20 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!114 &8996157987325783948
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6557263990226903310}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ec9db630973a0db47ae4e5fd42c21cea, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ClampToCanvas
+  canvasRect: {fileID: 3243896308603161148}
+  clampJustPivot: 1
 --- !u!1 &8821174484444812189
 GameObject:
   m_ObjectHideFlags: 0
