@@ -12,6 +12,7 @@ public class RotateBetweenAngles : MonoBehaviour
     [Header("ROTATION PROPERTIES")]
     [SerializeField] private float rotationDuration = 2f;
     [SerializeField] private float waitTime = 1f;
+    [SerializeField] private float waitAtStart = 1f;
 
     private int currentTargetIndex = 0;
     private bool movingForward = true;
@@ -34,7 +35,7 @@ public class RotateBetweenAngles : MonoBehaviour
             transform.localRotation = Quaternion.Euler(rotationPoints[currentTargetIndex]);
         }
 
-        StartCoroutine(WaitCoroutine());
+        StartCoroutine(WaitCoroutine(waitAtStart));
     }
 
     private void Update()
@@ -68,7 +69,7 @@ public class RotateBetweenAngles : MonoBehaviour
 
     private void SetNextTarget()
     {
-        StartCoroutine(WaitCoroutine());
+        StartCoroutine(WaitCoroutine(waitTime));
         if (rotationPoints.Count <= 1) return;
 
         if (random)
@@ -107,12 +108,11 @@ public class RotateBetweenAngles : MonoBehaviour
         }
     }
 
-    private IEnumerator WaitCoroutine()
+    private IEnumerator WaitCoroutine(float time)
     {
         canMove = false;
-        yield return new WaitForSeconds(waitTime);
+        yield return new WaitForSeconds(time);
 
-        // Preparamos el siguiente punto justo antes de volver a movernos
         PrepareNextRotation();
 
         canMove = true;
