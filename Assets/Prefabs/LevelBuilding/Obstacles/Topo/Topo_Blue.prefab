@@ -631,10 +631,6 @@ GameObject:
   m_Component:
   - component: {fileID: 7675821955325881292}
   - component: {fileID: 8897475911496971960}
-  - component: {fileID: 2719713695782487958}
-  - component: {fileID: 5530074920124464159}
-  - component: {fileID: 3174870815218323313}
-  - component: {fileID: 4720057570415811217}
   m_Layer: 0
   m_Name: Body
   m_TagString: Untagged
@@ -722,94 +718,6 @@ SkinnedMeshRenderer:
     m_Center: {x: -23.648485, y: -0.107917786, z: -0.32004356}
     m_Extent: {x: 36.901287, y: 30.029247, z: 57.02694}
   m_DirtyAABB: 0
---- !u!136 &2719713695782487958
-CapsuleCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2573474879403165426}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Radius: 26.86162
-  m_Height: 65.51338
-  m_Direction: 1
-  m_Center: {x: 0.10145903, y: -31.370216, z: -0.6950855}
---- !u!65 &5530074920124464159
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2573474879403165426}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Size: {x: 59.788258, y: 31.131277, z: 60.058487}
-  m_Center: {x: 0.024837255, y: -48.784153, z: -0.10791719}
---- !u!136 &3174870815218323313
-CapsuleCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2573474879403165426}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Radius: 26.86162
-  m_Height: 65.51338
-  m_Direction: 1
-  m_Center: {x: 0.10145903, y: -31.370216, z: -0.6950855}
---- !u!65 &4720057570415811217
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2573474879403165426}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Size: {x: 59.788258, y: 31.131277, z: 60.058487}
-  m_Center: {x: 0.024837255, y: -48.784153, z: -0.10791719}
 --- !u!1 &2867761731289902882
 GameObject:
   m_ObjectHideFlags: 0
@@ -1924,7 +1832,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::MoleEmergeParticles
   dirtParticles: {fileID: 0}
   holePoint: {fileID: 6923616073385816174}
-  animatorDelay: 1
+  animatorDelay: 2
   dirtColor: {r: 0.4, g: 0.27, b: 0.15, a: 1}
   burstCount: 45
   coneAngle: 50
@@ -1934,7 +1842,53 @@ MonoBehaviour:
   lifetimeRange: {x: 0.9, y: 1.5}
   gravity: 0.75
   drag: 1.8
-  maxColliderRadius: 0.8
-  colliderExpandDuration: 0.5
+  ballTag: Ball
+  ballLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  startRadius: 0.2
+  maxColliderRadius: 3.32
+  colliderExpandDuration: 0.65
+  expandCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0.9047619
+      outSlope: 0.9047619
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 1
+    - serializedVersion: 3
+      time: 0.06366119
+      value: 0.24244618
+      inSlope: 2.4584947
+      outSlope: 2.4584947
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.80364805
+      outWeight: 0.049515247
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
   repelForce: 25
   upwardLift: 2
+  hitEachBallOnce: 1
+  enableBodyCollider: 1
+  bodyRepelsBall: 1
+  followTarget: {fileID: 8896505925713937915}
+  topOffset: -0.03
+  bodyRadius: 0.95
+  minBodyHeight: 0.41
+  maxBodyHeight: 3.35

@@ -1555,20 +1555,67 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MoleEmergeParticles
   dirtParticles: {fileID: 0}
-  holePoint: {fileID: 1017792800404634713}
-  dirtColor: {r: 0.4433962, g: 0.34541792, b: 0.018823417, a: 1}
-  burstCount: 30
+  holePoint: {fileID: 0}
+  animatorDelay: 3
+  dirtColor: {r: 0.4, g: 0.27, b: 0.15, a: 1}
+  burstCount: 45
   coneAngle: 50
-  coneRadius: 1
+  coneRadius: 0.2
   speedRange: {x: 4, y: 9}
-  sizeRange: {x: 0.5, y: 1}
-  lifetimeRange: {x: 0.15, y: 2}
+  sizeRange: {x: 0.08, y: 0.28}
+  lifetimeRange: {x: 0.9, y: 1.5}
   gravity: 0.75
   drag: 1.8
-  maxColliderRadius: 1.5
-  colliderExpandDuration: 0.5
+  ballTag: Ball
+  ballLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  startRadius: 0.2
+  maxColliderRadius: 3.32
+  colliderExpandDuration: 0.65
+  expandCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0.9047619
+      outSlope: 0.9047619
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 1
+    - serializedVersion: 3
+      time: 0.06366119
+      value: 0.24244618
+      inSlope: 2.4584947
+      outSlope: 2.4584947
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.80364805
+      outWeight: 0.049515247
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
   repelForce: 25
   upwardLift: 2
+  hitEachBallOnce: 1
+  enableBodyCollider: 1
+  bodyRepelsBall: 1
+  followTarget: {fileID: 1368424648270601170}
+  topOffset: -0.03
+  bodyRadius: 0.95
+  minBodyHeight: 0.41
+  maxBodyHeight: 3.35
 --- !u!1 &8561708927118057730
 GameObject:
   m_ObjectHideFlags: 0

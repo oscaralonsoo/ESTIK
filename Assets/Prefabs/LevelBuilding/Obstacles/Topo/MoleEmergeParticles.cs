@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class MoleEmergeParticles : MonoBehaviour
@@ -8,7 +9,7 @@ public class MoleEmergeParticles : MonoBehaviour
 
     [Header("Ajustes del Animator")]
     private Animator moleAnimator;
-    [SerializeField] private float animatorDelay = 0f; 
+    [SerializeField] private float animatorDelay = 0f;
 
     [Header("Ajustes de Partículas")]
     [SerializeField] private Color dirtColor = new Color(0.40f, 0.27f, 0.15f, 1f);
@@ -21,11 +22,41 @@ public class MoleEmergeParticles : MonoBehaviour
     [SerializeField] private float gravity = 0.8f;
     [SerializeField] private float drag = 1.5f;
 
-    [Header("Ajustes del Trigger Collider")]
+    [Header("Onda de repulsión (esfera)")]
+    [SerializeField] private string ballTag = "Ball";
+    [SerializeField] private LayerMask ballLayers = ~0;
+    [SerializeField] private float startRadius = 0.2f;
     [SerializeField] private float maxColliderRadius = 1.5f;
     [SerializeField] private float colliderExpandDuration = 0.5f;
-    [SerializeField] private float repelForce = 10f; 
-    [SerializeField] private float upwardLift = 2f; 
+    [SerializeField] private AnimationCurve expandCurve = AnimationCurve.EaseInOut(0f, 0f, 1f, 1f);
+    [SerializeField] private float repelForce = 10f;
+    [SerializeField] private float upwardLift = 2f;
+    [Tooltip("Si es true, cada bola solo es empujada una vez por emergencia.")]
+    [SerializeField] private bool hitEachBallOnce = true;
+
+    [Header("Collider del cuerpo (sigue la animación)")]
+    [SerializeField] private bool enableBodyCollider = true;
+    [Tooltip("Si es true, la colisión de la bola con el cuerpo la repele igual que la onda.")]
+    [SerializeField] private bool bodyRepelsBall = true;
+    [Tooltip("Transform que se mueve con la animación (hueso/malla del topo). Si está vacío usa este transform.")]
+    [SerializeField] private Transform followTarget;
+    [Tooltip("Distancia desde el pivote de followTarget hasta lo más alto del topo (cabeza).")]
+    [SerializeField] private float topOffset = 0.5f;
+    [SerializeField] private float bodyRadius = 0.35f;
+    [SerializeField] private float minBodyHeight = 0.05f;
+    [SerializeField] private float maxBodyHeight = 2f;
+
+    // Estado interno
+    private bool burstActive;
+    private float burstTimer;
+    private readonly HashSet<Rigidbody> alreadyHit = new HashSet<Rigidbody>();
+    private readonly Collider[] overlapBuffer = new Collider[32];
+
+    private GameObject bodyObj;
+    private Rigidbody bodyRb;
+    private CapsuleCollider bodyCollider;
+
+    private Vector3 Holeposition => holePoint != null ? holePoint.position : transform.position;
 
     private void Awake()
     {
@@ -35,83 +66,187 @@ public class MoleEmergeParticles : MonoBehaviour
         if (moleAnimator == null)
             moleAnimator = GetComponent<Animator>();
 
+        if (followTarget == null)
+            followTarget = transform;
+
         if (moleAnimator != null && animatorDelay > 0f)
         {
             moleAnimator.enabled = false;
             StartCoroutine(DelayedAnimatorStart());
         }
+
+        if (enableBodyCollider)
+            CreateBodyCollider();
+    }
+
+    private void OnDestroy()
+    {
+        if (bodyObj != null) Destroy(bodyObj);
+    }
+
+    private void OnDisable()
+    {
+        burstActive = false;
+        if (bodyCollider != null) bodyCollider.enabled = false;
     }
 
     private IEnumerator DelayedAnimatorStart()
     {
         yield return new WaitForSeconds(animatorDelay);
         if (moleAnimator != null)
-        {
             moleAnimator.enabled = true;
-        }
     }
+
+    // ───────────────────────── Emerger ─────────────────────────
 
     public void PlayEmerge()
     {
         Transform t = dirtParticles.transform;
-        t.position = holePoint != null ? holePoint.position : transform.position;
+        t.position = Holeposition;
 
         if (!dirtParticles.isPlaying)
             dirtParticles.Play();
 
         dirtParticles.Emit(burstCount);
 
-        StartCoroutine(ExpandTriggerCollider(t));
+        // Arranca la onda de repulsión (se procesa en FixedUpdate)
+        alreadyHit.Clear();
+        burstTimer = 0f;
+        burstActive = true;
     }
 
-    private IEnumerator ExpandTriggerCollider(Transform particleTransform)
+    private void FixedUpdate()
     {
-        GameObject triggerObj = new GameObject("EmergeTrigger");
-        triggerObj.transform.SetParent(particleTransform, false);
-        triggerObj.transform.localPosition = Vector3.zero;
+        UpdateRepelBurst();
+        UpdateBodyCollider();
+    }
 
-        SphereCollider sphereCollider = triggerObj.AddComponent<SphereCollider>();
-        sphereCollider.isTrigger = true;
-        sphereCollider.radius = maxColliderRadius;
+    // ───────────────────────── Onda esférica ─────────────────────────
 
-        MoleTriggerHandler triggerHandler = triggerObj.AddComponent<MoleTriggerHandler>();
-        triggerHandler.repelForce = repelForce;
-        triggerHandler.upwardLift = upwardLift;
-        triggerHandler.originTransform = particleTransform;
+    private void UpdateRepelBurst()
+    {
+        if (!burstActive) return;
 
-        yield return new WaitForSeconds(colliderExpandDuration);
+        burstTimer += Time.fixedDeltaTime;
+        float t = Mathf.Clamp01(burstTimer / Mathf.Max(0.0001f, colliderExpandDuration));
+        float radius = Mathf.Lerp(startRadius, maxColliderRadius, expandCurve.Evaluate(t));
+        Vector3 center = Holeposition;
 
-        if (triggerObj != null)
+        int count = Physics.OverlapSphereNonAlloc(
+            center, radius, overlapBuffer, ballLayers, QueryTriggerInteraction.Ignore);
+
+        for (int i = 0; i < count; i++)
         {
-            Destroy(triggerObj);
+            Collider col = overlapBuffer[i];
+            if (!IsBall(col, out Rigidbody rb)) continue;
+            if (hitEachBallOnce && alreadyHit.Contains(rb)) continue;
+
+            alreadyHit.Add(rb);
+            ApplyRepel(rb, center);
+        }
+
+        if (t >= 1f)
+            burstActive = false;
+    }
+
+    private void ApplyRepel(Rigidbody rb, Vector3 center)
+    {
+        Vector3 pushDir = rb.worldCenterOfMass - center;
+        if (pushDir.sqrMagnitude < 0.0001f) pushDir = Vector3.up;
+        pushDir.Normalize();
+        if (pushDir.y < 0.2f) pushDir.y = 0.2f;
+        pushDir.Normalize();
+
+        Vector3 targetVelocity = pushDir * repelForce;
+        targetVelocity.y += upwardLift;
+
+        rb.WakeUp();
+        rb.linearVelocity = targetVelocity;
+    }
+
+    private bool IsBall(Collider col, out Rigidbody rb)
+    {
+        rb = col.attachedRigidbody;
+        if (rb == null || rb.isKinematic) return false;
+        return col.CompareTag(ballTag) || rb.CompareTag(ballTag);
+    }
+
+    // ───────────────────────── Collider del cuerpo ─────────────────────────
+
+    private void CreateBodyCollider()
+    {
+        bodyObj = new GameObject("MoleBodyCollider");
+        bodyObj.layer = gameObject.layer;
+        bodyObj.transform.position = Holeposition;
+
+        bodyRb = bodyObj.AddComponent<Rigidbody>();
+        bodyRb.isKinematic = true;
+        bodyRb.interpolation = RigidbodyInterpolation.Interpolate;
+
+        bodyCollider = bodyObj.AddComponent<CapsuleCollider>();
+        bodyCollider.direction = 1; // eje Y
+        bodyCollider.radius = bodyRadius;
+        bodyCollider.enabled = false;
+
+        if (bodyRepelsBall)
+        {
+            var relay = bodyObj.AddComponent<MoleBodyCollisionRelay>();
+            relay.onCollision = OnBodyCollision;
         }
     }
 
-    private class MoleTriggerHandler : MonoBehaviour
+    private void OnBodyCollision(Collision collision)
     {
-        public float repelForce;
-        public float upwardLift;
-        public Transform originTransform;
+        Collider col = collision.collider;
+        if (!IsBall(col, out Rigidbody rb)) return;
 
-        private void OnTriggerEnter(Collider other)
-        {
-            if (other.CompareTag("Ball"))
-            {
-                Rigidbody rb = other.GetComponent<Rigidbody>();
-                if (rb != null)
-                {
-                    Vector3 pushDir = (other.transform.position - originTransform.position).normalized;
-                    if (pushDir.y < 0.2f) pushDir.y = 0.2f;
-                    pushDir.Normalize();
+        // Empuja horizontalmente desde el eje del topo (a la altura de la bola),
+        // para que el rebote sea hacia fuera y no solo hacia arriba.
+        Vector3 hole = Holeposition;
+        Vector3 center = new Vector3(hole.x, rb.worldCenterOfMass.y, hole.z);
 
-                    Vector3 targetVelocity = pushDir * repelForce;
-                    targetVelocity.y += upwardLift;
-
-                    rb.linearVelocity = targetVelocity;
-                }
-            }
-        }
+        ApplyRepel(rb, center);
     }
+
+    private void UpdateBodyCollider()
+    {
+        if (bodyCollider == null) return;
+
+        Vector3 basePos = Holeposition;
+        float topY = followTarget.position.y + topOffset;
+        float visibleHeight = Mathf.Min(topY - basePos.y, maxBodyHeight);
+
+        if (visibleHeight < minBodyHeight)
+        {
+            if (bodyCollider.enabled) bodyCollider.enabled = false;
+            return;
+        }
+
+        float capsuleHeight = Mathf.Max(visibleHeight, bodyRadius * 2f);
+        bodyCollider.radius = bodyRadius;
+        bodyCollider.height = capsuleHeight;
+        // La parte superior de la cápsula queda exactamente en la cabeza del topo
+        bodyCollider.center = new Vector3(0f, visibleHeight - capsuleHeight * 0.5f, 0f);
+
+        if (!bodyCollider.enabled) bodyCollider.enabled = true;
+        bodyRb.MovePosition(basePos);
+    }
+
+    private void OnDrawGizmosSelected()
+    {
+        Vector3 hole = holePoint != null ? holePoint.position : transform.position;
+
+        Gizmos.color = new Color(1f, 0.5f, 0f, 0.4f);
+        Gizmos.DrawWireSphere(hole, maxColliderRadius);
+
+        Transform ft = followTarget != null ? followTarget : transform;
+        Gizmos.color = Color.green;
+        Vector3 top = new Vector3(hole.x, ft.position.y + topOffset, hole.z);
+        Gizmos.DrawLine(hole, top);
+        Gizmos.DrawWireSphere(top, bodyRadius);
+    }
+
+    // ───────────────────────── Partículas ─────────────────────────
 
     private ParticleSystem CreateDirtParticles()
     {
@@ -248,5 +383,19 @@ public class MoleEmergeParticles : MonoBehaviour
         tex.SetPixels32(pixels);
         tex.Apply();
         return tex;
+    }
+}
+
+/// <summary>
+/// Reenvía OnCollisionEnter del collider del cuerpo (que vive en otro GameObject)
+/// al script principal del topo.
+/// </summary>
+public class MoleBodyCollisionRelay : MonoBehaviour
+{
+    public System.Action<Collision> onCollision;
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        onCollision?.Invoke(collision);
     }
 }
