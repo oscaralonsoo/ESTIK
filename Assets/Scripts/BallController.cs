@@ -52,7 +52,7 @@ public class BallController : MonoBehaviour
     [Header("DEBUG")]
     bool initialized = true;
     [SerializeField] public bool draging = false;
-    [SerializeField] private bool isShooting = false;
+    [SerializeField] private bool blockShoot = false;
     [SerializeField] private bool gestureBlocked = false;
     [SerializeField] private bool aerealShot = false;
     [SerializeField] private bool goal = false;
@@ -143,7 +143,7 @@ public class BallController : MonoBehaviour
             return;
         }
 
-        if (!isShooting)
+        if (!blockShoot)
         {
 
             if (gestureBlocked)
@@ -184,7 +184,7 @@ public class BallController : MonoBehaviour
                     }
                     else
                     {
-                        isShooting = true;
+                        blockShoot = true;
                         draging = false;
                         shootCoroutine = StartCoroutine(PerformShootSequence());
                     }
@@ -192,7 +192,7 @@ public class BallController : MonoBehaviour
             }
         }
 
-        slowmo = draging || (aerealShot && remainingShots != 0);
+        slowmo = draging || (aerealShot && remainingShots != 0 && !blockShoot);
 
         float targetTimeScale = slowmo ? currentSlowmoScale : 1.0f;
         float currentTransitionDuration = slowmo ? currentSlowmoJoinTransitionDuration : slowmoLeaveTransitionDuration;
@@ -298,7 +298,7 @@ public class BallController : MonoBehaviour
 
     private IEnumerator PerformShootSequence()
     {
-        isShooting = true;
+        blockShoot = true;
         Vector2 dragDir = dragStartPosition - dragEndPosition;
         currentShootSpeed = GetPower01(dragDir.magnitude) * shootSpeed;
         float fillPercentage = currentShootSpeed / shootSpeed;
@@ -359,7 +359,7 @@ public class BallController : MonoBehaviour
         HideStick();
         remainingShots--;
         draging = false;
-        isShooting = false;
+        blockShoot = false;
 
         dragStartPosition = Vector2.zero;
         dragCurrentPosition = Vector2.zero;
@@ -380,9 +380,9 @@ public class BallController : MonoBehaviour
 
     private IEnumerator ShootDelay()
     {
-        isShooting = true;
+        blockShoot = true;
         yield return new WaitForSecondsRealtime(shootDelay);
-        isShooting = false;
+        blockShoot = false;
     }
 
     #region Skin
@@ -534,7 +534,7 @@ public class BallController : MonoBehaviour
         if (other.CompareTag("Area"))
         {
             StopCoroutine(shootCoroutine);
-            isShooting = false;
+            blockShoot = false;
             draging = false;
             HideTrace();
             HideStick();
@@ -597,5 +597,19 @@ public class BallController : MonoBehaviour
                 ballSoundController.PlayWoodSound(collision.relativeVelocity.magnitude / shootSpeed);
             }
         }
+    }
+
+    public void Die()
+    {
+        blockShoot = true;
+        ballRigidbody.linearVelocity = Vector3.zero;
+        ballRigidbody. angularVelocity = Vector3.zero;
+        CancelAim();
+    }
+
+    public void CancelAimAndShoot()
+    {
+        CancelAim();
+        StopCoroutine(shootCoroutine);
     }
 }
