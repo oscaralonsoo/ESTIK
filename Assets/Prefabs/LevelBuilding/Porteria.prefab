@@ -279,6 +279,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::GoalController
   timeToChange: 1.5
   goalParticles: {fileID: 3814208825789338790}
+  goalSound: {fileID: 8300000, guid: 24864744b5a01e347ad5498f758064dc, type: 3}
+  sfxMixerGroup: {fileID: -3593654482492574578, guid: 26334b540b17f884d8f0904207b27d93, type: 2}
+  goalSoundVolume: 1
 --- !u!65 &6829195703039156624
 BoxCollider:
   m_ObjectHideFlags: 0
