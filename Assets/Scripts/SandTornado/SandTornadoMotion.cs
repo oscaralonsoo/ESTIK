@@ -3,20 +3,16 @@ using UnityEngine;
 public class SandTornadoMotion : MonoBehaviour
 {
     [Header("Recorrido")]
-    [Tooltip("Punto de inicio. Puede ser hijo del tornado: su posicion se fija al empezar.")]
     public Transform pointA;
-    [Tooltip("Punto final. Puede ser hijo del tornado: su posicion se fija al empezar.")]
     public Transform pointB;
-    [Tooltip("Si esta activo, A y B se siguen en vivo (solo para puntos que NO sean hijos del tornado y se muevan solos). Por defecto se fijan al empezar.")]
     public bool followPointsLive = false;
 
     [Header("Movimiento")]
     public float speed = 2.5f;
     public float sway = 0.5f;
     public float swayFrequency = 0.8f;
-    [Tooltip("Va de A a B y vuelve de B a A.")]
     public bool pingPong = true;
-    [Tooltip("Solo si PingPong esta desactivado: al llegar a B reaparece en A y repite.")]
+
     public bool loop = true;
     public float tilt = 6f;
     public float leanWobble = 4f;
@@ -42,7 +38,6 @@ public class SandTornadoMotion : MonoBehaviour
     float facing = 1f;
     Vector3 basePos;
 
-    // Posiciones del mundo de A y B, fijadas en Awake (antes de que el tornado se mueva)
     Vector3 worldA;
     Vector3 worldB;
     bool hasPoints;

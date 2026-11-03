@@ -1,7 +1,9 @@
 // Bola de fuego para URP, sin partículas: el efecto va en el propio material de la bola.
 // Interior rojo oscuro con vetas naranjas que fluyen, borde difuminado (semitransparente)
 // y brillo amarillo/blanco en el contorno.
-// Coste: ~2 llamadas a ruido 3D por píxel (unos 16 hashes). Una sola bola con transparencia es barato.
+// Escribe profundidad (pase 1) para que el agua transparente NO se pinte encima cuando la bola
+// está por encima, pero sí cuando está hundida (el agua pasa el test de profundidad y se mezcla encima).
+// Coste: ~2 llamadas a ruido 3D por píxel (unos 16 hashes).
 Shader "Custom/FireBallMobile"
 {
     Properties
@@ -22,16 +24,46 @@ Shader "Custom/FireBallMobile"
 
     SubShader
     {
-        // Transparent-10 = se dibuja justo ANTES que lo transparente normal (partículas, capas de fuera...)
+        // Transparent-10 = se dibuja ANTES que el agua (3000) y las partículas.
+        // Como escribe profundidad, el agua solo se pinta encima donde la bola queda DETRÁS de la superficie.
         Tags { "Queue"="Transparent-10" "RenderType"="Transparent" "RenderPipeline"="UniversalPipeline" }
 
+        // Pase 1: solo profundidad, con la malla sin agrandar (así el borde difuminado no recorta el agua)
         Pass
         {
+            Name "FireDepth"
+            Tags { "LightMode"="SRPDefaultUnlit" }
+            ZWrite On
+            ColorMask 0
+            Cull Back
+
+            HLSLPROGRAM
+            #pragma vertex vertDepth
+            #pragma fragment fragDepth
+            #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Core.hlsl"
+
+            float4 vertDepth(float4 positionOS : POSITION) : SV_POSITION
+            {
+                return TransformObjectToHClip(positionOS.xyz);
+            }
+
+            half4 fragDepth() : SV_Target
+            {
+                return 0;
+            }
+            ENDHLSL
+        }
+
+        // Pase 2: el fuego
+        Pass
+        {
+            Name "FireColor"
             Tags { "LightMode"="UniversalForward" }
 
             // Alpha premultiplicado: el color base se atenúa con el alpha y el brillo se suma encima
             Blend One OneMinusSrcAlpha
             ZWrite Off
+            ZTest LEqual
             Cull Back
 
             HLSLPROGRAM
