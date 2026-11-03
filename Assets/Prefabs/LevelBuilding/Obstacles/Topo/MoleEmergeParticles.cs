@@ -1,11 +1,23 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Audio;
 
 public class MoleEmergeParticles : MonoBehaviour
 {
     [SerializeField] private ParticleSystem dirtParticles;
     [SerializeField] private Transform holePoint;
+
+    [Header("Sonido")]
+    [SerializeField] private AudioClip[] emergeSounds;
+    [SerializeField] private AudioMixerGroup mixerGroup;
+    [SerializeField, Range(0f, 1f)] private float soundVolume = 1f;
+    [SerializeField] private float hearDistance = 12f;
+    [Tooltip("Si es true, el volumen baja con la distancia a la bola. Si es false, suena a volumen fijo dentro del rango.")]
+    [SerializeField] private bool fadeWithDistance = true;
+    [SerializeField] private Vector2 pitchRange = new Vector2(0.95f, 1.05f);
+    [Tooltip("Si es true, evita repetir el mismo clip dos veces seguidas.")]
+    [SerializeField] private bool avoidRepeat = true;
 
     [Header("Ajustes del Animator")]
     private Animator moleAnimator;
@@ -48,7 +60,6 @@ public class MoleEmergeParticles : MonoBehaviour
     [SerializeField] private float minBodyHeight = 0.05f;
     [SerializeField] private float maxBodyHeight = 2f;
 
-    // Estado interno
     private bool burstActive;
     private float burstTimer;
     private readonly HashSet<Rigidbody> alreadyHit = new HashSet<Rigidbody>();
@@ -57,6 +68,10 @@ public class MoleEmergeParticles : MonoBehaviour
     private GameObject bodyObj;
     private Rigidbody bodyRb;
     private CapsuleCollider bodyCollider;
+
+    private AudioSource audioSource;
+    private Transform ballTransform;
+    private int lastSoundIndex = -1;
 
     private Vector3 Holeposition => holePoint != null ? holePoint.position : transform.position;
 
@@ -79,6 +94,8 @@ public class MoleEmergeParticles : MonoBehaviour
 
         if (enableBodyCollider)
             CreateBodyCollider();
+
+        CreateAudioSource();
     }
 
     private void OnDestroy()
@@ -99,8 +116,6 @@ public class MoleEmergeParticles : MonoBehaviour
             moleAnimator.enabled = true;
     }
 
-    // ───────────────────────── Emerger ─────────────────────────
-
     public void PlayEmerge()
     {
         Transform t = dirtParticles.transform;
@@ -111,10 +126,64 @@ public class MoleEmergeParticles : MonoBehaviour
 
         dirtParticles.Emit(burstCount);
 
-        // Arranca la onda de repulsión (se procesa en FixedUpdate)
+        PlayEmergeSound();
+
         alreadyHit.Clear();
         burstTimer = Mathf.Clamp(burstLeadTime, 0f, colliderExpandDuration);
         burstActive = true;
+    }
+
+    private void CreateAudioSource()
+    {
+        audioSource = gameObject.AddComponent<AudioSource>();
+        audioSource.playOnAwake = false;
+        audioSource.loop = false;
+        audioSource.spatialBlend = 0f;
+        audioSource.outputAudioMixerGroup = mixerGroup;
+    }
+
+    private Transform FindBall()
+    {
+        if (ballTransform == null)
+        {
+            GameObject ball = GameObject.FindGameObjectWithTag(ballTag);
+            if (ball != null) ballTransform = ball.transform;
+        }
+        return ballTransform;
+    }
+
+    private AudioClip PickRandomClip()
+    {
+        if (emergeSounds == null || emergeSounds.Length == 0) return null;
+
+        int index = Random.Range(0, emergeSounds.Length);
+
+        if (avoidRepeat && emergeSounds.Length > 1 && index == lastSoundIndex)
+            index = (index + Random.Range(1, emergeSounds.Length)) % emergeSounds.Length;
+
+        lastSoundIndex = index;
+        return emergeSounds[index];
+    }
+
+    private void PlayEmergeSound()
+    {
+        if (audioSource == null) return;
+
+        Transform ball = FindBall();
+        if (ball == null) return;
+
+        float distance = Vector3.Distance(ball.position, Holeposition);
+        if (distance > hearDistance) return;
+
+        AudioClip clip = PickRandomClip();
+        if (clip == null) return;
+
+        float volume = soundVolume;
+        if (fadeWithDistance)
+            volume *= 1f - Mathf.Clamp01(distance / Mathf.Max(0.0001f, hearDistance));
+
+        audioSource.pitch = Random.Range(pitchRange.x, pitchRange.y);
+        audioSource.PlayOneShot(clip, volume);
     }
 
     private void FixedUpdate()
@@ -122,8 +191,6 @@ public class MoleEmergeParticles : MonoBehaviour
         UpdateRepelBurst();
         UpdateBodyCollider();
     }
-
-    // ───────────────────────── Onda esférica ─────────────────────────
 
     private void UpdateRepelBurst()
     {
@@ -173,8 +240,6 @@ public class MoleEmergeParticles : MonoBehaviour
         return col.CompareTag(ballTag) || rb.CompareTag(ballTag);
     }
 
-    // ───────────────────────── Collider del cuerpo ─────────────────────────
-
     private void CreateBodyCollider()
     {
         bodyObj = new GameObject("MoleBodyCollider");
@@ -186,7 +251,7 @@ public class MoleEmergeParticles : MonoBehaviour
         bodyRb.interpolation = RigidbodyInterpolation.Interpolate;
 
         bodyCollider = bodyObj.AddComponent<CapsuleCollider>();
-        bodyCollider.direction = 1; // eje Y
+        bodyCollider.direction = 1;
         bodyCollider.radius = bodyRadius;
         bodyCollider.enabled = false;
 
@@ -202,8 +267,6 @@ public class MoleEmergeParticles : MonoBehaviour
         Collider col = collision.collider;
         if (!IsBall(col, out Rigidbody rb)) return;
 
-        // Empuja horizontalmente desde el eje del topo (a la altura de la bola),
-        // para que el rebote sea hacia fuera y no solo hacia arriba.
         Vector3 hole = Holeposition;
         Vector3 center = new Vector3(hole.x, rb.worldCenterOfMass.y, hole.z);
 
@@ -227,7 +290,6 @@ public class MoleEmergeParticles : MonoBehaviour
         float capsuleHeight = Mathf.Max(visibleHeight, bodyRadius * 2f);
         bodyCollider.radius = bodyRadius;
         bodyCollider.height = capsuleHeight;
-        // La parte superior de la cápsula queda exactamente en la cabeza del topo
         bodyCollider.center = new Vector3(0f, visibleHeight - capsuleHeight * 0.5f, 0f);
 
         if (!bodyCollider.enabled) bodyCollider.enabled = true;
@@ -241,14 +303,15 @@ public class MoleEmergeParticles : MonoBehaviour
         Gizmos.color = new Color(1f, 0.5f, 0f, 0.4f);
         Gizmos.DrawWireSphere(hole, maxColliderRadius);
 
+        Gizmos.color = new Color(0f, 0.6f, 1f, 0.4f);
+        Gizmos.DrawWireSphere(hole, hearDistance);
+
         Transform ft = followTarget != null ? followTarget : transform;
         Gizmos.color = Color.green;
         Vector3 top = new Vector3(hole.x, ft.position.y + topOffset, hole.z);
         Gizmos.DrawLine(hole, top);
         Gizmos.DrawWireSphere(top, bodyRadius);
     }
-
-    // ───────────────────────── Partículas ─────────────────────────
 
     private ParticleSystem CreateDirtParticles()
     {
@@ -388,10 +451,6 @@ public class MoleEmergeParticles : MonoBehaviour
     }
 }
 
-/// <summary>
-/// Reenvía OnCollisionEnter del collider del cuerpo (que vive en otro GameObject)
-/// al script principal del topo.
-/// </summary>
 public class MoleBodyCollisionRelay : MonoBehaviour
 {
     public System.Action<Collision> onCollision;

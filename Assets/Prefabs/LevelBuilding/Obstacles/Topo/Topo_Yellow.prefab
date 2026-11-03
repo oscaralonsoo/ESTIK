@@ -1556,10 +1556,20 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::MoleEmergeParticles
   dirtParticles: {fileID: 0}
   holePoint: {fileID: 0}
+  emergeSounds:
+  - {fileID: 8300000, guid: 18133f4f7109715498874cba7b066bf1, type: 3}
+  - {fileID: 8300000, guid: fadbfeb30c324d64a8779d29b60545bf, type: 3}
+  - {fileID: 8300000, guid: 85d6b2fdbc076a547b0daebad2c5e840, type: 3}
+  mixerGroup: {fileID: -3593654482492574578, guid: 26334b540b17f884d8f0904207b27d93, type: 2}
+  soundVolume: 1
+  hearDistance: 16.4
+  fadeWithDistance: 1
+  pitchRange: {x: 0.95, y: 1.05}
+  avoidRepeat: 1
   animatorDelay: 3
   dirtColor: {r: 0.4, g: 0.27, b: 0.15, a: 1}
-  burstCount: 45
-  coneAngle: 50
+  burstCount: 54
+  coneAngle: 51
   coneRadius: 0.2
   speedRange: {x: 4, y: 9}
   sizeRange: {x: 0.08, y: 0.28}
@@ -1609,6 +1619,7 @@ MonoBehaviour:
   repelForce: 25
   upwardLift: 2
   hitEachBallOnce: 1
+  burstLeadTime: 0.15
   enableBodyCollider: 1
   bodyRepelsBall: 1
   followTarget: {fileID: 1368424648270601170}
