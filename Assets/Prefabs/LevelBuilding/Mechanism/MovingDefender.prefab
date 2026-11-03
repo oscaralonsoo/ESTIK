@@ -364,6 +364,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2b04c90d611c3e34e93b2252cc579208, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MoveBetweenPoints
+  useCurves: 0
   points:
   - {fileID: 6194132768306235886}
   - {fileID: 4314530077086706645}
@@ -371,3 +372,7 @@ MonoBehaviour:
   restartOnEnd: 0
   speed: 3
   waitTime: 0
+  rotateToDirection: 0
+  is2D: 0
+  rotationSpeed: 15
+  gizmoResolution: 30
