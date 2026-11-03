@@ -470,7 +470,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8244932081526975001, guid: 06cbf3621d1b6724ab63ec967b97e977, type: 3}
       propertyPath: maxColliderRadius
-      value: 1.2
+      value: 2.36
       objectReference: {fileID: 0}
     - target: {fileID: 8897475911496971960, guid: 06cbf3621d1b6724ab63ec967b97e977, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
@@ -2527,7 +2527,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8244932081526975001, guid: 06cbf3621d1b6724ab63ec967b97e977, type: 3}
       propertyPath: maxColliderRadius
-      value: 1.2
+      value: 2.36
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -20783,8 +20783,16 @@ PrefabInstance:
     m_TransformParent: {fileID: 1670387490}
     m_Modifications:
     - target: {fileID: 245986862517914482, guid: 540591a0196a16a45bc0598bb7422ff9, type: 3}
+      propertyPath: bodyRadius
+      value: 1.76
+      objectReference: {fileID: 0}
+    - target: {fileID: 245986862517914482, guid: 540591a0196a16a45bc0598bb7422ff9, type: 3}
       propertyPath: animatorDelay
       value: 1.7
+      objectReference: {fileID: 0}
+    - target: {fileID: 245986862517914482, guid: 540591a0196a16a45bc0598bb7422ff9, type: 3}
+      propertyPath: maxColliderRadius
+      value: 3.9
       objectReference: {fileID: 0}
     - target: {fileID: 1225856491111876089, guid: 540591a0196a16a45bc0598bb7422ff9, type: 3}
       propertyPath: m_LocalScale.x
