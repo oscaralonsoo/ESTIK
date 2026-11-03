@@ -436,6 +436,7 @@ GameObject:
   - component: {fileID: 628915976021589175}
   - component: {fileID: 9212523235435497474}
   - component: {fileID: 8996157987325783948}
+  - component: {fileID: 5231028559303486028}
   m_Layer: 5
   m_Name: Image
   m_TagString: Untagged
@@ -484,7 +485,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_RaycastTarget: 1
+  m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
@@ -514,6 +515,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::ClampToCanvas
   canvasRect: {fileID: 3243896308603161148}
   clampJustPivot: 1
+--- !u!225 &5231028559303486028
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6557263990226903310}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
 --- !u!1 &8821174484444812189
 GameObject:
   m_ObjectHideFlags: 0
