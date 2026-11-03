@@ -10,6 +10,31 @@ public class PointsManager : MonoBehaviour
     [SerializeField] private TextMeshProUGUI scoreText;
     [SerializeField] private bool alwaysShowScore = false;
 
+    [Header("Multiplicador (xN)")]
+    [SerializeField] private TextMeshProUGUI multiplierText;
+    [SerializeField] private string multiplierFormat = "x{0}";
+    [SerializeField] private bool showAtX1 = false;
+
+    [Header("Multiplicador - Tamaño y posición")]
+    [Tooltip("El tamaño de fuente del multiplicador sigue al del texto de puntos.")]
+    [SerializeField] private bool matchScoreSize = true;
+    [Tooltip("Porcentaje del tamaño de fuente de los puntos (0.6 = 60%).")]
+    [SerializeField] private float sizeRatio = 0.6f;
+    [Tooltip("Coloca el multiplicador a la derecha del texto de puntos.")]
+    [SerializeField] private bool followScoreText = true;
+    [Tooltip("Separación entre los puntos y el multiplicador.")]
+    [SerializeField] private float spacing = 10f;
+
+    [Header("Multiplicador - Animación")]
+    [SerializeField] private Color hotColor = new Color(1f, 0.35f, 0.1f);
+    [SerializeField] private int colorMaxMultiplier = 8;
+    [SerializeField] private float growthPerStep = 0.08f;
+    [SerializeField] private int maxGrowthSteps = 8;
+    [SerializeField] private float punchScale = 0.35f;
+    [SerializeField] private float punchDecay = 0.3f;
+    [SerializeField] private float wobbleSpeed = 6f;
+    [SerializeField] private float wobbleDegreesPerStep = 0.6f;
+
     [Header("Animación y Tiempos del Texto")]
     [SerializeField] private float hideDelay = 1.0f;
 
@@ -39,6 +64,12 @@ public class PointsManager : MonoBehaviour
     private Coroutine hideCoroutine;
     private Coroutine scoreAnimCoroutine;
 
+    private Vector3 multiplierBaseScale = Vector3.one;
+    private Quaternion multiplierBaseRotation = Quaternion.identity;
+    private Color multiplierBaseColor = Color.white;
+    private float punch;
+    private int lastMultiplier = -1;
+
     private void Awake()
     {
         if (Instance == null)
@@ -56,22 +87,91 @@ public class PointsManager : MonoBehaviour
             originalScale = scoreText.transform.localScale;
         }
 
+        if (multiplierText != null)
+        {
+            multiplierBaseScale = multiplierText.transform.localScale;
+            multiplierBaseRotation = multiplierText.transform.localRotation;
+            multiplierBaseColor = multiplierText.color;
+
+            if (matchScoreSize) multiplierText.enableAutoSizing = false;
+            if (followScoreText) multiplierText.rectTransform.pivot = new Vector2(0f, 0.5f);
+        }
+
         points = PlayerPrefs.GetInt(SCORE_KEY, 0);
     }
 
     private void Start()
     {
         UpdateScoreUI();
+        UpdateMultiplierUI(false);
 
-        if (scoreText != null)
+        SetScoreVisible(alwaysShowScore);
+    }
+
+    private void Update()
+    {
+        if (multiplierText == null || !multiplierText.gameObject.activeInHierarchy) return;
+
+        punch = Mathf.MoveTowards(punch, 0f, Time.unscaledDeltaTime / Mathf.Max(0.01f, punchDecay));
+        float eased = punch * punch;
+
+        int multiplier = GetMultiplier();
+        int steps = Mathf.Min(multiplier - 1, maxGrowthSteps);
+
+        float growth = 1f + steps * growthPerStep;
+        multiplierText.transform.localScale = multiplierBaseScale * growth * (1f + punchScale * eased);
+
+        float angle = Mathf.Sin(Time.unscaledTime * wobbleSpeed) * steps * wobbleDegreesPerStep;
+        multiplierText.transform.localRotation = multiplierBaseRotation * Quaternion.Euler(0f, 0f, angle);
+
+        float tier = Mathf.InverseLerp(2f, Mathf.Max(3, colorMaxMultiplier), multiplier);
+        Color tierColor = Color.Lerp(multiplierBaseColor, hotColor, tier);
+        multiplierText.color = Color.Lerp(tierColor, Color.white, eased * 0.5f);
+    }
+
+    private void LateUpdate()
+    {
+        FitMultiplierToScore();
+    }
+
+    // Ajusta tamaño y posición del multiplicador al texto de puntos
+    private void FitMultiplierToScore()
+    {
+        if (multiplierText == null || scoreText == null) return;
+        if (!multiplierText.gameObject.activeInHierarchy || !scoreText.gameObject.activeInHierarchy) return;
+        if (!matchScoreSize && !followScoreText) return;
+
+        scoreText.ForceMeshUpdate();
+
+        if (matchScoreSize)
         {
-            scoreText.gameObject.SetActive(alwaysShowScore);
+            multiplierText.enableAutoSizing = false;
+            multiplierText.fontSize = scoreText.fontSize * sizeRatio;
+        }
+
+        // Rect ajustado al contenido para que no haga salto de línea
+        multiplierText.rectTransform.SetSizeWithCurrentAnchors(
+            RectTransform.Axis.Horizontal, multiplierText.preferredWidth);
+
+        if (followScoreText)
+        {
+            Bounds b = scoreText.textBounds;
+            Vector3 rightEdge = scoreText.transform.TransformPoint(new Vector3(b.max.x, b.center.y, 0f));
+
+            RectTransform rt = multiplierText.rectTransform;
+            rt.position = rightEdge;
+            rt.anchoredPosition += new Vector2(spacing, 0f);
         }
     }
 
     public int GetCurrentScore()
     {
         return points;
+    }
+
+    private static int GetMultiplier()
+    {
+        return 1 + LevelLoader.GetConsecutiveLevels();
     }
 
     public void AddPoints(int amount)
@@ -81,7 +181,10 @@ public class PointsManager : MonoBehaviour
         PlayerPrefs.SetInt(SCORE_KEY, points);
         PlayerPrefs.Save();
         UpdateScoreUI();
+        UpdateMultiplierUI(true);
         ShowScore();
+
+        if (amount > 0) punch = Mathf.Max(punch, 0.8f);
     }
 
     public void SpendPoints(int amount)
@@ -102,7 +205,7 @@ public class PointsManager : MonoBehaviour
 
         if (scoreText != null)
         {
-            scoreText.gameObject.SetActive(true);
+            SetScoreVisible(true);
 
             if (hideCoroutine != null)
             {
@@ -161,11 +264,41 @@ public class PointsManager : MonoBehaviour
         }
     }
 
+    private void UpdateMultiplierUI(bool animateChange)
+    {
+        if (multiplierText == null) return;
+
+        int multiplier = GetMultiplier();
+        multiplierText.text = string.Format(multiplierFormat, multiplier);
+
+        if (animateChange && lastMultiplier != -1 && multiplier != lastMultiplier)
+        {
+            punch = 1f;
+        }
+
+        lastMultiplier = multiplier;
+    }
+
+    // Muestra u oculta el marcador y el multiplicador a la vez
+    private void SetScoreVisible(bool visible)
+    {
+        if (scoreText != null)
+        {
+            scoreText.gameObject.SetActive(visible);
+        }
+
+        if (multiplierText != null)
+        {
+            bool showMultiplier = visible && (showAtX1 || GetMultiplier() > 1);
+            multiplierText.gameObject.SetActive(showMultiplier);
+        }
+    }
+
     public void ShowScore()
     {
         if (scoreText != null)
         {
-            scoreText.gameObject.SetActive(true);
+            SetScoreVisible(true);
 
             if (alwaysShowScore) return;
 
@@ -182,9 +315,6 @@ public class PointsManager : MonoBehaviour
         if (alwaysShowScore) yield break;
 
         yield return new WaitForSeconds(hideDelay);
-        if (scoreText != null)
-        {
-            scoreText.gameObject.SetActive(false);
-        }
+        SetScoreVisible(false);
     }
 }

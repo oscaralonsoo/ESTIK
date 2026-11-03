@@ -30,7 +30,7 @@ public class PointCollector : MonoBehaviour
     [SerializeField] private string sortingLayerName = "Default";
     [SerializeField] private int sortingOrder = 100;
 
-    private Camera mainCamera; // Cámara que sigue el juego
+    private Camera mainCamera;
 
     private void Awake()
     {
@@ -58,16 +58,12 @@ public class PointCollector : MonoBehaviour
             PointsManager.Instance.ShowScore();
         }
 
-        // Obtenemos los niveles consecutivos y calculamos el multiplicador:
-        // LevelLoader.GetConsecutiveLevels() arranca en 0 para el primer nivel -> Multiplicador = 1 + 0 = 1 (x1)
-        // Al pasar al segundo nivel consecutivo, consecutiveLevels = 1 -> Multiplicador = 1 + 1 = 2 (x2), y así sucesivamente sin límite.
         int consecutive = LevelLoader.GetConsecutiveLevels();
         int multiplier = 1 + consecutive;
 
         StartCoroutine(SpawnRoutine(worldSpawnPosition, min, max, finalDuration, multiplier));
     }
 
-    // Posición en mundo (según la cámara principal) del punto de la UI visto por la cámara secundaria
     private Vector3 GetTargetWorldPosition()
     {
         Vector2 uiScreenPos = RectTransformUtility.WorldToScreenPoint(secondaryCamera, targetUIPoint.position);
@@ -76,7 +72,6 @@ public class PointCollector : MonoBehaviour
 
     private IEnumerator SpawnRoutine(Vector3 worldSpawnPosition, int min, int max, float flightDuration, int multiplier)
     {
-        // Por si la cámara principal cambia o no existía en Awake
         if (mainCamera == null)
         {
             mainCamera = Camera.main;
