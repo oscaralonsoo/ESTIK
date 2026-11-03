@@ -169,7 +169,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ed4ec68ed1bfb2f41b97db55f168d11a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Immobilizer
-  dampingSpeed: 5
+  dampingSpeed: 15
 --- !u!65 &5144246
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -189,8 +189,8 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 10, y: 20, z: 10}
-  m_Center: {x: 0, y: -10, z: 0}
+  m_Size: {x: 10, y: 100, z: 10}
+  m_Center: {x: 0, y: -51.5, z: 0}
 --- !u!4 &18287295 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4506893718174525145, guid: 2a1a95031a836b440bd89597fc2f6608, type: 3}
@@ -8447,7 +8447,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ed4ec68ed1bfb2f41b97db55f168d11a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Immobilizer
-  dampingSpeed: 5
+  dampingSpeed: 15
 --- !u!65 &697867306
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -8468,7 +8468,7 @@ BoxCollider:
   m_Enabled: 1
   serializedVersion: 3
   m_Size: {x: 10, y: 55.705666, z: 10}
-  m_Center: {x: 0, y: -27.852833, z: 0}
+  m_Center: {x: 0, y: -30.31, z: 0}
 --- !u!1 &699651265
 GameObject:
   m_ObjectHideFlags: 0
