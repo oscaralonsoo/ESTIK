@@ -3,6 +3,8 @@ using UnityEngine;
 public class WaterSplash : MonoBehaviour
 {
     [SerializeField] private GameObject splashPrefab;
+    [SerializeField] private AudioClip splashSound;
+    [SerializeField][Range(0f, 1f)] private float splashVolume = 1f;
     [SerializeField] private float cooldown = 0.25f;
 
     private Collider waterCollider;
@@ -22,5 +24,7 @@ public class WaterSplash : MonoBehaviour
         pos.y = waterCollider.bounds.max.y;
 
         Instantiate(splashPrefab, pos, Quaternion.identity);
+
+        if (splashSound != null) AudioSource.PlayClipAtPoint(splashSound, pos, splashVolume);
     }
 }
