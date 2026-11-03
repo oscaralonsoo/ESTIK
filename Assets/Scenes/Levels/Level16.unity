@@ -440,6 +440,59 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2f4c243c6e9447c489bebedc3da4fbf5, type: 3}
+--- !u!1 &145928757
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 145928759}
+  - component: {fileID: 145928758}
+  m_Layer: 3
+  m_Name: bridge (25)
+  m_TagString: Floor
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!65 &145928758
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 145928757}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 2.71, y: 0.15342337, z: 6.9}
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!4 &145928759
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 145928757}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0.74979734, z: -0, w: -0.66166764}
+  m_LocalPosition: {x: -19.43, y: 0, z: -20.759995}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 600558096}
+  m_LocalEulerAnglesHint: {x: 0, y: -262.854, z: 0}
 --- !u!1001 &157894960
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1239,6 +1292,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: bridge (5)
       objectReference: {fileID: 0}
+    - target: {fileID: 8963665904012989134, guid: a709ad0a41571f846a048d4a4e2cccc3, type: 3}
+      propertyPath: m_Size.z
+      value: 5.93
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -1249,6 +1306,112 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 1548805080850163827, guid: a709ad0a41571f846a048d4a4e2cccc3, type: 3}
   m_PrefabInstance: {fileID: 325461478}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &331538040
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 331538042}
+  - component: {fileID: 331538041}
+  m_Layer: 3
+  m_Name: bridge (15)
+  m_TagString: Floor
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!65 &331538041
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 331538040}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 4.56, y: 0.15342337, z: 6.9}
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!4 &331538042
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 331538040}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: 0.27400514, z: -0, w: 0.9617283}
+  m_LocalPosition: {x: 10.74, y: 0, z: -18.86}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 600558096}
+  m_LocalEulerAnglesHint: {x: 0, y: 31.806, z: 0}
+--- !u!1 &349852539
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 349852541}
+  - component: {fileID: 349852540}
+  m_Layer: 3
+  m_Name: bridge (32)
+  m_TagString: Floor
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!65 &349852540
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 349852539}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1.42, y: 0.15342337, z: 6.9}
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!4 &349852541
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 349852539}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0.62546146, z: -0, w: -0.7802551}
+  m_LocalPosition: {x: -7.12, y: 0, z: -0.4399948}
+  m_LocalScale: {x: 2.1918, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 600558096}
+  m_LocalEulerAnglesHint: {x: 0, y: -282.568, z: 0}
 --- !u!1001 &350079879
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1566,6 +1729,59 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: ac079ef4ed7c20847ba454bc66618947, type: 3}
+--- !u!1 &411437899
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 411437901}
+  - component: {fileID: 411437900}
+  m_Layer: 3
+  m_Name: bridge (30)
+  m_TagString: Floor
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!65 &411437900
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 411437899}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 2.71, y: 0.15342337, z: 6.9}
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!4 &411437901
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 411437899}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: 0.5180489, z: -0, w: -0.85535103}
+  m_LocalPosition: {x: -2.7199998, y: 0, z: 1.0699997}
+  m_LocalScale: {x: 2.1918004, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 600558096}
+  m_LocalEulerAnglesHint: {x: 0, y: -422.403, z: 0}
 --- !u!1001 &414278286
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1628,6 +1844,59 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 1656431582983312452, guid: ba05897d575aa28458ca1a44c4f1a02e, type: 3}
   m_PrefabInstance: {fileID: 414278286}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &421924220
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 421924222}
+  - component: {fileID: 421924221}
+  m_Layer: 3
+  m_Name: bridge (39)
+  m_TagString: Floor
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!65 &421924221
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 421924220}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1.23, y: 0.15342337, z: 4.95}
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!4 &421924222
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 421924220}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: 0.38323003, z: -0, w: -0.923653}
+  m_LocalPosition: {x: -4.43, y: 0, z: 7.090004}
+  m_LocalScale: {x: 2.1918, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 600558096}
+  m_LocalEulerAnglesHint: {x: 0, y: -405.068, z: 0}
 --- !u!1001 &423501868
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1698,6 +1967,59 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 4506893718174525145, guid: 99e332436e207054093b4917f7d9f3e6, type: 3}
   m_PrefabInstance: {fileID: 423501868}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &424415101
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 424415103}
+  - component: {fileID: 424415102}
+  m_Layer: 3
+  m_Name: bridge (34)
+  m_TagString: Floor
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!65 &424415102
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 424415101}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1.42, y: 0.15342337, z: 4.95}
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!4 &424415103
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 424415101}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: 0.35748488, z: -0, w: -0.933919}
+  m_LocalPosition: {x: -6.5599995, y: 0, z: -0.44999695}
+  m_LocalScale: {x: 2.1918, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 600558096}
+  m_LocalEulerAnglesHint: {x: 0, y: -401.892, z: 0}
 --- !u!1001 &436726667
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1824,6 +2146,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: bridge (4)
       objectReference: {fileID: 0}
+    - target: {fileID: 8963665904012989134, guid: a709ad0a41571f846a048d4a4e2cccc3, type: 3}
+      propertyPath: m_Size.z
+      value: 5.93
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -1896,6 +2222,112 @@ Transform:
   - {fileID: 1923079747}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &468971378
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 468971380}
+  - component: {fileID: 468971379}
+  m_Layer: 3
+  m_Name: bridge (42)
+  m_TagString: Floor
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!65 &468971379
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 468971378}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1.9, y: 0.15342337, z: 6.3}
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!4 &468971380
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 468971378}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: 0.019938666, z: -0, w: -0.9998013}
+  m_LocalPosition: {x: -3.2199998, y: 0, z: 5.630005}
+  m_LocalScale: {x: 2.1917999, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 600558096}
+  m_LocalEulerAnglesHint: {x: 0, y: -362.285, z: 0}
+--- !u!1 &478924387
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 478924389}
+  - component: {fileID: 478924388}
+  m_Layer: 3
+  m_Name: bridge (26)
+  m_TagString: Floor
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!65 &478924388
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 478924387}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 2.71, y: 0.15342337, z: 6.9}
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!4 &478924389
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 478924387}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0.36612236, z: -0, w: -0.9305667}
+  m_LocalPosition: {x: -19.67, y: 0, z: -20.089996}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 600558096}
+  m_LocalEulerAnglesHint: {x: 0, y: -317.047, z: 0}
 --- !u!1001 &481563704
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2094,6 +2526,59 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 4914658034805795186, guid: f0a73018af1faac43a3c2b309d59e982, type: 3}
   m_PrefabInstance: {fileID: 509450961}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &526087530
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 526087532}
+  - component: {fileID: 526087531}
+  m_Layer: 3
+  m_Name: bridge (13)
+  m_TagString: Floor
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!65 &526087531
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 526087530}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 4.56, y: 0.15342337, z: 6.9}
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!4 &526087532
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 526087530}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0.7763558, z: -0, w: 0.63029504}
+  m_LocalPosition: {x: 10.75, y: 0, z: -21.939995}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 600558096}
+  m_LocalEulerAnglesHint: {x: 0, y: -101.856, z: 0}
 --- !u!4 &527628131 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 2411245687927102208, guid: e774fcf81796dbc468edb10e2b459979, type: 3}
@@ -2154,6 +2639,10 @@ PrefabInstance:
     - target: {fileID: 2176829266607780553, guid: a709ad0a41571f846a048d4a4e2cccc3, type: 3}
       propertyPath: m_Name
       value: bridge (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: 8963665904012989134, guid: a709ad0a41571f846a048d4a4e2cccc3, type: 3}
+      propertyPath: m_Size.z
+      value: 5.93
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -2321,6 +2810,127 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 2543729288835279342, guid: a8f5475887596774ebca5babb41e37c5, type: 3}
   m_PrefabInstance: {fileID: 551289110}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &567618286
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 567618288}
+  - component: {fileID: 567618287}
+  m_Layer: 3
+  m_Name: bridge (27)
+  m_TagString: Floor
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!65 &567618287
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 567618286}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 2.71, y: 0.15342337, z: 6.9}
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!4 &567618288
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 567618286}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0.29545838, z: -0, w: -0.95535564}
+  m_LocalPosition: {x: -18.57, y: 0, z: -20.809998}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 600558096}
+  m_LocalEulerAnglesHint: {x: 0, y: -325.63, z: 0}
+--- !u!1 &600558095
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 600558096}
+  m_Layer: 0
+  m_Name: Floor
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &600558096
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 600558095}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 9.82, y: 5, z: -78.83}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 2004475539722980408}
+  - {fileID: 973154347}
+  - {fileID: 1306474393}
+  - {fileID: 1901073891}
+  - {fileID: 1290177318}
+  - {fileID: 1884352316}
+  - {fileID: 1351452613}
+  - {fileID: 526087532}
+  - {fileID: 1246246028}
+  - {fileID: 331538042}
+  - {fileID: 1208458016}
+  - {fileID: 1215538873}
+  - {fileID: 684598179}
+  - {fileID: 613413430}
+  - {fileID: 1001875577}
+  - {fileID: 2050182612}
+  - {fileID: 1737320462}
+  - {fileID: 632766993}
+  - {fileID: 767397646}
+  - {fileID: 145928759}
+  - {fileID: 478924389}
+  - {fileID: 567618288}
+  - {fileID: 1600085691}
+  - {fileID: 1567893246}
+  - {fileID: 468971380}
+  - {fileID: 411437901}
+  - {fileID: 1640552426}
+  - {fileID: 349852541}
+  - {fileID: 1509642682}
+  - {fileID: 424415103}
+  - {fileID: 807971307}
+  - {fileID: 1745141003}
+  - {fileID: 1218517704}
+  - {fileID: 421924222}
+  - {fileID: 945558815}
+  - {fileID: 1901738978}
+  - {fileID: 1413522142}
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &610667218
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2383,6 +2993,59 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 1699753804648703828, guid: b9a8a92d9e5e0fb4da5855a52d9565cc, type: 3}
   m_PrefabInstance: {fileID: 610667218}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &613413428
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 613413430}
+  - component: {fileID: 613413429}
+  m_Layer: 3
+  m_Name: bridge (19)
+  m_TagString: Floor
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!65 &613413429
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 613413428}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 2.76, y: 0.15342337, z: 6.9}
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!4 &613413430
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 613413428}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0.75479406, z: -0, w: 0.65596193}
+  m_LocalPosition: {x: -16.92, y: 0, z: -19.54}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 600558096}
+  m_LocalEulerAnglesHint: {x: 0, y: -98.015, z: 0}
 --- !u!1001 &627393163
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2457,6 +3120,59 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 4506893718174525145, guid: 99e332436e207054093b4917f7d9f3e6, type: 3}
   m_PrefabInstance: {fileID: 627393163}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &632766991
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 632766993}
+  - component: {fileID: 632766992}
+  m_Layer: 3
+  m_Name: bridge (23)
+  m_TagString: Floor
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!65 &632766992
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 632766991}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 2.71, y: 0.15342337, z: 6.9}
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!4 &632766993
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 632766991}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0.9545978, z: -0, w: -0.2978979}
+  m_LocalPosition: {x: -19.18, y: 0, z: -18.599998}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 600558096}
+  m_LocalEulerAnglesHint: {x: 0, y: -214.663, z: 0}
 --- !u!1001 &662994877
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2589,6 +3305,59 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 1699753804648703828, guid: b9a8a92d9e5e0fb4da5855a52d9565cc, type: 3}
   m_PrefabInstance: {fileID: 670905932}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &684598177
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 684598179}
+  - component: {fileID: 684598178}
+  m_Layer: 3
+  m_Name: bridge (18)
+  m_TagString: Floor
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!65 &684598178
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 684598177}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 2.57, y: 0.15342337, z: 4.68}
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!4 &684598179
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 684598177}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0.16223407, z: -0, w: 0.98675233}
+  m_LocalPosition: {x: 9.99, y: 0, z: -17.330002}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 600558096}
+  m_LocalEulerAnglesHint: {x: 0, y: -18.673, z: 0}
 --- !u!1001 &692715189
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2798,6 +3567,59 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 2351081354668248264, guid: 69fe637c90e06184fbeaaf7389710866, type: 3}
   m_PrefabInstance: {fileID: 767386364}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &767397644
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 767397646}
+  - component: {fileID: 767397645}
+  m_Layer: 3
+  m_Name: bridge (24)
+  m_TagString: Floor
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!65 &767397645
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 767397644}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 2.71, y: 0.15342337, z: 6.9}
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!4 &767397646
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 767397644}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0.7823231, z: -0, w: -0.6228729}
+  m_LocalPosition: {x: -19.18, y: 0, z: -18.599998}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 600558096}
+  m_LocalEulerAnglesHint: {x: 0, y: -257.052, z: 0}
 --- !u!1001 &771595774
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2853,6 +3675,10 @@ PrefabInstance:
     - target: {fileID: 2176829266607780553, guid: a709ad0a41571f846a048d4a4e2cccc3, type: 3}
       propertyPath: m_Name
       value: bridge (2)
+      objectReference: {fileID: 0}
+    - target: {fileID: 8963665904012989134, guid: a709ad0a41571f846a048d4a4e2cccc3, type: 3}
+      propertyPath: m_Size.z
+      value: 5.93
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -2942,6 +3768,59 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 2543729288835279342, guid: a8f5475887596774ebca5babb41e37c5, type: 3}
   m_PrefabInstance: {fileID: 782149029}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &807971305
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 807971307}
+  - component: {fileID: 807971306}
+  m_Layer: 3
+  m_Name: bridge (35)
+  m_TagString: Floor
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!65 &807971306
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 807971305}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1.23, y: 0.15342337, z: 4.95}
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!4 &807971307
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 807971305}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: 0.26333454, z: -0, w: -0.96470463}
+  m_LocalPosition: {x: -0.21999931, y: 0, z: -0.65999603}
+  m_LocalScale: {x: 2.1918, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 600558096}
+  m_LocalEulerAnglesHint: {x: 0, y: -390.536, z: 0}
 --- !u!1001 &817408071
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -3696,6 +4575,59 @@ Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 0b1f82de5b77f8d4094c8526f5e65ed5, type: 3}
   m_PrefabInstance: {fileID: 1770660114}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &945558813
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 945558815}
+  - component: {fileID: 945558814}
+  m_Layer: 3
+  m_Name: bridge (40)
+  m_TagString: Floor
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!65 &945558814
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 945558813}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1.05, y: 0.15342337, z: 4.95}
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!4 &945558815
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 945558813}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: 0.070112266, z: -0, w: -0.9975391}
+  m_LocalPosition: {x: -3.87, y: 0, z: 7.470001}
+  m_LocalScale: {x: 2.1918, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 600558096}
+  m_LocalEulerAnglesHint: {x: 0, y: -368.04102, z: 0}
 --- !u!1001 &948690197
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -3751,6 +4683,10 @@ PrefabInstance:
     - target: {fileID: 2176829266607780553, guid: a709ad0a41571f846a048d4a4e2cccc3, type: 3}
       propertyPath: m_Name
       value: bridge (3)
+      objectReference: {fileID: 0}
+    - target: {fileID: 8963665904012989134, guid: a709ad0a41571f846a048d4a4e2cccc3, type: 3}
+      propertyPath: m_Size.z
+      value: 5.93
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -3948,6 +4884,59 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 7087785167000792382, guid: 1bd96fda64aa0d94a95101598383d0f1, type: 3}
   m_PrefabInstance: {fileID: 966895612}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &973154345
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 973154347}
+  - component: {fileID: 973154346}
+  m_Layer: 3
+  m_Name: bridge (7)
+  m_TagString: Floor
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!65 &973154346
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 973154345}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 5.33, y: 0.15342337, z: 6.9}
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!4 &973154347
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 973154345}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0.54614514, z: -0, w: 0.8376906}
+  m_LocalPosition: {x: -4.2099996, y: 0, z: -39.82}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 600558096}
+  m_LocalEulerAnglesHint: {x: 0, y: -66.206, z: 0}
 --- !u!1001 &983003599
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -4010,6 +4999,59 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 1656431582983312452, guid: ba05897d575aa28458ca1a44c4f1a02e, type: 3}
   m_PrefabInstance: {fileID: 983003599}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1001875575
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1001875577}
+  - component: {fileID: 1001875576}
+  m_Layer: 3
+  m_Name: bridge (20)
+  m_TagString: Floor
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!65 &1001875576
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1001875575}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 2.76, y: 0.15342337, z: 6.9}
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!4 &1001875577
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1001875575}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0.938319, z: -0, w: 0.34577084}
+  m_LocalPosition: {x: -16.92, y: 0, z: -19.54}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 600558096}
+  m_LocalEulerAnglesHint: {x: 0, y: -139.542, z: 0}
 --- !u!1001 &1009568419
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -4760,6 +5802,218 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: ac079ef4ed7c20847ba454bc66618947, type: 3}
+--- !u!1 &1208458014
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1208458016}
+  - component: {fileID: 1208458015}
+  m_Layer: 3
+  m_Name: bridge (16)
+  m_TagString: Floor
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!65 &1208458015
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1208458014}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 2.57, y: 0.15342337, z: 4.68}
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!4 &1208458016
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1208458014}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0.46878704, z: -0, w: 0.8833113}
+  m_LocalPosition: {x: 9.309999, y: 0, z: -17.779999}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 600558096}
+  m_LocalEulerAnglesHint: {x: 0, y: -55.911, z: 0}
+--- !u!1 &1215538871
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1215538873}
+  - component: {fileID: 1215538872}
+  m_Layer: 3
+  m_Name: bridge (17)
+  m_TagString: Floor
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!65 &1215538872
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1215538871}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 2.57, y: 0.15342337, z: 4.68}
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!4 &1215538873
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1215538871}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0.46878704, z: -0, w: 0.8833113}
+  m_LocalPosition: {x: 9.309999, y: 0, z: -17.779999}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 600558096}
+  m_LocalEulerAnglesHint: {x: 0, y: -55.911, z: 0}
+--- !u!1 &1218517702
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1218517704}
+  - component: {fileID: 1218517703}
+  m_Layer: 3
+  m_Name: bridge (38)
+  m_TagString: Floor
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!65 &1218517703
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1218517702}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1.23, y: 0.15342337, z: 4.95}
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!4 &1218517704
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1218517702}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: 0.550271, z: -0, w: -0.83498615}
+  m_LocalPosition: {x: -1.8999996, y: 0, z: -1.1899948}
+  m_LocalScale: {x: 2.1918, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 600558096}
+  m_LocalEulerAnglesHint: {x: 0, y: -426.771, z: 0}
+--- !u!1 &1246246026
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1246246028}
+  - component: {fileID: 1246246027}
+  m_Layer: 3
+  m_Name: bridge (14)
+  m_TagString: Floor
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!65 &1246246027
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1246246026}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 4.56, y: 0.15342337, z: 6.9}
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!4 &1246246028
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1246246026}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0.33082768, z: -0, w: 0.9436912}
+  m_LocalPosition: {x: 10.74, y: 0, z: -18.86}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 600558096}
+  m_LocalEulerAnglesHint: {x: 0, y: -38.638, z: 0}
 --- !u!1001 &1259242151
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -4900,6 +6154,59 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 2577027150780134994, guid: ef6908ab5cabf8e43b672215dfb412e4, type: 3}
   m_PrefabInstance: {fileID: 1289298228}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1290177316
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1290177318}
+  - component: {fileID: 1290177317}
+  m_Layer: 3
+  m_Name: bridge (10)
+  m_TagString: Floor
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!65 &1290177317
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1290177316}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 5.33, y: 0.15342337, z: 6.9}
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!4 &1290177318
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1290177316}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0.65993464, z: -0, w: 0.75132304}
+  m_LocalPosition: {x: -2.3199997, y: 0, z: -31.699997}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 600558096}
+  m_LocalEulerAnglesHint: {x: 0, y: -82.59, z: 0}
 --- !u!4 &1291993411 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: ac079ef4ed7c20847ba454bc66618947, type: 3}
@@ -4972,6 +6279,59 @@ Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 2f4c243c6e9447c489bebedc3da4fbf5, type: 3}
   m_PrefabInstance: {fileID: 131569803}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1306474391
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1306474393}
+  - component: {fileID: 1306474392}
+  m_Layer: 3
+  m_Name: bridge (8)
+  m_TagString: Floor
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!65 &1306474392
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1306474391}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 5.33, y: 0.15342337, z: 6.9}
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!4 &1306474393
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1306474391}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0.13668005, z: -0, w: 0.99061525}
+  m_LocalPosition: {x: -6.1299996, y: 0, z: -37.21}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 600558096}
+  m_LocalEulerAnglesHint: {x: 0, y: -15.712, z: 0}
 --- !u!1001 &1311489889
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -5223,6 +6583,59 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 467ab9f1c6a06274aad8497f866f0c8f, type: 3}
+--- !u!1 &1351452611
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1351452613}
+  - component: {fileID: 1351452612}
+  m_Layer: 3
+  m_Name: bridge (12)
+  m_TagString: Floor
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!65 &1351452612
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1351452611}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 5.33, y: 0.15342337, z: 6.9}
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!4 &1351452613
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1351452611}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0.62634045, z: -0, w: 0.7795497}
+  m_LocalPosition: {x: 0.64000034, y: 0, z: -35.85}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 600558096}
+  m_LocalEulerAnglesHint: {x: 0, y: -77.561, z: 0}
 --- !u!1001 &1372720472
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -5478,6 +6891,59 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 4506893718174525145, guid: 99e332436e207054093b4917f7d9f3e6, type: 3}
   m_PrefabInstance: {fileID: 1406087931}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1413522140
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1413522142}
+  - component: {fileID: 1413522141}
+  m_Layer: 3
+  m_Name: bridge (37)
+  m_TagString: Floor
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!65 &1413522141
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1413522140}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1.23, y: 0.15342337, z: 4.95}
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!4 &1413522142
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1413522140}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: 0.8071807, z: -0, w: -0.59030443}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 2.1918, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 600558096}
+  m_LocalEulerAnglesHint: {x: 0, y: -467.643, z: 0}
 --- !u!4 &1424052712 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 530d676008404a3419f009e2bb008f50, type: 3}
@@ -5612,6 +7078,112 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 3959738128320903800, guid: 6610b80d7ffebdc43b018635fe6f9958, type: 3}
   m_PrefabInstance: {fileID: 1495474993}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1509642680
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1509642682}
+  - component: {fileID: 1509642681}
+  m_Layer: 3
+  m_Name: bridge (33)
+  m_TagString: Floor
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!65 &1509642681
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1509642680}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1.42, y: 0.15342337, z: 4.95}
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!4 &1509642682
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1509642680}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: 0.021343425, z: -0, w: -0.99977225}
+  m_LocalPosition: {x: -7.6699996, y: 0, z: -0.80999756}
+  m_LocalScale: {x: 2.1918004, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 600558096}
+  m_LocalEulerAnglesHint: {x: 0, y: -362.446, z: 0}
+--- !u!1 &1567893244
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1567893246}
+  - component: {fileID: 1567893245}
+  m_Layer: 3
+  m_Name: bridge (29)
+  m_TagString: Floor
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!65 &1567893245
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1567893244}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 2.71, y: 0.15342337, z: 6.3}
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!4 &1567893246
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1567893244}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: 0.019938666, z: -0, w: -0.9998013}
+  m_LocalPosition: {x: -4.0399995, y: 0, z: 4.840004}
+  m_LocalScale: {x: 2.1917999, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 600558096}
+  m_LocalEulerAnglesHint: {x: 0, y: -362.285, z: 0}
 --- !u!1001 &1596608730
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -5674,6 +7246,59 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 4506893718174525145, guid: 99e332436e207054093b4917f7d9f3e6, type: 3}
   m_PrefabInstance: {fileID: 1596608730}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1600085689
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1600085691}
+  - component: {fileID: 1600085690}
+  m_Layer: 3
+  m_Name: bridge (28)
+  m_TagString: Floor
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!65 &1600085690
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1600085689}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 2.71, y: 0.15342337, z: 6.9}
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!4 &1600085691
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1600085689}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: 0.108895965, z: -0, w: -0.99405324}
+  m_LocalPosition: {x: -18.73, y: 0, z: -20.729996}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 600558096}
+  m_LocalEulerAnglesHint: {x: 0, y: -372.503, z: 0}
 --- !u!1001 &1613424047
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -5736,6 +7361,59 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 4506893718174525145, guid: 99e332436e207054093b4917f7d9f3e6, type: 3}
   m_PrefabInstance: {fileID: 1613424047}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1640552424
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1640552426}
+  - component: {fileID: 1640552425}
+  m_Layer: 3
+  m_Name: bridge (31)
+  m_TagString: Floor
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!65 &1640552425
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1640552424}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 2.71, y: 0.15342337, z: 6.9}
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!4 &1640552426
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1640552424}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0.35184556, z: -0, w: -0.93605804}
+  m_LocalPosition: {x: -6.0599995, y: 0, z: 0.9700012}
+  m_LocalScale: {x: 2.1918, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 600558096}
+  m_LocalEulerAnglesHint: {x: 0, y: -318.799, z: 0}
 --- !u!1001 &1653426647
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -5984,6 +7662,112 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 2887461977373505091, guid: 9a97e1d02e77d764eae1e45a216ce4bf, type: 3}
   m_PrefabInstance: {fileID: 1734897910}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1737320460
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1737320462}
+  - component: {fileID: 1737320461}
+  m_Layer: 3
+  m_Name: bridge (22)
+  m_TagString: Floor
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!65 &1737320461
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1737320460}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 2.21, y: 0.15342337, z: 6.9}
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!4 &1737320462
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1737320460}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0.9989764, z: -0, w: -0.04523491}
+  m_LocalPosition: {x: -18.75, y: 0, z: -18.36}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 600558096}
+  m_LocalEulerAnglesHint: {x: 0, y: -185.185, z: 0}
+--- !u!1 &1745141001
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1745141003}
+  - component: {fileID: 1745141002}
+  m_Layer: 3
+  m_Name: bridge (36)
+  m_TagString: Floor
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!65 &1745141002
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1745141001}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1.23, y: 0.15342337, z: 4.95}
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!4 &1745141003
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1745141001}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: 0.57509845, z: -0, w: -0.8180842}
+  m_LocalPosition: {x: 0.07000065, y: 0, z: -0.7799988}
+  m_LocalScale: {x: 2.1918004, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 600558096}
+  m_LocalEulerAnglesHint: {x: 0, y: -430.213, z: 0}
 --- !u!1001 &1746387825
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -6913,6 +8697,59 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 4506893718174525145, guid: 99e332436e207054093b4917f7d9f3e6, type: 3}
   m_PrefabInstance: {fileID: 1883383765}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1884352314
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1884352316}
+  - component: {fileID: 1884352315}
+  m_Layer: 3
+  m_Name: bridge (11)
+  m_TagString: Floor
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!65 &1884352315
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1884352314}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 5.33, y: 0.15342337, z: 6.9}
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!4 &1884352316
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1884352314}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0.8760517, z: -0, w: 0.4822172}
+  m_LocalPosition: {x: 0.32000065, y: 0, z: -34.019997}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 600558096}
+  m_LocalEulerAnglesHint: {x: 0, y: -122.339, z: 0}
 --- !u!1001 &1891197237
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -6975,6 +8812,112 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 1964854386455668315, guid: dd37a62ff805e4e488a6779a11dcb24b, type: 3}
   m_PrefabInstance: {fileID: 1891197237}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1901073889
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1901073891}
+  - component: {fileID: 1901073890}
+  m_Layer: 3
+  m_Name: bridge (9)
+  m_TagString: Floor
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!65 &1901073890
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1901073889}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 5.33, y: 0.15342337, z: 6.9}
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!4 &1901073891
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1901073889}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: 0.32319057, z: -0, w: 0.94633394}
+  m_LocalPosition: {x: -5.3099995, y: 0, z: -33.18}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 600558096}
+  m_LocalEulerAnglesHint: {x: 0, y: 37.712, z: 0}
+--- !u!1 &1901738976
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1901738978}
+  - component: {fileID: 1901738977}
+  m_Layer: 3
+  m_Name: bridge (41)
+  m_TagString: Floor
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!65 &1901738977
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1901738976}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1.05, y: 0.15342337, z: 4.95}
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!4 &1901738978
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1901738976}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0.31797782, z: -0, w: -0.9480982}
+  m_LocalPosition: {x: -3.7099996, y: 0, z: 7.5}
+  m_LocalScale: {x: 2.1918, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 600558096}
+  m_LocalEulerAnglesHint: {x: 0, y: -322.919, z: 0}
 --- !u!1001 &1906800009
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -7491,6 +9434,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: bridge
       objectReference: {fileID: 0}
+    - target: {fileID: 8963665904012989134, guid: a709ad0a41571f846a048d4a4e2cccc3, type: 3}
+      propertyPath: m_Size.z
+      value: 5.93
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -7571,6 +9518,59 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 4506893718174525145, guid: 99e332436e207054093b4917f7d9f3e6, type: 3}
   m_PrefabInstance: {fileID: 2048429808}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &2050182610
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2050182612}
+  - component: {fileID: 2050182611}
+  m_Layer: 3
+  m_Name: bridge (21)
+  m_TagString: Floor
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!65 &2050182611
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2050182610}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 2.76, y: 0.15342337, z: 6.9}
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!4 &2050182612
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2050182610}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0.95787036, z: -0, w: 0.28720093}
+  m_LocalPosition: {x: -18.75, y: 0, z: -18.36}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 600558096}
+  m_LocalEulerAnglesHint: {x: 0, y: -146.619, z: 0}
 --- !u!1001 &2068467079
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -7984,6 +9984,59 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 4506893718174525145, guid: 99e332436e207054093b4917f7d9f3e6, type: 3}
   m_PrefabInstance: {fileID: 2135354710}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1196413024208262786
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2004475539722980408}
+  - component: {fileID: 8271550402214278789}
+  m_Layer: 3
+  m_Name: bridge (6)
+  m_TagString: Floor
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2004475539722980408
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1196413024208262786}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0.26099575, z: -0, w: 0.96533996}
+  m_LocalPosition: {x: -1.6199999, y: 0, z: -39.159996}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 600558096}
+  m_LocalEulerAnglesHint: {x: 0, y: -30.258, z: 0}
+--- !u!65 &8271550402214278789
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1196413024208262786}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 5.33, y: 0.15342337, z: 6.9}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
@@ -7993,3 +10046,4 @@ SceneRoots:
   - {fileID: 1860045562}
   - {fileID: 465299996}
   - {fileID: 1112987903}
+  - {fileID: 600558096}
