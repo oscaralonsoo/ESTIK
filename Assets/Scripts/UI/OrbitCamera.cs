@@ -5,21 +5,37 @@ public class OrbitCamera : MonoBehaviour
     public Transform target;
     public float radius = 40f;
     public float height = 15f;
-    public float speed = 8f;         
-    public float bobAmount = 2f;   
+    public float speed = 8f;
+    public float bobAmount = 2f;
     public float bobSpeed = 0.3f;
-    public float lookHeight = 2f;   
+    public float lookHeight = 2f;
 
     float angle;
+    bool started;
 
     void Start()
     {
         Vector3 offset = transform.position - target.position;
         angle = Mathf.Atan2(offset.z, offset.x) * Mathf.Rad2Deg;
+        started = true;
+    }
+
+    public void SetTarget(Transform newTarget, float newRadius, float newHeight, float newLookHeight)
+    {
+        if (newTarget == null) return;
+
+        target = newTarget;
+        radius = newRadius;
+        height = newHeight;
+        lookHeight = newLookHeight;
+
+        if (started) LateUpdate();
     }
 
     void LateUpdate()
     {
+        if (target == null) return;
+
         angle += speed * Time.unscaledDeltaTime;
         float rad = angle * Mathf.Deg2Rad;
         float y = height + Mathf.Sin(Time.unscaledTime * bobSpeed) * bobAmount;

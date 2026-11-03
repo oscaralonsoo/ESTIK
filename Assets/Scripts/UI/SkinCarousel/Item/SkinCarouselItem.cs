@@ -55,11 +55,6 @@ public class SkinCarouselItem : MonoBehaviour
             ball = ballRenderer.transform;
 
         _valid = ball != null && ballRenderer != null;
-        if (!_valid)
-        {
-            Debug.LogError("SkinCarouselItem: el prefab necesita una bola 3D hija con MeshRenderer", this);
-            return;
-        }
 
         _baseBallScale = ball.localScale;
 
@@ -135,8 +130,6 @@ public class SkinCarouselItem : MonoBehaviour
     {
         if (data.ballMaterial != null)
             ballRenderer.sharedMaterial = data.ballMaterial;
-        else
-            Debug.LogWarning($"Skin '{data.id}' no tiene Ball Material asignado", data);
     }
 
     public void PlayReceivePulse()

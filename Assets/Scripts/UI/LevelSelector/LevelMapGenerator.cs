@@ -1,5 +1,7 @@
+锘縰sing System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class LevelMapGenerator : MonoBehaviour
 {
@@ -17,33 +19,57 @@ public class LevelMapGenerator : MonoBehaviour
     public Transform pathParent;
     public Transform recordParent;
 
-    [Header("Configuraci髇 del record")]
+    [Header("Selecci贸n / Scroll")]
+    public ScrollRect scrollRect;
+    public float centerDuration = 0.5f;
+    public GameObject outlinePrefab;
+    public Transform outlineParent;
+    public float outlineFadeDuration = 0.2f;
+
+    [Header("Configuraci贸n del record")]
     public float recordPadding = 300f;
 
-    [Header("Configuraci髇 del Selector")]
+    [Header("Configuraci贸n del Selector")]
     public int maxLevels = 50;
     public int showEveryNumLevels = 5;
     public float levelPadding = 250f;
     public float maxHorizontalOffset = 150f;
     public float lvlsTopAndBottonPadding = 100f;
 
-    [Header("Configuraci髇 del Bkg")]
+    [Header("Configuraci贸n del Bkg")]
     public float bkgTopAndBottonPadding = 100f;
 
-    [Header("Generaci髇 Procedural")]
+    [Header("Generaci贸n Procedural")]
     public int mapSeed = 12345;
 
-    [Header("Configuraci髇 del Trazado Curvo")]
-    [Tooltip("Distancia en p韝eles entre cada segmento de trazo")]
+    [Header("Configuraci贸n del Trazado Curvo")]
     public float segmentSpacing = 25f;
-    [Tooltip("Puntos intermedios para suavizar la curva entre dos niveles")]
     public int pointsPerSegment = 20;
 
     private List<Vector3> nodePositions = new List<Vector3>();
+    private readonly Dictionary<int, LevelIcon> icons = new Dictionary<int, LevelIcon>();
 
     private float panelHeight = 0;
-
     private int record = 20;
+
+    private LevelIcon selected;
+    private Transform outline;
+    private CanvasGroup outlineGroup;
+    private Coroutine centerRoutine;
+    private Coroutine outlineRoutine;
+    private bool generated;
+
+    void OnEnable()
+    {
+        LevelIcon.Selected += HandleSelected;
+
+        if (generated) CenterOn(selected, true);
+    }
+
+    void OnDisable()
+    {
+        LevelIcon.Selected -= HandleSelected;
+    }
 
     void Start()
     {
@@ -55,15 +81,136 @@ public class LevelMapGenerator : MonoBehaviour
         GenerateBackground();
         GenerateNodes();
         GenerateCurvedPath();
+        generated = true;
+
+        SelectInitial();
     }
 
+    void SelectInitial()
+    {
+        int sel = PlayerPrefs.GetInt("SelectedLevel", 0);
+        int key = (sel / showEveryNumLevels) * showEveryNumLevels;
+
+        if (!icons.TryGetValue(key, out LevelIcon icon))
+            icons.TryGetValue(0, out icon);
+
+        if (icon == null) return;
+
+        selected = icon;
+        CenterOn(selected, true);
+    }
+
+    void HandleSelected(LevelIcon icon)
+    {
+        selected = icon;
+        MoveOutlineWithFade(icon);
+        CenterOn(selected, false);
+    }
+    void EnsureOutline()
+    {
+        if (outline != null || outlinePrefab == null) return;
+
+        Transform parent = outlineParent != null ? outlineParent : contentParent;
+        outline = Instantiate(outlinePrefab, parent).transform;
+        outline.name = "SelectionOutline";
+
+        outlineGroup = outline.GetComponent<CanvasGroup>();
+        if (outlineGroup == null) outlineGroup = outline.gameObject.AddComponent<CanvasGroup>();
+        outlineGroup.interactable = false;
+        outlineGroup.blocksRaycasts = false;
+    }
+    void PlaceOutline(LevelIcon icon)
+    {
+        if (icon == null) return;
+
+        EnsureOutline();
+        if (outline == null) return;
+
+        if (outlineRoutine != null) StopCoroutine(outlineRoutine);
+        outline.position = icon.transform.position;
+        outlineGroup.alpha = 1f;
+    }
+    void MoveOutlineWithFade(LevelIcon icon)
+    {
+        if (icon == null) return;
+
+        EnsureOutline();
+        if (outline == null) return;
+
+        if (outlineRoutine != null) StopCoroutine(outlineRoutine);
+        outlineRoutine = StartCoroutine(OutlineFadeRoutine(icon));
+    }
+
+    IEnumerator OutlineFadeRoutine(LevelIcon icon)
+    {
+        yield return FadeOutline(outlineGroup.alpha, 0f);
+        outline.position = icon.transform.position;
+        yield return FadeOutline(0f, 1f);
+    }
+
+    IEnumerator FadeOutline(float from, float to)
+    {
+        float duration = Mathf.Max(0.01f, outlineFadeDuration);
+        float t = 0f;
+        while (t < 1f)
+        {
+            t += Time.unscaledDeltaTime / duration;
+            outlineGroup.alpha = Mathf.Lerp(from, to, t);
+            yield return null;
+        }
+        outlineGroup.alpha = to;
+    }
+    void CenterOn(LevelIcon icon, bool instant)
+    {
+        if (icon == null || scrollRect == null || !isActiveAndEnabled) return;
+
+        if (centerRoutine != null) StopCoroutine(centerRoutine);
+        centerRoutine = StartCoroutine(CenterRoutine(icon, instant));
+    }
+
+    IEnumerator CenterRoutine(LevelIcon icon, bool instant)
+    {
+
+        yield return null;
+        if (instant) PlaceOutline(icon);
+
+        RectTransform content = scrollRect.content;
+        RectTransform viewport = scrollRect.viewport != null
+            ? scrollRect.viewport
+            : (RectTransform)scrollRect.transform;
+
+        float scrollable = content.rect.height - viewport.rect.height;
+        if (scrollable <= 0f) yield break;
+
+        float nodeFromBottom = content.InverseTransformPoint(icon.transform.position).y - content.rect.yMin;
+        float target = Mathf.Clamp01((nodeFromBottom - viewport.rect.height * 0.5f) / scrollable);
+
+        scrollRect.StopMovement();
+
+        if (instant || centerDuration <= 0f)
+        {
+            scrollRect.verticalNormalizedPosition = target;
+            yield break;
+        }
+
+        float start = scrollRect.verticalNormalizedPosition;
+        float t = 0f;
+        while (t < 1f)
+        {
+            t += Time.unscaledDeltaTime / centerDuration;
+            scrollRect.verticalNormalizedPosition = Mathf.Lerp(start, target, Mathf.SmoothStep(0f, 1f, t));
+            yield return null;
+        }
+        scrollRect.verticalNormalizedPosition = target;
+    }
     void GenerateNodes()
     {
         Random.InitState(mapSeed);
         nodePositions.Clear();
+        icons.Clear();
 
         float levelStartPosY = lvlsTopAndBottonPadding;
-        float levelEndPosY = panelHeight-lvlsTopAndBottonPadding;
+        float levelEndPosY = panelHeight - lvlsTopAndBottonPadding;
 
         int totalLevels = maxLevels / showEveryNumLevels;
         float totalLevelHeight = levelEndPosY - levelStartPosY;
@@ -97,9 +244,10 @@ public class LevelMapGenerator : MonoBehaviour
             {
                 levelIcon.SetLevel(i);
                 if (i <= record) levelIcon.UnlockLevel();
+                icons[i] = levelIcon;
             }
 
-            if (record >= i && record < i +5)
+            if (record >= i && record < i + showEveryNumLevels)
             {
                 GameObject recordObj = Instantiate(recordPrefab, recordParent);
                 RecordShow recordShow = recordObj.GetComponent<RecordShow>();
@@ -111,7 +259,6 @@ public class LevelMapGenerator : MonoBehaviour
                     if (posX < 0)
                     {
                         recordShow.SetTextX(recordPadding);
-
                     }
                     else
                     {
@@ -124,47 +271,47 @@ public class LevelMapGenerator : MonoBehaviour
         }
     }
 
-void GenerateBackground()
-{
-    float segmentHeight = 100f * 5.5f;
-    float maxNodePosY = (maxLevels / showEveryNumLevels) * levelPadding;
-
-    float minRequiredHeight = maxNodePosY + (bkgTopAndBottonPadding * 2);
-
-    float heightWithoutEnds = minRequiredHeight - (segmentHeight * 2);
-    int midCount = 0;
-    if (heightWithoutEnds > 0)
+    void GenerateBackground()
     {
-        midCount = Mathf.CeilToInt(heightWithoutEnds / segmentHeight);
+        float segmentHeight = 100f * 5.5f;
+        float maxNodePosY = (maxLevels / showEveryNumLevels) * levelPadding;
+
+        float minRequiredHeight = maxNodePosY + (bkgTopAndBottonPadding * 2);
+
+        float heightWithoutEnds = minRequiredHeight - (segmentHeight * 2);
+        int midCount = 0;
+        if (heightWithoutEnds > 0)
+        {
+            midCount = Mathf.CeilToInt(heightWithoutEnds / segmentHeight);
+        }
+
+        float totalTilesHeight = (2 + midCount) * segmentHeight;
+
+        panelHeight = bkgTopAndBottonPadding + totalTilesHeight;
+
+        RectTransform mainPanelRect = transform.GetComponent<RectTransform>();
+        if (mainPanelRect != null)
+        {
+            mainPanelRect.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, panelHeight);
+        }
+
+        RectTransform bkgRectTransform = backgroundParent.GetComponent<RectTransform>();
+        if (bkgRectTransform != null)
+        {
+            bkgRectTransform.anchoredPosition = new Vector2(0, bkgTopAndBottonPadding);
+        }
+
+        float currentPosY = 0f;
+
+        SpawnBkgSegment(startBkgPrefab, "Bkg_Start", ref currentPosY, segmentHeight);
+
+        for (int i = 0; i < midCount; i++)
+        {
+            SpawnBkgSegment(midBkgPrefab, "Bkg_Mid_" + i, ref currentPosY, segmentHeight);
+        }
+
+        SpawnBkgSegment(endBkgPrefab, "Bkg_End", ref currentPosY, segmentHeight);
     }
-
-    float totalTilesHeight = (2 + midCount) * segmentHeight;
-
-   panelHeight = bkgTopAndBottonPadding + totalTilesHeight;
-
-    RectTransform mainPanelRect = transform.GetComponent<RectTransform>();
-    if (mainPanelRect != null)
-    {
-        mainPanelRect.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, panelHeight);
-    }
-
-    RectTransform bkgRectTransform = backgroundParent.GetComponent<RectTransform>();
-    if (bkgRectTransform != null)
-    {
-        bkgRectTransform.anchoredPosition = new Vector2(0, bkgTopAndBottonPadding);
-    }
-
-    float currentPosY = 0f;
-
-    SpawnBkgSegment(startBkgPrefab, "Bkg_Start", ref currentPosY, segmentHeight);
-
-    for (int i = 0; i < midCount; i++)
-    {
-        SpawnBkgSegment(midBkgPrefab, "Bkg_Mid_" + i, ref currentPosY, segmentHeight);
-    }
-
-    SpawnBkgSegment(endBkgPrefab, "Bkg_End", ref currentPosY, segmentHeight);
-}
 
     void SpawnBkgSegment(GameObject prefab, string objName, ref float posY, float height)
     {
@@ -204,7 +351,6 @@ void GenerateBackground()
             {
                 accumulatedDistance = 0f;
 
-                // Instanciar el trazo
                 GameObject segment = Instantiate(pathSegmentPrefab, pathParent != null ? pathParent : contentParent);
 
                 RectTransform rect = segment.GetComponent<RectTransform>();

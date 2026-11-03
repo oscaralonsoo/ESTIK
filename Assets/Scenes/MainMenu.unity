@@ -1143,6 +1143,11 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 3408295039104337179, guid: a4a4e95b45aa6814cb95cb59228602f2, type: 3}
+--- !u!1 &845230880 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 5800436383605739133, guid: cdafbd9b89fc25f4a83120e28bec3afd, type: 3}
+  m_PrefabInstance: {fileID: 1961719254}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &869520165 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 7539950971789425151, guid: cdafbd9b89fc25f4a83120e28bec3afd, type: 3}
@@ -1543,80 +1548,6 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
---- !u!1001 &1287005663
-PrefabInstance:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    serializedVersion: 3
-    m_TransformParent: {fileID: 0}
-    m_Modifications:
-    - target: {fileID: 3190110144580108033, guid: afd7502102afe3e4a8c2ca4e28f5c1a4, type: 3}
-      propertyPath: m_LocalScale.x
-      value: 1.01
-      objectReference: {fileID: 0}
-    - target: {fileID: 3190110144580108033, guid: afd7502102afe3e4a8c2ca4e28f5c1a4, type: 3}
-      propertyPath: m_LocalScale.y
-      value: 1.01
-      objectReference: {fileID: 0}
-    - target: {fileID: 3190110144580108033, guid: afd7502102afe3e4a8c2ca4e28f5c1a4, type: 3}
-      propertyPath: m_LocalScale.z
-      value: 1.01
-      objectReference: {fileID: 0}
-    - target: {fileID: 3190110144580108033, guid: afd7502102afe3e4a8c2ca4e28f5c1a4, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 1.7262955
-      objectReference: {fileID: 0}
-    - target: {fileID: 3190110144580108033, guid: afd7502102afe3e4a8c2ca4e28f5c1a4, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 7.66
-      objectReference: {fileID: 0}
-    - target: {fileID: 3190110144580108033, guid: afd7502102afe3e4a8c2ca4e28f5c1a4, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: -22.17173
-      objectReference: {fileID: 0}
-    - target: {fileID: 3190110144580108033, guid: afd7502102afe3e4a8c2ca4e28f5c1a4, type: 3}
-      propertyPath: m_LocalRotation.w
-      value: -1
-      objectReference: {fileID: 0}
-    - target: {fileID: 3190110144580108033, guid: afd7502102afe3e4a8c2ca4e28f5c1a4, type: 3}
-      propertyPath: m_LocalRotation.x
-      value: -0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3190110144580108033, guid: afd7502102afe3e4a8c2ca4e28f5c1a4, type: 3}
-      propertyPath: m_LocalRotation.y
-      value: -0.00003381073
-      objectReference: {fileID: 0}
-    - target: {fileID: 3190110144580108033, guid: afd7502102afe3e4a8c2ca4e28f5c1a4, type: 3}
-      propertyPath: m_LocalRotation.z
-      value: -0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3190110144580108033, guid: afd7502102afe3e4a8c2ca4e28f5c1a4, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3190110144580108033, guid: afd7502102afe3e4a8c2ca4e28f5c1a4, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: -359.996
-      objectReference: {fileID: 0}
-    - target: {fileID: 3190110144580108033, guid: afd7502102afe3e4a8c2ca4e28f5c1a4, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3880237870342736863, guid: afd7502102afe3e4a8c2ca4e28f5c1a4, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 1.55
-      objectReference: {fileID: 0}
-    - target: {fileID: 7267431994516729389, guid: afd7502102afe3e4a8c2ca4e28f5c1a4, type: 3}
-      propertyPath: m_Name
-      value: Porteria (1)
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-    m_RemovedGameObjects:
-    - {fileID: 6339805807463889700, guid: afd7502102afe3e4a8c2ca4e28f5c1a4, type: 3}
-    m_AddedGameObjects: []
-    m_AddedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: afd7502102afe3e4a8c2ca4e28f5c1a4, type: 3}
 --- !u!1 &1448063025 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 69969590908450739, guid: cdafbd9b89fc25f4a83120e28bec3afd, type: 3}
@@ -2338,6 +2269,10 @@ PrefabInstance:
     - target: {fileID: 5800436383605739133, guid: cdafbd9b89fc25f4a83120e28bec3afd, type: 3}
       propertyPath: m_Name
       value: TutorialMap
+      objectReference: {fileID: 0}
+    - target: {fileID: 5800436383605739133, guid: cdafbd9b89fc25f4a83120e28bec3afd, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5872701413903069793, guid: cdafbd9b89fc25f4a83120e28bec3afd, type: 3}
       propertyPath: m_Convex
@@ -4146,6 +4081,11 @@ MonoBehaviour:
   backgroundParent: {fileID: 8926180147744143524}
   pathParent: {fileID: 5830069659855022763}
   recordParent: {fileID: 7384318246411240262}
+  scrollRect: {fileID: 5645578902534961007}
+  centerDuration: 0.5
+  outlinePrefab: {fileID: 7661893473473818916, guid: ee287b1643b64ae4b98c74c61ae785db, type: 3}
+  outlineParent: {fileID: 0}
+  outlineFadeDuration: 0.2
   recordPadding: 330
   maxLevels: 24
   showEveryNumLevels: 4
@@ -6061,7 +6001,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &4756967927380526779
 RectTransform:
   m_ObjectHideFlags: 0
@@ -6481,8 +6421,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -100, y: -100}
-  m_SizeDelta: {x: 100, y: 100}
+  m_AnchoredPosition: {x: -975, y: -1820}
+  m_SizeDelta: {x: 150, y: 150}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &5785531214908017977
 GameObject:
@@ -7742,6 +7682,63 @@ MonoBehaviour:
   customizationPanel: {fileID: 2663810207714784937}
   LevelSelector: {fileID: 4752878431806000299}
   levelSelectorButton: {fileID: 6489830922242012317}
+  closeSelectorDelay: 0.4
+  biomes:
+  - name: Tutorial
+    firstLevel: -1
+    mapPrefab: {fileID: 0}
+    existingInScene: {fileID: 845230880}
+    mapPosition: {x: 0, y: 0, z: 0}
+    skybox: {fileID: 2100000, guid: e112aa23b18fdb247b44741d1d763281, type: 2}
+    orbitRadius: 110
+    orbitHeight: 25
+    orbitLookHeight: 2
+    instance: {fileID: 0}
+    orbitTarget: {fileID: 0}
+  - name: Prat
+    firstLevel: 0
+    mapPrefab: {fileID: 5172094648332113863, guid: 6019b85a8b990c040ae648ae935241e7, type: 3}
+    existingInScene: {fileID: 0}
+    mapPosition: {x: 0, y: 0, z: 0}
+    skybox: {fileID: 2100000, guid: e112aa23b18fdb247b44741d1d763281, type: 2}
+    orbitRadius: 100
+    orbitHeight: 35
+    orbitLookHeight: 2
+    instance: {fileID: 0}
+    orbitTarget: {fileID: 0}
+  - name: Neu
+    firstLevel: 4
+    mapPrefab: {fileID: 652317175671352809, guid: 3758d58a55157b3498d844df6ff305f0, type: 3}
+    existingInScene: {fileID: 0}
+    mapPosition: {x: 0, y: 0, z: 0}
+    skybox: {fileID: 2100000, guid: e5964ce215aa10742b52a24ceb5fdadf, type: 2}
+    orbitRadius: 90
+    orbitHeight: 35
+    orbitLookHeight: 2
+    instance: {fileID: 0}
+    orbitTarget: {fileID: 0}
+  - name: Bosc
+    firstLevel: 8
+    mapPrefab: {fileID: 4350346844071404990, guid: cc230380ce2cc6b46a503a46a7629ac3, type: 3}
+    existingInScene: {fileID: 0}
+    mapPosition: {x: 0, y: 0, z: 0}
+    skybox: {fileID: 2100000, guid: 58c058e0094b84a4490f03f6d5b5c260, type: 2}
+    orbitRadius: 120
+    orbitHeight: 50
+    orbitLookHeight: 3
+    instance: {fileID: 0}
+    orbitTarget: {fileID: 0}
+  - name: Desert
+    firstLevel: 12
+    mapPrefab: {fileID: 7188179477958899456, guid: 3b44e0dd6869db7479674527daca5327, type: 3}
+    existingInScene: {fileID: 0}
+    mapPosition: {x: 0, y: 0, z: 0}
+    skybox: {fileID: 2100000, guid: 6b4efabec162d7547b0243e9b4cbb270, type: 2}
+    orbitRadius: 110
+    orbitHeight: 35
+    orbitLookHeight: 2
+    instance: {fileID: 0}
+    orbitTarget: {fileID: 0}
 --- !u!114 &7513152879375360730
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8618,5 +8615,4 @@ SceneRoots:
   - {fileID: 7732644401807295670}
   - {fileID: 322028368}
   - {fileID: 209233677}
-  - {fileID: 1287005663}
   - {fileID: 1961719254}

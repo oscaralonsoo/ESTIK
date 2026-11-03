@@ -67,9 +67,6 @@ public class SandTornadoMotion : MonoBehaviour
         facing = 1f;
         basePos = hasPoints ? GetA() : transform.position;
 
-        if (!hasPoints)
-            Debug.LogWarning($"[SandTornadoMotion] Asigna Point A y Point B en {name}.", this);
-
         if (body == null) body = transform.Find("Body");
         if (body == null) { tiers = new Transform[0]; return; }
 

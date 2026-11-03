@@ -60,6 +60,7 @@ public static class LevelLoader
 
     public static AsyncOperation LoadNext()
     {
+
         if (currentLevel >= 0)
         {
             consecutiveLevels++;
