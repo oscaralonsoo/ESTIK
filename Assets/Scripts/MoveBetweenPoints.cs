@@ -6,6 +6,7 @@ public class MoveBetweenPoints : MonoBehaviour
 {
     [Header("ROUTE PROPERTIES")]
     [SerializeField] private bool useCurves = false;
+    [SerializeField] private bool waitOnEnd = true;
     [SerializeField] private List<Transform> points;
     [Tooltip("Solo funciona con useCurves desactivado.")]
     [SerializeField] private bool random = false;
@@ -90,9 +91,8 @@ public class MoveBetweenPoints : MonoBehaviour
 
     private void SetNextTarget()
     {
-        StartCoroutine(WaitCoroutine());
         if (points.Count <= 1) return;
-
+        
         if (random)
         {
             int newIndex = currentTargetIndex;
@@ -105,6 +105,7 @@ public class MoveBetweenPoints : MonoBehaviour
         else if (restartOnEnd)
         {
             currentTargetIndex = (currentTargetIndex + 1) % points.Count;
+            if (currentTargetIndex == 0 && waitOnEnd) StartCoroutine(WaitCoroutine());
         }
         else
         {
@@ -115,6 +116,7 @@ public class MoveBetweenPoints : MonoBehaviour
                 {
                     currentTargetIndex = points.Count - 2;
                     movingForward = false;
+                    if (waitOnEnd) StartCoroutine(WaitCoroutine());
                 }
             }
             else
@@ -124,6 +126,7 @@ public class MoveBetweenPoints : MonoBehaviour
                 {
                     currentTargetIndex = 1;
                     movingForward = true;
+                    if (waitOnEnd) StartCoroutine(WaitCoroutine());
                 }
             }
         }

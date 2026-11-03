@@ -604,7 +604,7 @@ public class BallController : MonoBehaviour
         blockShoot = true;
         ballRigidbody.linearVelocity = Vector3.zero;
         ballRigidbody. angularVelocity = Vector3.zero;
-        CancelAim();
+        CancelAimAndShoot();
     }
 
     public void CancelAimAndShoot()
