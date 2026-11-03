@@ -82,7 +82,7 @@ public static class LevelLoader
             currentLevel = 0;
 
             Time.timeScale = 1f;
-            return SceneManager.LoadSceneAsync(MenuSceneName);
+            return LoadSceneWithMusicFade(MenuSceneName);
         }
 
         if (currentLevel > 0)
@@ -104,7 +104,7 @@ public static class LevelLoader
     public static AsyncOperation LoadMenu()
     {
         consecutiveLevels = 0;
-        return SceneManager.LoadSceneAsync(MenuSceneName);
+        return LoadSceneWithMusicFade(MenuSceneName);
     }
 
     static AsyncOperation LoadCurrent()
@@ -116,7 +116,7 @@ public static class LevelLoader
     {
         consecutiveLevels = 0;
         Time.timeScale = 1f;
-        return SceneManager.LoadSceneAsync(SceneManager.GetActiveScene().name);
+        return LoadSceneWithMusicFade(SceneManager.GetActiveScene().name);
     }
 
     public static AsyncOperation LoadSpecificLevel(int sceneNum)
@@ -127,7 +127,7 @@ public static class LevelLoader
         else sceneName = GetLevelName(sceneNum);
 
         currentLevel = sceneNum;
-        return SceneManager.LoadSceneAsync(sceneName);
+        return LoadSceneWithMusicFade(sceneName);
     }
 
     public static void SyncWithScene(string sceneName)
@@ -166,5 +166,21 @@ public static class LevelLoader
     public static int GetConsecutiveLevels()
     {
         return consecutiveLevels;
+    }
+
+    static AsyncOperation LoadSceneWithMusicFade(string sceneName)
+    {
+        AmbientMusicManager.FadeOut();
+
+        AsyncOperation op = SceneManager.LoadSceneAsync(sceneName);
+        float fadeTime = AmbientMusicManager.GetFadeOutDuration();
+
+        if (fadeTime > 0f)
+        {
+            op.allowSceneActivation = false;
+            AmbientMusicManager.RunAfterDelay(fadeTime, () => op.allowSceneActivation = true);
+        }
+
+        return op;
     }
 }

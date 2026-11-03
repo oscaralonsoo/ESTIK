@@ -32,18 +32,15 @@ public class MudZone : MonoBehaviour
 
     private void Awake()
     {
-        // Asegura automáticamente que el collider sea un Trigger
         Collider col = GetComponent<Collider>();
         if (col != null)
         {
             col.isTrigger = true;
         }
 
-        // Creamos el sistema de partículas proceduralmente al iniciar
         dirtParticles = CreateDirtParticles();
     }
 
-    // ---------- Trigger ----------
     private void OnTriggerEnter(Collider other) => Enter(other);
     private void OnTriggerExit(Collider other) => Exit(other);
 
@@ -83,18 +80,15 @@ public class MudZone : MonoBehaviour
         Vector3 v = ballRb.linearVelocity;
         float currentSpeed = v.magnitude;
 
-        // Detección de Chute: Si la velocidad aumenta drásticamente estando dentro del barro
         if (currentSpeed - previousSpeed > 5f)
         {
             PlayMudSplash(ballRb.position);
         }
 
-        // 1) Rozamiento horizontal (no toca la gravedad)
         float k = Mathf.Exp(-drag * dt);
         v.x *= k;
         v.z *= k;
 
-        // 2) Limite de velocidad (ignora la caida para no frenar la gravedad)
         Vector3 w = new Vector3(v.x, Mathf.Max(v.y, 0f), v.z);
         float mag = w.magnitude;
         if (mag > maxSpeed)
