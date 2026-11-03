@@ -143,7 +143,7 @@ public class FastSceneLoader : MonoBehaviour
         isTransitioning = true;
 
         LivesManager.Instance.ResetLives();
-        StartCoroutine(ExitSceneRoutine(() => LevelLoader.StartGame()));
+        StartCoroutine(ExitSceneRoutine(() => LevelLoader.RestartFromCheckpoint()));
     }
     public void MenuAfterGameOver()
     {

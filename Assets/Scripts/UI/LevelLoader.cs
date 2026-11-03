@@ -67,6 +67,17 @@ public static class LevelLoader
         return LoadSpecificLevel(0);
     }
 
+    public static AsyncOperation RestartFromCheckpoint()
+    {
+        SnapshotRecord();
+        SyncWithScene(SceneManager.GetActiveScene().name);
+
+        if (currentLevel < 0) return StartGame();
+
+        int checkpoint = (currentLevel / CheckpointInterval) * CheckpointInterval;
+        return LoadSpecificLevel(checkpoint);
+    }
+
     public static AsyncOperation LoadNext()
     {
 
