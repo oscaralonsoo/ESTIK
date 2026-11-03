@@ -19,15 +19,18 @@ public class LevelIcon : MonoBehaviour
 
     private void Start()
     {
-        if (text)
-            text.text = level.ToString();
+        RefreshText();
     }
 
     public void SetLevel(int lvl)
     {
         level = lvl;
+        RefreshText();
+    }
+    void RefreshText()
+    {
         if (text)
-            text.text = level.ToString();
+            text.text = (level + 1).ToString();
     }
 
     public void UnlockLevel()

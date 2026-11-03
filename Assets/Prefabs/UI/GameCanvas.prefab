@@ -6473,7 +6473,6 @@ GameObject:
   - component: {fileID: 8639617739302831709}
   - component: {fileID: 8384608358932467278}
   - component: {fileID: 1532665689489381926}
-  - component: {fileID: 3002848358191324606}
   m_Layer: 5
   m_Name: GameCanvas
   m_TagString: Untagged
@@ -6584,19 +6583,6 @@ MonoBehaviour:
   sfxToggle: {fileID: 3694700153770770096}
   musicParam: MusicVolume
   sfxParam: SfxVolume
---- !u!114 &3002848358191324606
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8360041603307240670}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a0770331bd656684f9acd59f3a6b26de, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::AdaptiveCanvasScaler
-  referenceResolution: {x: 1080, y: 1920}
 --- !u!1 &8744211254475435722
 GameObject:
   m_ObjectHideFlags: 0

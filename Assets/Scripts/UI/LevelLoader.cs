@@ -6,6 +6,9 @@ public static class LevelLoader
 {
     const string MenuSceneName = "MainMenu";
 
+    // Debe coincidir con showEveryNumLevels de LevelMapGenerator
+    public const int CheckpointInterval = 4;
+
     static readonly List<string> tutorialScenes = new List<string>
     {
         "Tuto1",
@@ -33,9 +36,8 @@ public static class LevelLoader
         "Level15",
         "Level16",
         "Level17",
-        "Level18"
-
-
+        "Level18",
+        "Level19",
     };
 
     static int currentLevel = 0;
@@ -87,6 +89,12 @@ public static class LevelLoader
 
             Time.timeScale = 1f;
             return LoadSceneWithMusicFade(MenuSceneName);
+        }
+
+        // Checkpoint (niveles del level selector): se regeneran las vidas
+        if (currentLevel > 0 && currentLevel % CheckpointInterval == 0)
+        {
+            LivesManager.Instance.RefillLives();
         }
 
         if (currentLevel > 0)

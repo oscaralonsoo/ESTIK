@@ -1,5 +1,6 @@
 using System;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class LivesManager : MonoBehaviour
 {
@@ -51,18 +52,32 @@ public class LivesManager : MonoBehaviour
 
     public bool LoseLife()
     {
+        // En el tutorial nunca se pierden vidas
+        if (LevelLoader.IsTutorialScene(SceneManager.GetActiveScene().name))
+            return true;
+
         currentLives = Mathf.Max(0, currentLives - 1);
 
         OnLivesChanged?.Invoke(currentLives, maxLives);
         return currentLives > 0;
     }
 
+    // Reinicio completo de la partida (vidas + puntos)
     public void ResetLives()
     {
         currentLives = maxLives;
 
         PointsManager.ResetRun();
 
+        OnLivesChanged?.Invoke(currentLives, maxLives);
+    }
+
+    // Checkpoint: rellena vidas sin tocar los puntos
+    public void RefillLives()
+    {
+        if (currentLives == maxLives) return;
+
+        currentLives = maxLives;
         OnLivesChanged?.Invoke(currentLives, maxLives);
     }
 }
