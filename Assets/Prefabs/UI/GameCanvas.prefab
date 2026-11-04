@@ -1771,6 +1771,18 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+      - m_Target: {fileID: 7178526908306281628}
+        m_TargetAssemblyTypeName: UISFXManager, Assembly-CSharp
+        m_MethodName: PlayConfirmar
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &1361607449744410905
 GameObject:
   m_ObjectHideFlags: 0
@@ -1897,6 +1909,18 @@ MonoBehaviour:
       - m_Target: {fileID: 3980351509264611583}
         m_TargetAssemblyTypeName: PauseMenuManager, Assembly-CSharp
         m_MethodName: OnYouWinRetryPressed
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 7178526908306281628}
+        m_TargetAssemblyTypeName: UISFXManager, Assembly-CSharp
+        m_MethodName: PlayConfirmar
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -3092,7 +3116,6 @@ MonoBehaviour:
   optionsPanel: {fileID: 2648967116761985393}
   customBallPanel: {fileID: 5170647224932058205}
   gameOverPanel: {fileID: 3289255682359310346}
-  youWinPanel: {fileID: 4174530006255976735}
   hudButtonStagger: 0.05
   hudHideTime: 0.3
   hudButtonRise: {x: 0, y: -30}
@@ -3502,6 +3525,18 @@ MonoBehaviour:
       - m_Target: {fileID: 3980351509264611583}
         m_TargetAssemblyTypeName: PauseMenuManager, Assembly-CSharp
         m_MethodName: OnBackPressed
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 7178526908306281628}
+        m_TargetAssemblyTypeName: UISFXManager, Assembly-CSharp
+        m_MethodName: PlayAtras
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -3998,6 +4033,18 @@ MonoBehaviour:
       - m_Target: {fileID: 3980351509264611583}
         m_TargetAssemblyTypeName: PauseMenuManager, Assembly-CSharp
         m_MethodName: OnGameOverRetryPressed
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 7178526908306281628}
+        m_TargetAssemblyTypeName: UISFXManager, Assembly-CSharp
+        m_MethodName: PlayConfirmar
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -7263,6 +7310,18 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+      - m_Target: {fileID: 7178526908306281628}
+        m_TargetAssemblyTypeName: UISFXManager, Assembly-CSharp
+        m_MethodName: PlayAtras
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &3187255890576763507
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7434,6 +7493,18 @@ MonoBehaviour:
       - m_Target: {fileID: 3980351509264611583}
         m_TargetAssemblyTypeName: PauseMenuManager, Assembly-CSharp
         m_MethodName: OnYouWinMenuPressed
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 7178526908306281628}
+        m_TargetAssemblyTypeName: UISFXManager, Assembly-CSharp
+        m_MethodName: PlayAtras
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -7909,6 +7980,18 @@ MonoBehaviour:
       - m_Target: {fileID: 3980351509264611583}
         m_TargetAssemblyTypeName: PauseMenuManager, Assembly-CSharp
         m_MethodName: OnMainMenuPressed
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 7178526908306281628}
+        m_TargetAssemblyTypeName: UISFXManager, Assembly-CSharp
+        m_MethodName: PlayAtras
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

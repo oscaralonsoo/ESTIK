@@ -7,7 +7,9 @@ public enum ButtonSoundType
     Confirmar,
     Atras,
     Error,
-    Toggle
+    Toggle,
+    SkinSelector,
+    Play 
 }
 public class UISFXManager : MonoBehaviour
 {
@@ -42,6 +44,10 @@ public class UISFXManager : MonoBehaviour
     public void PlayAtras() => Play(ButtonSoundType.Atras);
     public void PlayError() => Play(ButtonSoundType.Error);
     public void PlayToggle() => Play(ButtonSoundType.Toggle);
+
+    public void PlayPlay() => Play(ButtonSoundType.Play);
+
+    public void PlaySkinSelector() => Play(ButtonSoundType.SkinSelector);
     public void Play(ButtonSoundType type)
     {
         if (source == null || sounds == null)
