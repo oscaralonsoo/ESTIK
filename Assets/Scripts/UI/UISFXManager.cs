@@ -1,22 +1,24 @@
 using System;
 using UnityEngine;
 
-public enum ButtonSoundType
+public enum UISoundType
 {
     Normal,
     Confirmar,
     Atras,
     Error,
     Toggle,
-    SkinSelector,
-    Play 
+    Play,
+    Buy,
+    Win,
+    Point
 }
 public class UISFXManager : MonoBehaviour
 {
     [Serializable]
     public class SoundEntry
     {
-        public ButtonSoundType type;
+        public UISoundType type;
         public AudioClip[] clips;
         [Range(0f, 1f)] public float volume = 1f;
         public Vector2 pitchRange = Vector2.one;
@@ -39,16 +41,17 @@ public class UISFXManager : MonoBehaviour
         source.playOnAwake = false;
         source.ignoreListenerPause = true;
     }
-    public void PlayNormal() => Play(ButtonSoundType.Normal);
-    public void PlayConfirmar() => Play(ButtonSoundType.Confirmar);
-    public void PlayAtras() => Play(ButtonSoundType.Atras);
-    public void PlayError() => Play(ButtonSoundType.Error);
-    public void PlayToggle() => Play(ButtonSoundType.Toggle);
+    public void PlayNormal() => Play(UISoundType.Normal);
+    public void PlayConfirmar() => Play(UISoundType.Confirmar);
+    public void PlayAtras() => Play(UISoundType.Atras);
+    public void PlayError() => Play(UISoundType.Error);
+    public void PlayToggle() => Play(UISoundType.Toggle);
+    public void PlayBuy() => Play(UISoundType.Buy);
+    public void PlayPlay() => Play(UISoundType.Play);
 
-    public void PlayPlay() => Play(ButtonSoundType.Play);
-
-    public void PlaySkinSelector() => Play(ButtonSoundType.SkinSelector);
-    public void Play(ButtonSoundType type)
+    public void PlayPoint() => Play(UISoundType.Point);
+    public void PlayWin() => Play(UISoundType.Win);
+    public void Play(UISoundType type)
     {
         if (source == null || sounds == null)
         {

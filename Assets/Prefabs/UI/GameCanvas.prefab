@@ -1773,7 +1773,7 @@ MonoBehaviour:
         m_CallState: 2
       - m_Target: {fileID: 7178526908306281628}
         m_TargetAssemblyTypeName: UISFXManager, Assembly-CSharp
-        m_MethodName: PlayConfirmar
+        m_MethodName: PlayAtras
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -5889,6 +5889,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: '::'
   scoreText: {fileID: 2930881062921783884}
   alwaysShowScore: 0
+  sfx: {fileID: 7178526908306281628}
   multiplierText: {fileID: 4394004789984782107}
   multiplierFormat: x{0}
   showAtX1: 0
@@ -6176,6 +6177,7 @@ MonoBehaviour:
   popHoldTime: 1.2
   popFadeTime: 0.5
   popRiseDistance: 20
+  sfx: {fileID: 0}
   spacing: 200
   centerScale: 2
   sideScale: 1
@@ -6917,13 +6919,13 @@ MonoBehaviour:
   sounds:
   - type: 0
     clips:
-    - {fileID: 8300000, guid: 76ab563f45553a84abcdad4b11e82752, type: 3}
-    volume: 1
+    - {fileID: 8300000, guid: 8d4f8dd141cac5d409a1620b7de2af55, type: 3}
+    volume: 0.6
     pitchRange: {x: 0, y: 0}
   - type: 1
     clips:
-    - {fileID: 8300000, guid: 76ab563f45553a84abcdad4b11e82752, type: 3}
-    volume: 1
+    - {fileID: 8300000, guid: 8d4f8dd141cac5d409a1620b7de2af55, type: 3}
+    volume: 0.6
     pitchRange: {x: 0, y: 0}
   - type: 2
     clips:
@@ -6933,22 +6935,27 @@ MonoBehaviour:
   - type: 4
     clips:
     - {fileID: 8300000, guid: c793bd9072e11724ab3881de588a6f3f, type: 3}
-    volume: 0
+    volume: 1
     pitchRange: {x: 0, y: 0}
   - type: 3
     clips:
     - {fileID: 8300000, guid: e42733b75eab64742be58d6a7170145c, type: 3}
-    volume: 0
-    pitchRange: {x: 0, y: 0}
-  - type: 5
-    clips:
-    - {fileID: 8300000, guid: 76ab563f45553a84abcdad4b11e82752, type: 3}
-    volume: 0
+    volume: 1
     pitchRange: {x: 0, y: 0}
   - type: 6
     clips:
-    - {fileID: 8300000, guid: 76ab563f45553a84abcdad4b11e82752, type: 3}
-    volume: 0
+    - {fileID: 8300000, guid: e41c7f6b921146e4b8f5b8b9d2a9b544, type: 3}
+    volume: 1
+    pitchRange: {x: 0, y: 0}
+  - type: 5
+    clips:
+    - {fileID: 8300000, guid: f31ec1e9a3b396144aa1d49747224fe7, type: 3}
+    volume: 1
+    pitchRange: {x: 0, y: 0}
+  - type: 8
+    clips:
+    - {fileID: 8300000, guid: 4cf706ca5c19ab6469974e927c253a29, type: 3}
+    volume: 0.2
     pitchRange: {x: 0, y: 0}
 --- !u!82 &3664096537202682609
 AudioSource:

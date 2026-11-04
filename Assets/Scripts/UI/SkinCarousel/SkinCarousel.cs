@@ -42,6 +42,9 @@ public class SkinCarousel : MonoBehaviour,
     [SerializeField] float popFadeTime = 0.5f;
     [SerializeField] float popRiseDistance = 20f;
 
+    [Header("Audio")]
+    [SerializeField] UISFXManager sfx;
+
     BallSkinController ballSkinController;
     PanelAnimator _panel;
 
@@ -109,6 +112,9 @@ public class SkinCarousel : MonoBehaviour,
     {
         ballSkinController = FindAnyObjectByType<BallSkinController>();
         _panel = GetComponentInParent<PanelAnimator>(true);
+
+        if (sfx == null)
+            sfx = FindAnyObjectByType<UISFXManager>();
 
         if (catalog == null || itemPrefab == null || content == null)
         {
@@ -546,9 +552,15 @@ public class SkinCarousel : MonoBehaviour,
 
         if (playerPoints < price)
         {
+            if (sfx != null)
+                sfx.PlayError();
+
             ShowNotEnoughPoints();
             return;
         }
+
+        if (sfx != null)
+            sfx.PlayBuy();
 
         _unlocking = true;
         _dragging = false;

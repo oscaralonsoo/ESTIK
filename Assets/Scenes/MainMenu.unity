@@ -1581,13 +1581,13 @@ MonoBehaviour:
   sounds:
   - type: 0
     clips:
-    - {fileID: 8300000, guid: 76ab563f45553a84abcdad4b11e82752, type: 3}
-    volume: 1
+    - {fileID: 8300000, guid: 8d4f8dd141cac5d409a1620b7de2af55, type: 3}
+    volume: 0.6
     pitchRange: {x: 0, y: 0}
   - type: 1
     clips:
-    - {fileID: 8300000, guid: 76ab563f45553a84abcdad4b11e82752, type: 3}
-    volume: 1
+    - {fileID: 8300000, guid: 8d4f8dd141cac5d409a1620b7de2af55, type: 3}
+    volume: 0.6
     pitchRange: {x: 0, y: 0}
   - type: 2
     clips:
@@ -1606,12 +1606,17 @@ MonoBehaviour:
     pitchRange: {x: 0, y: 0}
   - type: 5
     clips:
-    - {fileID: 8300000, guid: 76ab563f45553a84abcdad4b11e82752, type: 3}
+    - {fileID: 8300000, guid: e41c7f6b921146e4b8f5b8b9d2a9b544, type: 3}
     volume: 0
     pitchRange: {x: 0, y: 0}
   - type: 6
     clips:
-    - {fileID: 8300000, guid: 76ab563f45553a84abcdad4b11e82752, type: 3}
+    - {fileID: 8300000, guid: 794424d9349c8284fb3459dd547448cf, type: 3}
+    volume: 0
+    pitchRange: {x: 0, y: 0}
+  - type: 8
+    clips:
+    - {fileID: 8300000, guid: 4cf706ca5c19ab6469974e927c253a29, type: 3}
     volume: 0
     pitchRange: {x: 0, y: 0}
 --- !u!4 &1197093706
@@ -4065,7 +4070,7 @@ MonoBehaviour:
         m_CallState: 2
       - m_Target: {fileID: 1197093705}
         m_TargetAssemblyTypeName: UISFXManager, Assembly-CSharp
-        m_MethodName: PlayConfirmar
+        m_MethodName: PlayPlay
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -4729,6 +4734,7 @@ MonoBehaviour:
   outlinePrefab: {fileID: 7661893473473818916, guid: ee287b1643b64ae4b98c74c61ae785db, type: 3}
   outlineParent: {fileID: 0}
   outlineFadeDuration: 0.2
+  sfx: {fileID: 1197093705}
   recordPadding: 330
   maxLevels: 20
   showEveryNumLevels: 4
@@ -5117,6 +5123,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::PointsManager
   scoreText: {fileID: 2264885851086146020}
   alwaysShowScore: 1
+  sfx: {fileID: 0}
   multiplierText: {fileID: 0}
   multiplierFormat: x{0}
   showAtX1: 0
@@ -6082,6 +6089,7 @@ MonoBehaviour:
   popHoldTime: 1.2
   popFadeTime: 0.5
   popRiseDistance: 20
+  sfx: {fileID: 1197093705}
   spacing: 200
   centerScale: 2
   sideScale: 1
@@ -6953,7 +6961,7 @@ MonoBehaviour:
         m_CallState: 2
       - m_Target: {fileID: 1197093705}
         m_TargetAssemblyTypeName: UISFXManager, Assembly-CSharp
-        m_MethodName: PlayConfirmar
+        m_MethodName: PlayAtras
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

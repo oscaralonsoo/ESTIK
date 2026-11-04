@@ -20,7 +20,7 @@ public class PointCollector : MonoBehaviour
 
     [Header("Velocidad y Ritmo")]
     [SerializeField] private float duration = 0.4f;
-    [SerializeField] private float spawnDelay = 0.05f;
+    [SerializeField] private float spawnDelay = 0.1f;
     [SerializeField] private float spawnScaleDuration = 0.1f;
 
     [Header("Efecto de Curva")]

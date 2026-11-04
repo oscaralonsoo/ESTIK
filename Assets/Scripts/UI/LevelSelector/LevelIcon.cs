@@ -9,6 +9,7 @@ public class LevelIcon : MonoBehaviour
     [SerializeField] GameObject levelLocker;
     [SerializeField] int level;
     TextMeshProUGUI text;
+    UISFXManager sfx;
 
     public int Level => level;
 
@@ -20,6 +21,11 @@ public class LevelIcon : MonoBehaviour
     private void Start()
     {
         RefreshText();
+    }
+
+    public void SetSfx(UISFXManager manager)
+    {
+        sfx = manager;
     }
 
     public void SetLevel(int lvl)
@@ -43,6 +49,9 @@ public class LevelIcon : MonoBehaviour
     {
         bool locked = levelLocker && levelLocker.activeSelf;
         if (locked) return;
+
+        if (sfx != null)
+            sfx.PlayBuy();
 
         PlayerPrefs.SetInt("SelectedLevel", level);
         PlayerPrefs.Save();

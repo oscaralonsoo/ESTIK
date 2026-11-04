@@ -26,6 +26,9 @@ public class LevelMapGenerator : MonoBehaviour
     public Transform outlineParent;
     public float outlineFadeDuration = 0.2f;
 
+    [Header("Audio")]
+    public UISFXManager sfx;
+
     [Header("Configuración del record")]
     public float recordPadding = 300f;
 
@@ -242,6 +245,7 @@ public class LevelMapGenerator : MonoBehaviour
 
             if (newNode.TryGetComponent(out LevelIcon levelIcon))
             {
+                levelIcon.SetSfx(sfx);
                 levelIcon.SetLevel(i);
                 if (i <= record) levelIcon.UnlockLevel();
                 icons[i] = levelIcon;

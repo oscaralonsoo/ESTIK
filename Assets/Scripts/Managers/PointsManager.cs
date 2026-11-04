@@ -10,19 +10,18 @@ public class PointsManager : MonoBehaviour
     [SerializeField] private TextMeshProUGUI scoreText;
     [SerializeField] private bool alwaysShowScore = false;
 
+    [Header("Audio")]
+    [SerializeField] private UISFXManager sfx;
+
     [Header("Multiplicador (xN)")]
     [SerializeField] private TextMeshProUGUI multiplierText;
     [SerializeField] private string multiplierFormat = "x{0}";
     [SerializeField] private bool showAtX1 = false;
 
     [Header("Multiplicador - Tamaño y posición")]
-    [Tooltip("El tamaño de fuente del multiplicador sigue al del texto de puntos.")]
     [SerializeField] private bool matchScoreSize = true;
-    [Tooltip("Porcentaje del tamaño de fuente de los puntos (0.6 = 60%).")]
     [SerializeField] private float sizeRatio = 0.6f;
-    [Tooltip("Coloca el multiplicador a la derecha del texto de puntos.")]
     [SerializeField] private bool followScoreText = true;
-    [Tooltip("Separación entre los puntos y el multiplicador.")]
     [SerializeField] private float spacing = 10f;
 
     [Header("Multiplicador - Animación")]
@@ -134,7 +133,6 @@ public class PointsManager : MonoBehaviour
         FitMultiplierToScore();
     }
 
-    // Ajusta tamaño y posición del multiplicador al texto de puntos
     private void FitMultiplierToScore()
     {
         if (multiplierText == null || scoreText == null) return;
@@ -149,7 +147,6 @@ public class PointsManager : MonoBehaviour
             multiplierText.fontSize = scoreText.fontSize * sizeRatio;
         }
 
-        // Rect ajustado al contenido para que no haga salto de línea
         multiplierText.rectTransform.SetSizeWithCurrentAnchors(
             RectTransform.Axis.Horizontal, multiplierText.preferredWidth);
 
@@ -184,7 +181,11 @@ public class PointsManager : MonoBehaviour
         UpdateMultiplierUI(true);
         ShowScore();
 
-        if (amount > 0) punch = Mathf.Max(punch, 0.8f);
+        if (amount > 0)
+        {
+            punch = Mathf.Max(punch, 0.8f);
+            if (sfx != null) sfx.PlayPoint();
+        }
     }
 
     public void SpendPoints(int amount)
@@ -278,8 +279,6 @@ public class PointsManager : MonoBehaviour
 
         lastMultiplier = multiplier;
     }
-
-    // Muestra u oculta el marcador y el multiplicador a la vez
     private void SetScoreVisible(bool visible)
     {
         if (scoreText != null)
