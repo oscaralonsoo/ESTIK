@@ -10153,6 +10153,11 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 3711905928230151870, guid: b64894697ad5adf438a351e93ab7c33c, type: 3}
   m_PrefabInstance: {fileID: 1293096788}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1476905617 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 2127957734730705896, guid: 02f2ea64cbfcdc9418d1f9a8c89768f1, type: 3}
+  m_PrefabInstance: {fileID: 1561387894}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1482286286
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -11171,7 +11176,10 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 2127957734730705896, guid: 02f2ea64cbfcdc9418d1f9a8c89768f1, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1667534308}
   m_SourcePrefab: {fileID: 100100000, guid: 02f2ea64cbfcdc9418d1f9a8c89768f1, type: 3}
 --- !u!4 &1564276164 stripped
 Transform:
@@ -12151,6 +12159,22 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 5955138728902223992, guid: 02f2ea64cbfcdc9418d1f9a8c89768f1, type: 3}
   m_PrefabInstance: {fileID: 1561387894}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &1667534308
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1476905617}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fb7bf5ed0c74ce84ea92c8ee71de4aab, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::WaterSplash
+  splashPrefab: {fileID: 3261701271251825054, guid: 21d7cf22257b78447958de4020963320, type: 3}
+  splashSound: {fileID: 8300000, guid: c470d5cd5ea988b40a78edb576ab0c49, type: 3}
+  splashVolume: 1
+  cooldown: 0.25
 --- !u!1001 &1686078905
 PrefabInstance:
   m_ObjectHideFlags: 0
