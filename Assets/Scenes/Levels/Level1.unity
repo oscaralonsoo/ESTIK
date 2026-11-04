@@ -6844,6 +6844,11 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 2846096950647249492, guid: 60133be2c5bd1fa48a4de05b0e30adac, type: 3}
   m_PrefabInstance: {fileID: 1540457662}
   m_PrefabAsset: {fileID: 0}
+--- !u!224 &1540457664 stripped
+RectTransform:
+  m_CorrespondingSourceObject: {fileID: 2044349507974931151, guid: 60133be2c5bd1fa48a4de05b0e30adac, type: 3}
+  m_PrefabInstance: {fileID: 1540457662}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &1541532524 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1317488370194037504, guid: c3dcc2ef51485cc44b6ed9ae5d6a60dc, type: 3}
@@ -10320,7 +10325,7 @@ PrefabInstance:
     - target: {fileID: 2333795420770974812, guid: afd7502102afe3e4a8c2ca4e28f5c1a4, type: 3}
       propertyPath: targetUIPoint
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 1540457664}
     - target: {fileID: 2333795420770974812, guid: afd7502102afe3e4a8c2ca4e28f5c1a4, type: 3}
       propertyPath: secondaryCamera
       value: 
