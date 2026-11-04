@@ -17,6 +17,11 @@ public class BallSoundController : MonoBehaviour
     [SerializeField] private AudioClip[] woodAudioClips;
     [SerializeField, Range(0f, 1f)] private float woodMinVolume = 0.1f;
     [SerializeField, Range(0f, 1f)] private float woodMaxVolume = 1f;
+
+    [Header("MOLE AUDIO SETTINGS")]
+    [SerializeField] private AudioClip[] moleAudioClips;
+    [SerializeField, Range(0f, 1f)] private float moleMinVolume = 0.1f;
+    [SerializeField, Range(0f, 1f)] private float moleMaxVolume = 1f;
     private AudioSource audioSource;
 
     private void Awake()
@@ -51,7 +56,17 @@ public class BallSoundController : MonoBehaviour
             audioSource.PlayOneShot(clipToPlay, volume);
         }
     }
-
+    public void PlayMoleSound(float speed01 = 1f)
+    {
+        if (moleAudioClips == null || moleAudioClips.Length == 0) return;
+        int randomIndex = Random.Range(0, moleAudioClips.Length);
+        AudioClip clipToPlay = moleAudioClips[randomIndex];
+        if (clipToPlay != null)
+        {
+            float volume = Mathf.Lerp(moleMinVolume, moleMaxVolume, Mathf.Clamp01(speed01));
+            audioSource.PlayOneShot(clipToPlay, volume);
+        }
+    }
     public void PlayWoodSound(float speed01 = 1f)
     {
         if (woodAudioClips == null || woodAudioClips.Length == 0) return;

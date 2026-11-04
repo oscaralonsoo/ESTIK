@@ -19,6 +19,10 @@ public class MoleEmergeParticles : MonoBehaviour
     [Tooltip("Si es true, evita repetir el mismo clip dos veces seguidas.")]
     [SerializeField] private bool avoidRepeat = true;
 
+    [Header("Sonido de golpe (Bounce)")]
+    [SerializeField] private bool playBounceOnBodyHit = true;
+    [SerializeField] private float bounceReferenceSpeed = 30f;
+
     [Header("Ajustes del Animator")]
     private Animator moleAnimator;
     [SerializeField] private float animatorDelay = 0f;
@@ -255,7 +259,7 @@ public class MoleEmergeParticles : MonoBehaviour
         bodyCollider.radius = bodyRadius;
         bodyCollider.enabled = false;
 
-        if (bodyRepelsBall)
+        if (bodyRepelsBall || playBounceOnBodyHit)
         {
             var relay = bodyObj.AddComponent<MoleBodyCollisionRelay>();
             relay.onCollision = OnBodyCollision;
@@ -266,6 +270,18 @@ public class MoleEmergeParticles : MonoBehaviour
     {
         Collider col = collision.collider;
         if (!IsBall(col, out Rigidbody rb)) return;
+
+        if (playBounceOnBodyHit)
+        {
+            if (rb.TryGetComponent(out BallSoundController ballSound) ||
+                col.TryGetComponent(out ballSound))
+            {
+                float speed01 = collision.relativeVelocity.magnitude / Mathf.Max(0.0001f, bounceReferenceSpeed);
+                ballSound.PlayMoleSound(speed01);
+            }
+        }
+
+        if (!bodyRepelsBall) return;
 
         Vector3 hole = Holeposition;
         Vector3 center = new Vector3(hole.x, rb.worldCenterOfMass.y, hole.z);

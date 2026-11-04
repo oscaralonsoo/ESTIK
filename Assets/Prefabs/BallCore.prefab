@@ -130,7 +130,7 @@ MonoBehaviour:
   airLinearDamping: 0
   airAngularDamping: 0.05
   draging: 0
-  isShooting: 0
+  blockShoot: 0
   gestureBlocked: 0
   aerealShot: 0
   goal: 0
@@ -264,9 +264,13 @@ MonoBehaviour:
   maxVolume: 1
   postAudioClips:
   - {fileID: 8300000, guid: e189ca23470dd734f93a3e977e5c5469, type: 3}
-  postMinVolume: 0
+  postMinVolume: 0.2
   postMaxVolume: 1
   woodAudioClips:
   - {fileID: 8300000, guid: 53d284a413b005e408f0d5b0b8138e99, type: 3}
   woodMinVolume: 0
   woodMaxVolume: 1
+  moleAudioClips:
+  - {fileID: 8300000, guid: 6125bc5b52edcbd4a89b276a2060c36a, type: 3}
+  moleMinVolume: 1
+  moleMaxVolume: 1
