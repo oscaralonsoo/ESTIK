@@ -16,7 +16,6 @@ public class PauseMenuManager : MonoBehaviour
     public GameObject optionsPanel;
     public GameObject customBallPanel;
     public GameObject gameOverPanel;
-    public GameObject youWinPanel;
 
     [Header("HUD Buttons Anim")]
     [SerializeField] float hudButtonStagger = 0.05f;
@@ -60,7 +59,6 @@ public class PauseMenuManager : MonoBehaviour
         if (optionsPanel) optionsPanel.SetActive(false);
         if (customBallPanel) customBallPanel.SetActive(false);
         if (gameOverPanel) gameOverPanel.SetActive(false);
-        if (youWinPanel) youWinPanel.SetActive(false);
     }
 
     void Update()
@@ -75,7 +73,6 @@ public class PauseMenuManager : MonoBehaviour
         else OnResumePressed();
     }
 
-    // Lo llama FastSceneLoader cuando te quedas sin vidas
     public void ShowGameOver()
     {
         if (gameOver) return;
@@ -85,7 +82,6 @@ public class PauseMenuManager : MonoBehaviour
         GamePaused = true;
         Time.timeScale = 0f;
 
-        // Cierra cualquier panel de pausa que estuviera abierto
         if (currentPanel != null) { currentPanel.SetActive(false); currentPanel = null; }
         if (pausePanel) pausePanel.SetActive(false);
         if (optionsPanel) optionsPanel.SetActive(false);
@@ -95,35 +91,10 @@ public class PauseMenuManager : MonoBehaviour
         if (gameOverPanel) gameOverPanel.SetActive(true);
     }
 
-    // Lo llama FastSceneLoader al completar el ultimo nivel (no hay mas niveles que cargar).
-    // Devuelve false si no hay youWinPanel asignado, para que el loader use su comportamiento normal.
-    public bool ShowYouWin()
-    {
-        if (youWinPanel == null) return false;
-        if (gameOver) return true;
 
-        gameOver = true;   // bloquea Escape / pausa mientras el panel esta abierto
-        transitioning = false;
-
-        GamePaused = true;
-        Time.timeScale = 0f;
-
-        if (currentPanel != null) { currentPanel.SetActive(false); currentPanel = null; }
-        if (pausePanel) pausePanel.SetActive(false);
-        if (optionsPanel) optionsPanel.SetActive(false);
-        if (customBallPanel) customBallPanel.SetActive(false);
-        if (gameOverPanel) gameOverPanel.SetActive(false);
-
-        HideHud();
-        youWinPanel.SetActive(true);
-        return true;
-    }
-
-    // Botones del YouWinPanel (hacen lo mismo que los del GameOverPanel)
     public void OnYouWinRetryPressed() => OnGameOverRetryPressed();
     public void OnYouWinMenuPressed() => OnGameOverMenuPressed();
 
-    // Boton "Jugar de nuevo" del GameOverPanel
     public void OnGameOverRetryPressed()
     {
         if (!gameOver || transitioning) return;
@@ -140,7 +111,6 @@ public class PauseMenuManager : MonoBehaviour
         }
     }
 
-    // Boton "Menu" del GameOverPanel
     public void OnGameOverMenuPressed()
     {
         if (!gameOver || transitioning) return;
