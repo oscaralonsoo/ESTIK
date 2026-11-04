@@ -102,7 +102,6 @@ public static class LevelLoader
             return LoadSceneWithMusicFade(MenuSceneName);
         }
 
-        // Checkpoint (niveles del level selector): se regeneran las vidas
         if (currentLevel > 0 && currentLevel % CheckpointInterval == 0)
         {
             LivesManager.Instance.RefillLives();

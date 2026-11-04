@@ -52,7 +52,6 @@ public class LivesManager : MonoBehaviour
 
     public bool LoseLife()
     {
-        // En el tutorial nunca se pierden vidas
         if (LevelLoader.IsTutorialScene(SceneManager.GetActiveScene().name))
             return true;
 
@@ -62,7 +61,6 @@ public class LivesManager : MonoBehaviour
         return currentLives > 0;
     }
 
-    // Reinicio completo de la partida (vidas + puntos)
     public void ResetLives()
     {
         currentLives = maxLives;
@@ -72,7 +70,6 @@ public class LivesManager : MonoBehaviour
         OnLivesChanged?.Invoke(currentLives, maxLives);
     }
 
-    // Checkpoint: rellena vidas sin tocar los puntos
     public void RefillLives()
     {
         if (currentLives == maxLives) return;
