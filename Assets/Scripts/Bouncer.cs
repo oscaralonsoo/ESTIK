@@ -7,6 +7,7 @@ public class Bouncer : MonoBehaviour
     [SerializeField] private float pushForce = 10f;
     [SerializeField] private float upwardBoost = 1f;
     [SerializeField] private bool trigger = true;
+    [SerializeField] private bool scaleAnimation = false;
 
     [Header("Scale Animation")]
     [Tooltip("Multiplicador de escala al encogerse (0.7 = 70% del tamaño original)")]
@@ -62,6 +63,7 @@ public class Bouncer : MonoBehaviour
 
     private void PlayScaleAnimation()
     {
+        if (!scaleAnimation) return;
         if (scaleRoutine != null) StopCoroutine(scaleRoutine);
         scaleRoutine = StartCoroutine(ScaleRoutine());
     }
