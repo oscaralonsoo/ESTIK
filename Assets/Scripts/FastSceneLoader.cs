@@ -76,8 +76,6 @@ public class FastSceneLoader : MonoBehaviour
     {
         if (isTransitioning) return;
 
-        // Ultimo nivel completado: en vez de la transicion, sale el YouWinPanel
-        // y no se hace ninguna transicion hasta que el jugador elija (jugar de nuevo / menu)
         if (!HasNextLevel())
         {
             PauseMenuManager pm = FindAnyObjectByType<PauseMenuManager>();
@@ -87,15 +85,13 @@ public class FastSceneLoader : MonoBehaviour
         StartCoroutine(ExitSceneRoutine(LevelLoader.LoadNext));
     }
 
-    // True si despues del nivel actual hay otro que cargar (tutoriales incluidos)
     private bool HasNextLevel()
     {
         LevelLoader.SyncWithScene(SceneManager.GetActiveScene().name);
 
         int cur = LevelLoader.GetCurrentLevel();
-        if (cur < 0) return true; // tutorial: siempre hay siguiente
+        if (cur < 0) return true;
 
-        // GetLevelName devuelve el ultimo nivel cuando te pasas de la lista
         return LevelLoader.GetLevelName(cur + 1) != LevelLoader.GetLevelName(cur);
     }
 
