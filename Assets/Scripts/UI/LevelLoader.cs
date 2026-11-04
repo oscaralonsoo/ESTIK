@@ -6,7 +6,6 @@ public static class LevelLoader
 {
     const string MenuSceneName = "MainMenu";
 
-    // Debe coincidir con showEveryNumLevels de LevelMapGenerator
     public const int CheckpointInterval = 4;
 
     static readonly List<string> tutorialScenes = new List<string>
@@ -61,12 +60,12 @@ public static class LevelLoader
         SnapshotRecord();
         return LoadCurrent();
     }
+
     public static AsyncOperation RestartFromFirstLevel()
     {
         SnapshotRecord();
         return LoadSpecificLevel(0);
     }
-
     public static AsyncOperation RestartFromCheckpoint()
     {
         SnapshotRecord();
@@ -102,7 +101,9 @@ public static class LevelLoader
             return LoadSceneWithMusicFade(MenuSceneName);
         }
 
-        if (currentLevel > 0 && currentLevel % CheckpointInterval == 0)
+        bool isCheckpoint = currentLevel > 0 && currentLevel % CheckpointInterval == 0;
+
+        if (isCheckpoint)
         {
             LivesManager.Instance.RefillLives();
         }
@@ -115,6 +116,12 @@ public static class LevelLoader
                 if (currentLevel < mainLevelScenes.Count)
                 {
                     PlayerPrefs.SetInt("Record", currentLevel);
+
+                    if (isCheckpoint)
+                    {
+                        PlayerPrefs.SetInt("SelectedLevel", currentLevel);
+                    }
+
                     PlayerPrefs.Save();
                 }
             }
