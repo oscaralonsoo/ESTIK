@@ -28,7 +28,7 @@ public class GameOverPanel : MonoBehaviour
     void OnEnable()
     {
         int points = PointsManager.RunTotal;
-        int levelReached = Mathf.Max(0, LevelLoader.GetCurrentLevel()) + 1;
+        int levelReached = Mathf.Max(0, LevelLoader.GetCurrentLevel());
 
         if (pointsText) pointsText.text = points.ToString();
         if (levelText) levelText.text = levelReached.ToString();
