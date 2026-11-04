@@ -104,7 +104,6 @@ GameObject:
   - component: {fileID: 2047206395266170760}
   - component: {fileID: 6061403657171504288}
   - component: {fileID: 2616787179994335790}
-  - component: {fileID: 5446773180876477831}
   m_Layer: 5
   m_Name: Flare
   m_TagString: Ball
@@ -184,27 +183,6 @@ MeshRenderer:
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!135 &5446773180876477831
-SphereCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1895911250125194628}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Radius: 1.0372732
-  m_Center: {x: 0, y: -0.025931835, z: 0}
 --- !u!1 &7065246540487271567
 GameObject:
   m_ObjectHideFlags: 0
