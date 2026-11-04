@@ -45,6 +45,10 @@ public class MainMenuManager : MonoBehaviour
     [Header("Selector de niveles")]
     public float closeSelectorDelay = 0.8f;
 
+    [Header("Tutorial")]
+    public int tutorialLevel = 0;
+    public int firstLevelAfterTutorial = 1;
+
     [Header("Biomas")]
     public BiomeMap[] biomes;
 
@@ -52,6 +56,8 @@ public class MainMenuManager : MonoBehaviour
     BiomeMap currentBiome;
     bool transitioning;
     bool closingSelector;
+
+    bool TutorialCompleted => PlayerPrefs.GetInt("HasCompletedTutorial", 0) == 1;
 
     void OnEnable()
     {
@@ -75,9 +81,9 @@ public class MainMenuManager : MonoBehaviour
         if (mainPanel) mainPanel.SetActive(true);
         currentPanel = null;
 
-        levelSelectorButton.SetActive(PlayerPrefs.GetInt("HasCompletedTutorial", 0) == 1);
+        levelSelectorButton.SetActive(TutorialCompleted);
 
-        ShowBiomeForLevel(PlayerPrefs.GetInt("SelectedLevel", 0));
+        ShowBiomeForLevel(GetMenuLevel());
     }
 
     void Update()
@@ -87,9 +93,17 @@ public class MainMenuManager : MonoBehaviour
             OnBackPressed();
     }
 
+    int GetMenuLevel()
+    {
+        if (!TutorialCompleted) return tutorialLevel;
+        return Mathf.Max(PlayerPrefs.GetInt("SelectedLevel", 0), firstLevelAfterTutorial);
+    }
+
     void OnLevelSelected(LevelIcon icon)
     {
-        ShowBiomeForLevel(icon.Level);
+        if (!TutorialCompleted) return;
+
+        ShowBiomeForLevel(Mathf.Max(icon.Level, firstLevelAfterTutorial));
 
         if (currentPanel == LevelSelector && !closingSelector)
             StartCoroutine(CloseSelectorRoutine());
@@ -103,6 +117,7 @@ public class MainMenuManager : MonoBehaviour
 
         if (currentPanel == LevelSelector) OnBackPressed();
     }
+
     void ShowBiomeForLevel(int level)
     {
         if (biomes == null || biomes.Length == 0) return;
@@ -152,6 +167,7 @@ public class MainMenuManager : MonoBehaviour
         Transform t = b.instance.transform.Find("OrbitTarget");
         b.orbitTarget = t != null ? t : b.instance.transform;
     }
+
     public void OnPlayPressed()
     {
         orbitCamera.enabled = false;
