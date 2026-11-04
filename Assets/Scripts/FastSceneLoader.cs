@@ -76,12 +76,6 @@ public class FastSceneLoader : MonoBehaviour
     {
         if (isTransitioning) return;
 
-        if (!HasNextLevel())
-        {
-            PauseMenuManager pm = FindAnyObjectByType<PauseMenuManager>();
-            if (pm != null && pm.ShowYouWin()) return;
-        }
-
         StartCoroutine(ExitSceneRoutine(LevelLoader.LoadNext));
     }
 

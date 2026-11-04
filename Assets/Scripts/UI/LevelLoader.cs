@@ -39,6 +39,8 @@ public static class LevelLoader
         "Level19",
     };
 
+    static string endGameScene = "EndScene";
+
     static int currentLevel = 0;
     static int recordAtRunStart = int.MaxValue;
 
@@ -98,7 +100,7 @@ public static class LevelLoader
             currentLevel = 0;
 
             Time.timeScale = 1f;
-            return LoadSceneWithMusicFade(MenuSceneName);
+            return LoadSceneWithMusicFade(endGameScene);
         }
 
         bool isCheckpoint = currentLevel > 0 && currentLevel % CheckpointInterval == 0;
