@@ -5875,6 +5875,7 @@ MonoBehaviour:
   pushForce: 10
   upwardBoost: 1
   trigger: 0
+  scaleAnimation: 0
   shrinkMultiplier: 0.7
   shrinkDuration: 0.08
   growDuration: 0.15
@@ -6062,6 +6063,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: MovingDefender
       objectReference: {fileID: 0}
+    - target: {fileID: 3603413471129861635, guid: e44157bf2c517724b86f3e1e7496e889, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 1a86566702aeeea47860d3bcb9d539cf, type: 2}
     - target: {fileID: 5892738044159722171, guid: e44157bf2c517724b86f3e1e7496e889, type: 3}
       propertyPath: m_Convex
       value: 1
