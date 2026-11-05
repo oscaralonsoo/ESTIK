@@ -45,6 +45,7 @@ public class RecordShow : MonoBehaviour
     public void SetRecord(int record)
     {
         if (!textRecord) return;
+        record++;
         textRecord.text = "Récord: " + record.ToString();
     }
 }
