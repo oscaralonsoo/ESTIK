@@ -60,6 +60,9 @@ public class FastSceneLoader : MonoBehaviour
     public void NotifyGoalScored()
     {
         GoalScored = true;
+
+        if (LevelLoader.IsLastTutorialScene(SceneManager.GetActiveScene().name))
+            SetTutorialPlayed();
     }
 
     public void StartPlaying()
