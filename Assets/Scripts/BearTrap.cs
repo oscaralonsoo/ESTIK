@@ -28,7 +28,7 @@ public class BearTrap : MonoBehaviour
         if (!initialized) return;
         if (other.CompareTag("Ball"))
         {
-            ballController.Die();
+            ballController.Die(true);
             StartCoroutine(TrapAnimation());
         }
     }

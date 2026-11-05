@@ -599,11 +599,14 @@ public class BallController : MonoBehaviour
         }
     }
 
-    public void Die()
+    public void Die(bool stopBall)
     {
         blockShoot = true;
-        ballRigidbody.linearVelocity = Vector3.zero;
-        ballRigidbody. angularVelocity = Vector3.zero;
+        if (stopBall)
+        {
+            ballRigidbody.linearVelocity = Vector3.zero;
+            ballRigidbody.angularVelocity = Vector3.zero;
+        }
         CancelAimAndShoot();
     }
 

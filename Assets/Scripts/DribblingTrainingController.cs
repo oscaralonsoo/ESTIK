@@ -33,12 +33,14 @@ public class DribblingTrainingController : MonoBehaviour
     private int currentGateIndex = 0;
 
     private GameObject ball;
+    private BallController ballController;
     private Collider[] ballColliders;
 
     private void Start()
     {
 
-        ball = GameObject.FindGameObjectWithTag("Ball");
+        ballController = GameObject.FindAnyObjectByType<BallController>();
+        ball = ballController.gameObject;
 
         if (ball == null) return;
 
@@ -173,6 +175,7 @@ public class DribblingTrainingController : MonoBehaviour
             {
                 limit.ballInside = false;
 
+                if (ballController) ballController.Die(false);
                 FastSceneLoader.Instance.RestartLevel();
                 return;
             }
