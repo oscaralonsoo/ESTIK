@@ -5889,6 +5889,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: '::'
   scoreText: {fileID: 2930881062921783884}
   alwaysShowScore: 0
+  leftTargetPadding: 10
   sfx: {fileID: 7178526908306281628}
   multiplierText: {fileID: 4394004789984782107}
   multiplierFormat: x{0}
@@ -6919,43 +6920,43 @@ MonoBehaviour:
   sounds:
   - type: 0
     clips:
-    - {fileID: 8300000, guid: 8d4f8dd141cac5d409a1620b7de2af55, type: 3}
+    - {fileID: 8300000, guid: 5282688f751e0be4387e6d3a69e69bbb, type: 3}
     volume: 0.6
     pitchRange: {x: 0, y: 0}
   - type: 1
     clips:
-    - {fileID: 8300000, guid: 8d4f8dd141cac5d409a1620b7de2af55, type: 3}
+    - {fileID: 8300000, guid: 5282688f751e0be4387e6d3a69e69bbb, type: 3}
     volume: 0.6
     pitchRange: {x: 0, y: 0}
   - type: 2
     clips:
-    - {fileID: 8300000, guid: 6a3cc7e53bf316a41be92a09a3e11efb, type: 3}
+    - {fileID: 8300000, guid: 720e37592c9515f488f474336e911f80, type: 3}
     volume: 1
     pitchRange: {x: 0, y: 0}
   - type: 4
     clips:
-    - {fileID: 8300000, guid: c793bd9072e11724ab3881de588a6f3f, type: 3}
-    volume: 1
+    - {fileID: 8300000, guid: d438088273fb42642b336ea67f4b3dff, type: 3}
+    volume: 0
     pitchRange: {x: 0, y: 0}
   - type: 3
     clips:
-    - {fileID: 8300000, guid: e42733b75eab64742be58d6a7170145c, type: 3}
-    volume: 1
+    - {fileID: 8300000, guid: dde1676dedfa32d4f90f07e62b3cd640, type: 3}
+    volume: 0
     pitchRange: {x: 0, y: 0}
-  - type: 6
+  - type: 5
     clips:
     - {fileID: 8300000, guid: e41c7f6b921146e4b8f5b8b9d2a9b544, type: 3}
     volume: 1
     pitchRange: {x: 0, y: 0}
-  - type: 5
+  - type: 6
     clips:
-    - {fileID: 8300000, guid: f31ec1e9a3b396144aa1d49747224fe7, type: 3}
+    - {fileID: 8300000, guid: 41b864d12b36d51468fe8fdf21ba89aa, type: 3}
     volume: 1
     pitchRange: {x: 0, y: 0}
   - type: 8
     clips:
     - {fileID: 8300000, guid: 4cf706ca5c19ab6469974e927c253a29, type: 3}
-    volume: 0.1
+    volume: 0
     pitchRange: {x: 0, y: 0}
 --- !u!82 &3664096537202682609
 AudioSource:
