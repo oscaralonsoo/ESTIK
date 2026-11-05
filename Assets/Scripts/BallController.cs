@@ -614,5 +614,6 @@ public class BallController : MonoBehaviour
     {
         CancelAim();
         StopCoroutine(shootCoroutine);
+        HideStick();
     }
 }
