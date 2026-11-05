@@ -1,9 +1,3 @@
-// Bola de fuego para URP, sin partículas: el efecto va en el propio material de la bola.
-// Interior rojo oscuro con vetas naranjas que fluyen, borde difuminado (semitransparente)
-// y brillo amarillo/blanco en el contorno.
-// Escribe profundidad (pase 1) para que el agua transparente NO se pinte encima cuando la bola
-// está por encima, pero sí cuando está hundida (el agua pasa el test de profundidad y se mezcla encima).
-// Coste: ~2 llamadas a ruido 3D por píxel (unos 16 hashes).
 Shader "Custom/FireBallMobile"
 {
     Properties
@@ -24,11 +18,8 @@ Shader "Custom/FireBallMobile"
 
     SubShader
     {
-        // Transparent-10 = se dibuja ANTES que el agua (3000) y las partículas.
-        // Como escribe profundidad, el agua solo se pinta encima donde la bola queda DETRÁS de la superficie.
         Tags { "Queue"="Transparent-10" "RenderType"="Transparent" "RenderPipeline"="UniversalPipeline" }
 
-        // Pase 1: solo profundidad, con la malla sin agrandar (así el borde difuminado no recorta el agua)
         Pass
         {
             Name "FireDepth"
@@ -54,13 +45,11 @@ Shader "Custom/FireBallMobile"
             ENDHLSL
         }
 
-        // Pase 2: el fuego
         Pass
         {
             Name "FireColor"
             Tags { "LightMode"="UniversalForward" }
 
-            // Alpha premultiplicado: el color base se atenúa con el alpha y el brillo se suma encima
             Blend One OneMinusSrcAlpha
             ZWrite Off
             ZTest LEqual
@@ -72,18 +61,18 @@ Shader "Custom/FireBallMobile"
             #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Core.hlsl"
 
             CBUFFER_START(UnityPerMaterial)
-                half4 _ColorCore;
-                half4 _ColorMid;
-                half4 _ColorHot;
-                half4 _ColorWhite;
-                half _Scale;
-                half _FlowSpeed;
-                half _Streaks;
-                half _Softness;
-                half _Opacity;
-                half _Glow;
-                half _RimPower;
-                half _Expand;
+                float4 _ColorCore;
+                float4 _ColorMid;
+                float4 _ColorHot;
+                float4 _ColorWhite;
+                float _Scale;
+                float _FlowSpeed;
+                float _Streaks;
+                float _Softness;
+                float _Opacity;
+                float _Glow;
+                float _RimPower;
+                float _Expand;
             CBUFFER_END
 
             struct Attributes
@@ -96,20 +85,19 @@ Shader "Custom/FireBallMobile"
             {
                 float4 positionCS : SV_POSITION;
                 float3 dir        : TEXCOORD0;
-                half3  normalWS   : TEXCOORD1;
-                half3  viewDirWS  : TEXCOORD2;
+                float3 normalWS   : TEXCOORD1;
+                float3 viewDirWS  : TEXCOORD2;
             };
 
             Varyings vert(Attributes IN)
             {
                 Varyings OUT;
-                // Inflamos un poco la malla para que el difuminado quede por fuera y el núcleo conserve su tamaño
                 float3 posOS = IN.positionOS.xyz + normalize(IN.normalOS) * _Expand;
                 float3 posWS = TransformObjectToWorld(posOS);
                 OUT.positionCS = TransformWorldToHClip(posWS);
                 OUT.dir = IN.positionOS.xyz;
-                OUT.normalWS = (half3)TransformObjectToWorldNormal(IN.normalOS);
-                OUT.viewDirWS = (half3)(GetCameraPositionWS() - posWS);
+                OUT.normalWS = TransformObjectToWorldNormal(IN.normalOS);
+                OUT.viewDirWS = GetCameraPositionWS() - posWS;
                 return OUT;
             }
 
@@ -136,39 +124,34 @@ Shader "Custom/FireBallMobile"
             half4 frag(Varyings IN) : SV_Target
             {
                 float3 p = normalize(IN.dir);
-                float t = _Time.y;
+                float t = fmod(_Time.y, 1000.0);
 
-                // Fuego que fluye hacia arriba, con una deformación barata hecha con senos
                 float3 q = p * _Scale;
                 q.y -= t * _FlowSpeed;
                 q += 0.35 * sin(q.zxy * 1.7 + t * 0.6);
-                half n = (half)(noise3(q) * 0.65 + noise3(q * 2.1 + 5.0) * 0.35);
+                float n = noise3(q) * 0.65 + noise3(q * 2.1 + 5.0) * 0.35;
 
-                // Calor: late un poco para que el fuego "respire"
-                half heat = saturate(n * 1.5 - 0.1h + 0.06h * (half)sin(t * 3.0));
+                float heat = saturate(n * 1.5 - 0.1 + 0.06 * sin(t * 3.0));
 
-                // Rampa de color: rojo oscuro -> naranja -> amarillo
-                half3 col = lerp(_ColorCore.rgb, _ColorMid.rgb, smoothstep(0.2h, 0.6h, heat));
-                col = lerp(col, _ColorHot.rgb, smoothstep(0.55h, 0.95h, heat));
+                float3 col = lerp(_ColorCore.rgb, _ColorMid.rgb, smoothstep(0.2, 0.6, heat));
+                col = lerp(col, _ColorHot.rgb, smoothstep(0.55, 0.95, heat));
 
-                // Vetas brillantes, donde el ruido cruza 0.5
-                half vein = 1.0h - abs(n * 2.0h - 1.0h);
+                float vein = 1.0 - abs(n * 2.0 - 1.0);
                 vein = vein * vein * vein;
                 col += _ColorMid.rgb * vein * _Streaks;
 
-                // Borde: el color se calienta hacia el amarillo/blanco, a manchas
-                half ndv = saturate(dot(normalize(IN.normalWS), normalize(IN.viewDirWS)));
-                half rim = pow(1.0h - ndv, _RimPower);
-                col = lerp(col, _ColorWhite.rgb, rim * (0.25h + 0.6h * n));
+                float3 nrm = normalize(IN.normalWS);
+                float3 vd  = IN.viewDirWS * rsqrt(max(dot(IN.viewDirWS, IN.viewDirWS), 1e-6));
+                float ndv = saturate(dot(nrm, vd));
+                float rim = pow(max(1.0 - ndv, 1e-4), _RimPower);
+                col = lerp(col, _ColorWhite.rgb, rim * (0.25 + 0.6 * n));
 
-                // Difuminado: el alpha cae hacia el contorno
-                half alpha = smoothstep(0.0h, _Softness, ndv) * _Opacity;
+                float alpha = smoothstep(0.0, _Softness, ndv) * _Opacity;
 
-                // Brillo del contorno: más fuerte en una banda cerca del borde y a manchas
-                half band = smoothstep(0.02h, 0.2h, ndv) * rim;
-                half3 glow = _ColorHot.rgb * band * (0.3h + 0.7h * n) * _Glow;
+                float band = smoothstep(0.02, 0.2, ndv) * rim;
+                float3 glow = _ColorHot.rgb * band * (0.3 + 0.7 * n) * _Glow;
 
-                return half4(col * alpha + glow * _Opacity, alpha);
+                return half4((half3)(col * alpha + glow * _Opacity), (half)alpha);
             }
             ENDHLSL
         }
