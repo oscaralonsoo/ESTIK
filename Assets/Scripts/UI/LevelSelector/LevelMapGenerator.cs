@@ -53,7 +53,7 @@ public class LevelMapGenerator : MonoBehaviour
     private readonly Dictionary<int, LevelIcon> icons = new Dictionary<int, LevelIcon>();
 
     private float panelHeight = 0;
-    private int record = 20;
+    private int record = 1;
 
     private LevelIcon selected;
     private Transform outline;
@@ -76,10 +76,7 @@ public class LevelMapGenerator : MonoBehaviour
 
     void Start()
     {
-        if (PlayerPrefs.HasKey("Record"))
-        {
-            record = PlayerPrefs.GetInt("Record");
-        }
+        record = PlayerPrefs.GetInt("Record", 1);
 
         GenerateBackground();
         GenerateNodes();

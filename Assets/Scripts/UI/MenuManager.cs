@@ -46,8 +46,7 @@ public class MainMenuManager : MonoBehaviour
     public float closeSelectorDelay = 0.8f;
 
     [Header("Tutorial")]
-    public int tutorialLevel = 0;
-    public int firstLevelAfterTutorial = 1;
+    public int tutorialBiomeLevel = -1;
 
     [Header("Biomas")]
     public BiomeMap[] biomes;
@@ -92,18 +91,17 @@ public class MainMenuManager : MonoBehaviour
         if (currentPanel != null && keyboard != null && keyboard.escapeKey.wasPressedThisFrame)
             OnBackPressed();
     }
-
     int GetMenuLevel()
     {
-        if (!TutorialCompleted) return tutorialLevel;
-        return Mathf.Max(PlayerPrefs.GetInt("SelectedLevel", 0), firstLevelAfterTutorial);
+        if (!TutorialCompleted) return tutorialBiomeLevel;
+        return Mathf.Max(PlayerPrefs.GetInt("SelectedLevel", 0), 0);
     }
 
     void OnLevelSelected(LevelIcon icon)
     {
         if (!TutorialCompleted) return;
 
-        ShowBiomeForLevel(Mathf.Max(icon.Level, firstLevelAfterTutorial));
+        ShowBiomeForLevel(icon.Level);
 
         if (currentPanel == LevelSelector && !closingSelector)
             StartCoroutine(CloseSelectorRoutine());

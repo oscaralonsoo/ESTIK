@@ -11024,7 +11024,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &1406514646867981257
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -12553,7 +12553,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &2343085714877120330
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -14422,7 +14422,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 5, y: 294}
+  m_AnchoredPosition: {x: 5, y: 506}
   m_SizeDelta: {x: 1010, y: 1920}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &3943093934138511861
@@ -17786,11 +17786,10 @@ MonoBehaviour:
   levelSelectorButton: {fileID: 262813579168698174}
   skinCarousel: {fileID: 4240763527664171901}
   closeSelectorDelay: 0.4
-  tutorialLevel: 0
-  firstLevelAfterTutorial: 1
+  tutorialBiomeLevel: -1
   biomes:
   - name: Tutorial
-    firstLevel: 0
+    firstLevel: -1
     mapPrefab: {fileID: 0}
     existingInScene: {fileID: 845230880}
     mapPosition: {x: 0, y: 0, z: 0}
@@ -17801,7 +17800,7 @@ MonoBehaviour:
     instance: {fileID: 0}
     orbitTarget: {fileID: 0}
   - name: Prat
-    firstLevel: 1
+    firstLevel: 0
     mapPrefab: {fileID: 5172094648332113863, guid: 6019b85a8b990c040ae648ae935241e7, type: 3}
     existingInScene: {fileID: 0}
     mapPosition: {x: 0, y: 0, z: 0}
@@ -18998,7 +18997,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: -235}
+  m_AnchoredPosition: {x: 0, y: -253}
   m_SizeDelta: {x: 400, y: 190}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &7732552648625782753

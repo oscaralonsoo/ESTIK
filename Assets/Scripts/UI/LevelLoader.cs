@@ -175,6 +175,11 @@ public static class LevelLoader
         return tutorialScenes.Contains(sceneName);
     }
 
+    public static bool IsLastTutorialScene(string sceneName)
+    {
+        return tutorialScenes.Count > 0 && sceneName == tutorialScenes[tutorialScenes.Count - 1];
+    }
+
     public static string GetTutorialLevelName(int num)
     {
         if (num >= 0) return "";
