@@ -13,7 +13,7 @@ Shader "Custom/BallXRay"
             ZTest Greater
             ZWrite Off
             Cull Back
-            Offset -1, -1
+            Offset 10, 10
             Blend SrcAlpha OneMinusSrcAlpha
 
             HLSLPROGRAM
