@@ -9,6 +9,7 @@ public class PointsManager : MonoBehaviour
     [Header("UI del Marcador")]
     [SerializeField] private TextMeshProUGUI scoreText;
     [SerializeField] private bool alwaysShowScore = false;
+    [SerializeField] private float leftTargetPadding = 10f;
 
     [Header("Audio")]
     [SerializeField] private UISFXManager sfx;
@@ -164,6 +165,19 @@ public class PointsManager : MonoBehaviour
     public int GetCurrentScore()
     {
         return points;
+    }
+
+    public bool TryGetScoreLeftEdgeWorldPosition(out Vector3 worldPosition)
+    {
+        worldPosition = Vector3.zero;
+        if (scoreText == null) return false;
+
+        scoreText.ForceMeshUpdate();
+
+        Bounds b = scoreText.textBounds;
+        Vector3 localLeft = new Vector3(b.min.x - leftTargetPadding, b.center.y, 0f);
+        worldPosition = scoreText.transform.TransformPoint(localLeft);
+        return true;
     }
 
     private static int GetMultiplier()
