@@ -1,3 +1,4 @@
+
 Shader "Custom/FireBallMobile"
 {
     Properties
@@ -53,6 +54,7 @@ Shader "Custom/FireBallMobile"
             Blend One OneMinusSrcAlpha
             ZWrite Off
             ZTest LEqual
+            Offset -1, -1
             Cull Back
 
             HLSLPROGRAM

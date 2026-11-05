@@ -1,5 +1,4 @@
-// Skin neón / cyberpunk para URP. Sin texturas ni ruido: solo matemáticas baratas.
-// Los colores son HDR: con Bloom activado brillan mucho; sin Bloom se ven bien igualmente.
+
 Shader "Custom/NeonBallMobile"
 {
     Properties
@@ -64,7 +63,6 @@ Shader "Custom/NeonBallMobile"
                 OUT.normalWS = (half3)TransformObjectToWorldNormal(IN.normalOS);
                 OUT.viewDirWS = (half3)(GetCameraPositionWS() - posWS);
 
-                // Giro alrededor del eje Y, calculado por vértice
                 float t = _Time.y * _Speed;
                 float s = sin(t), c = cos(t);
                 float3 p = IN.positionOS.xyz;
@@ -76,10 +74,9 @@ Shader "Custom/NeonBallMobile"
             {
                 float3 p = normalize(IN.dir);
 
-                // Rejilla: 3 familias de planos que cortan la esfera en círculos
                 float3 g = p * _GridCount;
-                float3 d = abs(frac(g + 0.5) - 0.5);   // distancia a la línea más cercana
-                float3 aa = fwidth(g);                  // antialiasing según el tamaño en pantalla
+                float3 d = abs(frac(g + 0.5) - 0.5);
+                float3 aa = fwidth(g);
 
                 float3 l3 = 1.0 - smoothstep(_LineWidth - aa, _LineWidth + aa, d);
                 float lineMask = max(max(l3.x, l3.y), l3.z);
@@ -88,16 +85,13 @@ Shader "Custom/NeonBallMobile"
                 h3 *= h3;
                 float halo = max(max(h3.x, h3.y), h3.z);
 
-                // Pulso de luz que recorre la bola de abajo a arriba
                 half pulse = 0.5h + 0.5h * (half)sin(p.y * 6.0 - _Time.y * _PulseSpeed);
                 half intensity = 1.0h + pulse;
 
-                // Color que va de A a B según la altura
                 half3 neon = lerp(_ColorA.rgb, _ColorB.rgb, (half)(p.y * 0.5 + 0.5));
 
                 half3 col = _BaseColor.rgb + neon * ((half)lineMask + halo * _Glow) * intensity;
 
-                // Borde (fresnel)
                 half rim = 1.0h - saturate(dot(normalize(IN.normalWS), normalize(IN.viewDirWS)));
                 col += _RimColor.rgb * pow(rim, _RimPower);
 

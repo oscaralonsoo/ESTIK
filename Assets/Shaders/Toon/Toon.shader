@@ -53,7 +53,6 @@ Shader "Custom/Toon"
         HLSLINCLUDE
         #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Core.hlsl"
 
-        // Mismo CBUFFER para todos los passes -> compatible con SRP Batcher
         CBUFFER_START(UnityPerMaterial)
             float4 _BaseMap_ST;
             half4  _BaseColor;
@@ -82,9 +81,6 @@ Shader "Custom/Toon"
         SAMPLER(sampler_BaseMap);
         ENDHLSL
 
-        // ------------------------------------------------------------
-        // Pass principal
-        // ------------------------------------------------------------
         Pass
         {
             Name "ForwardLit"
@@ -139,32 +135,27 @@ Shader "Custom/Toon"
                 return OUT;
             }
 
-            // Capa 1: luz vs sombra media (terminador): 0 = sombra, 1 = luz
             half FormStep(half NdotL)
             {
                 return smoothstep(_Threshold - _Smooth, _Threshold + _Smooth, NdotL);
             }
 
-            // Capa 2: sombra media vs sombra de núcleo: 0 = núcleo, 1 = fuera del núcleo
             half CoreStep(half NdotL)
             {
                 return smoothstep(_Shadow2Threshold - _Shadow2Smooth, _Shadow2Threshold + _Shadow2Smooth, NdotL);
             }
 
-            // Sombra proyectada (shadow map) cuantizada: borde nítido en vez de degradado PCF
             half CastStep(half shadowAtten)
             {
                 return smoothstep(0.5h - _ShadowEdge, 0.5h + _ShadowEdge, shadowAtten);
             }
 
-            // Especular toon SIN dependencia de la cámara: solo luz + normal
             half ToonSpecular(half NdotL)
             {
                 half s = pow(saturate(NdotL), _Glossiness);
                 return smoothstep(_SpecThreshold, _SpecThreshold + _SpecSmooth, s);
             }
 
-            // Acumula una luz adicional (puntual/spot/direccional extra)
             void AddToonLight(Light l, float3 normalWS, inout half3 extraDiffuse, inout half3 extraSpec)
             {
                 half NdotL = dot(normalWS, l.direction);
@@ -181,7 +172,6 @@ Shader "Custom/Toon"
                 float3 normalWS  = normalize(IN.normalWS);
                 float3 viewDirWS = GetWorldSpaceNormalizeViewDir(IN.positionWS);
 
-                // Con screen-space shadows la coord viene del vértice; si no, por píxel (cascadas correctas)
                 float4 shadowCoord = IN.shadowCoord;
                 #if !defined(_MAIN_LIGHT_SHADOWS_SCREEN)
                     shadowCoord = TransformWorldToShadowCoord(IN.positionWS);
@@ -189,29 +179,23 @@ Shader "Custom/Toon"
 
                 half4 shadowMask = half4(1, 1, 1, 1);
 
-                // ---- Luz principal ----
                 Light mainLight = GetMainLight(shadowCoord, IN.positionWS, shadowMask);
                 half NdotL = dot(normalWS, mainLight.direction);
 
                 half form = FormStep(NdotL);
                 half cast = CastStep(mainLight.shadowAttenuation);
-                half lit  = form * cast;                       // 1 = zona iluminada
+                half lit  = form * cast;
 
-                // Núcleo: la sombra proyectada puede empujar hacia la capa 2 según _CastToCore
                 half core = CoreStep(NdotL) * lerp(1.0h, cast, _CastToCore);
 
-                // Capas: luz (1) -> sombra 1 (media) -> sombra 2 (núcleo)
                 half3 shadeTint = lerp(_Shadow2Color.rgb, _ShadowColor.rgb, core);
                 half3 lighting  = lerp(shadeTint, half3(1, 1, 1), lit) * mainLight.color;
 
-                // Un poco de ambiente solo dentro de la sombra (evita sombras negras sin sobreexponer la luz)
                 half3 ambient = SampleSH(normalWS) * _AmbientStrength;
                 lighting += ambient * shadeTint * (1.0h - lit);
 
-                // Especular: solo donde hay luz, no depende de la cámara
                 half3 specular = ToonSpecular(NdotL) * lit * _SpecColor.rgb * mainLight.color;
 
-                // ---- Luces adicionales ----
                 half3 extraDiffuse = 0;
                 half3 extraSpec = 0;
 
@@ -222,7 +206,6 @@ Shader "Custom/Toon"
 
                     uint pixelLightCount = GetAdditionalLightsCount();
 
-                    // Forward+ / Cluster: las direccionales extra van aparte del bucle por clusters
                     #if USE_FORWARD_PLUS || USE_CLUSTER_LIGHT_LOOP
                     [loop] for (uint dirIndex = 0; dirIndex < min(URP_FP_DIRECTIONAL_LIGHTS_COUNT, MAX_VISIBLE_LIGHTS); dirIndex++)
                     {
@@ -238,13 +221,11 @@ Shader "Custom/Toon"
                     LIGHT_LOOP_END
                 #endif
 
-                // ---- Rim (solo en el lado iluminado) ----
                 half rim = 1.0h - saturate(dot(normalWS, viewDirWS));
                 rim = smoothstep(1.0h - _RimSize - _RimSmooth, 1.0h - _RimSize + _RimSmooth, rim);
                 rim *= saturate(NdotL * 0.5h + 0.5h);
                 half3 rimCol = rim * _RimColor.rgb * mainLight.color;
 
-                // ---- Composición ----
                 half3 color = albedo * (lighting + extraDiffuse);
                 color += specular + extraSpec + rimCol;
                 color += _EmissionColor.rgb;
@@ -255,9 +236,6 @@ Shader "Custom/Toon"
             ENDHLSL
         }
 
-        // ------------------------------------------------------------
-        // Outline (inverted hull, grosor constante en píxeles)
-        // ------------------------------------------------------------
         Pass
         {
             Name "Outline"
@@ -288,16 +266,13 @@ Shader "Custom/Toon"
                 Varyings OUT;
                 float4 posCS = TransformObjectToHClip(IN.positionOS.xyz);
 
-                // Dirección de la normal en pantalla, corrigiendo el aspect ratio
                 float3 normalVS = TransformWorldToViewDir(TransformObjectToWorldNormal(IN.normalOS));
                 float2 n = mul((float3x3)UNITY_MATRIX_P, normalVS).xy;
                 n.x *= _ScreenParams.x / _ScreenParams.y;
                 float2 dir = n / max(length(n), 1e-5);
 
-                // Offset en clip space -> mismo grosor en píxeles a cualquier distancia
                 posCS.xy += dir * (_OutlineWidth * 2.0 / _ScreenParams.xy) * posCS.w;
 
-                // Grosor 0 -> triángulos degenerados (se descarta el pass entero)
                 if (_OutlineWidth < 0.01)
                     posCS = float4(0, 0, 0, 0);
 
@@ -314,9 +289,6 @@ Shader "Custom/Toon"
             ENDHLSL
         }
 
-        // ------------------------------------------------------------
-        // ShadowCaster
-        // ------------------------------------------------------------
         Pass
         {
             Name "ShadowCaster"
@@ -379,9 +351,6 @@ Shader "Custom/Toon"
             ENDHLSL
         }
 
-        // ------------------------------------------------------------
-        // DepthOnly
-        // ------------------------------------------------------------
         Pass
         {
             Name "DepthOnly"
@@ -412,9 +381,6 @@ Shader "Custom/Toon"
             ENDHLSL
         }
 
-        // ------------------------------------------------------------
-        // DepthNormals (SSAO, decals, etc.)
-        // ------------------------------------------------------------
         Pass
         {
             Name "DepthNormals"

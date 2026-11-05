@@ -1,13 +1,4 @@
-// Stylized Mud (Clean v2) - Unlit URP
-// Igual de simple que Clean, pero mas integrado con el escenario:
-//   - Paleta marron mas apagada y cercana al valor del tile (menos contraste)
-//   - Borde oscuro mas fino
-//   - Franja exterior con su propio contorno irregular (suelo humedo, no un aro)
-//   - Un reflejo plano y sutil que hace que se lea como charco y no como monticulo
-//   - Barro casi opaco: el verde del suelo tine un poco el color
-//
-// Colores (hex en el Inspector del material):
-//   Base #46382A  Blotches #3B2F23  Edge #30261C  Shine #4F3F2E  Fringe #1D4430
+
 Shader "Stylized/MudShader"
 {
     Properties
@@ -134,7 +125,6 @@ Shader "Stylized/MudShader"
                             lerp(hash21(i + float2(0, 1)), hash21(i + float2(1, 1)), f.x), f.y);
             }
 
-            // Corte duro con 1 pixel de anti-aliasing: 0 si v < t, 1 si v > t
             float Cut(float v, float t)
             {
                 float w = max(fwidth(v), 1e-5);
@@ -154,7 +144,6 @@ Shader "Stylized/MudShader"
 
             half4 frag(Varyings IN) : SV_Target
             {
-                // ---------- Manchas (planas, movimiento lento) ----------
                 #if defined(_WORLD_UV)
                     float2 pw = IN.positionWS.xz;
                 #else
@@ -170,33 +159,27 @@ Shader "Stylized/MudShader"
                 float n = valueNoise(p);
                 float3 mud = lerp(_ColorBase.rgb, _ColorBlotch.rgb, Cut(n, 1.0 - _BlotchAmount));
 
-                // ---------- Silueta organica ----------
-                // e = distancia al borde (0 en el borde del plano, crece hacia dentro)
                 float2 q = IN.uv * 2.0 - 1.0;
                 float e = 1.0 - length(q);
                 e -= valueNoise(IN.uv * _OutlineScale + _Seed * 13.7) * _OutlineBumps;
 
-                // Contorno propio de la franja exterior (distinto al del barro)
                 float ef = e + (valueNoise(IN.uv * 3.1 + _Seed * 7.3 + float2(5.2, 1.7)) - 0.5) * _FringeWobble;
 
-                // Franja exterior en [outerEdge, cutoff]; el barro empieza en cutoff
                 const float outerEdge = 0.02;
                 float cutoff = outerEdge + _FringeWidth;
 
-                float inside = Cut(e, cutoff);                    // 1 = barro
-                float rim    = 1.0 - Cut(e, cutoff + _RimWidth);  // borde oscuro fino
+                float inside = Cut(e, cutoff);
+                float rim    = 1.0 - Cut(e, cutoff + _RimWidth);
                 float3 col = lerp(mud, _ColorRim.rgb, rim);
 
-                // ---------- Reflejo plano (elipse inclinada) ----------
                 float2 s = q - _Shine.xy;
                 float ca = cos(_ShineAngle);
                 float sa = sin(_ShineAngle);
                 float2 r = float2(s.x * ca + s.y * sa, -s.x * sa + s.y * ca) / max(_Shine.zw, 1e-4);
-                float shineSD = 1.0 - length(r);                  // >0 dentro de la elipse
+                float shineSD = 1.0 - length(r);
                 float shine = Cut(shineSD, 0.0) * Cut(e, cutoff + _RimWidth + 0.05);
                 col = lerp(col, _ColorShine.rgb, shine * _ShineOpacity);
 
-                // ---------- Franja exterior + alfa ----------
                 col = lerp(_ColorFringe.rgb, col, inside);
                 float fringeA = Cut(ef, outerEdge) * _FringeAlpha;
                 float alpha = lerp(fringeA, _MudOpacity, inside);

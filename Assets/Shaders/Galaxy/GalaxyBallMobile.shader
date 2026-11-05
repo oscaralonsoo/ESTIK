@@ -1,5 +1,3 @@
-// Shader de juego para URP. Solo una lectura de cubemap + rotación + borde.
-// Compatible con SRP Batcher.
 Shader "Custom/GalaxyBallMobile"
 {
     Properties
@@ -58,7 +56,6 @@ Shader "Custom/GalaxyBallMobile"
                 OUT.normalWS = (half3)TransformObjectToWorldNormal(IN.normalOS);
                 OUT.viewDirWS = (half3)(GetCameraPositionWS() - posWS);
 
-                // Rotación en el vértice (barato): giro alrededor del eje Y
                 float t = _Time.y * _Speed;
                 float s = sin(t), c = cos(t);
                 float3 p = IN.positionOS.xyz;
@@ -70,13 +67,11 @@ Shader "Custom/GalaxyBallMobile"
             {
                 half3 col = SAMPLE_TEXTURECUBE(_Cube, sampler_Cube, IN.dir).rgb * _Tint.rgb;
 
-                // Parpadeo barato: solo afecta a los píxeles brillantes (las estrellas)
                 half lum = dot(col, half3(0.299h, 0.587h, 0.114h));
                 half starMask = smoothstep(0.5h, 0.9h, lum);
                 float phase = dot(normalize(IN.dir), float3(127.1, 311.7, 74.7));
                 col *= 1.0h + _Twinkle * starMask * (half)sin(_Time.y * 3.0 + phase);
 
-                // Borde (fresnel)
                 half rim = 1.0h - saturate(dot(normalize(IN.normalWS), normalize(IN.viewDirWS)));
                 col += _RimColor.rgb * pow(rim, _RimPower);
 
