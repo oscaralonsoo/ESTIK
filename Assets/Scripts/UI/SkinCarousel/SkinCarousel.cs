@@ -651,8 +651,6 @@ public class SkinCarousel : MonoBehaviour,
     {
         notEnoughText.gameObject.SetActive(true);
 
-        _popupRect.SetAsLastSibling();
-
         _popupRect.anchoredPosition = _popupBasePos;
         _popupGroup.alpha = 0f;
         _popupRect.localScale = Vector3.one * popStartScale;

@@ -10,6 +10,7 @@ public class PointCollector : MonoBehaviour
     [SerializeField] private RectTransform targetUIPoint;
 
     [Header("Cámara Secundaria")]
+    [Tooltip("Cámara secundaria donde está el punto de la UI que hay que seguir.")]
     [SerializeField] private Camera secondaryCamera;
 
     [Header("Parámetros por Defecto")]
@@ -65,11 +66,7 @@ public class PointCollector : MonoBehaviour
 
     private Vector3 GetTargetWorldPosition()
     {
-        Vector3 targetUIWorld = targetUIPoint != null ? targetUIPoint.position : Vector3.zero;
-        if (PointsManager.Instance != null && PointsManager.Instance.TryGetScoreLeftEdgeWorldPosition(out Vector3 leftEdge))
-            targetUIWorld = leftEdge;
-
-        Vector2 uiScreenPos = RectTransformUtility.WorldToScreenPoint(secondaryCamera, targetUIWorld);
+        Vector2 uiScreenPos = RectTransformUtility.WorldToScreenPoint(secondaryCamera, targetUIPoint.position);
         return mainCamera.ScreenToWorldPoint(new Vector3(uiScreenPos.x, uiScreenPos.y, mainCamera.nearClipPlane + 5f));
     }
 

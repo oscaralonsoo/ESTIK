@@ -51,7 +51,7 @@ public class LevelIcon : MonoBehaviour
         if (locked) return;
 
         if (sfx != null)
-            sfx.PlayBuy();
+            sfx.PlayNormal();
 
         PlayerPrefs.SetInt("SelectedLevel", level);
         PlayerPrefs.Save();
