@@ -6,12 +6,14 @@ Shader "Custom/BallXRay"
     }
     SubShader
     {
-        Tags { "RenderType"="Transparent" "Queue"="Transparent" "RenderPipeline"="UniversalPipeline" }
+        Tags { "RenderType"="Opaque" "Queue"="Geometry+1" "RenderPipeline"="UniversalPipeline" }
         Pass
         {
             Name "XRay"
             ZTest Greater
             ZWrite Off
+            Cull Back
+            Offset -1, -1
             Blend SrcAlpha OneMinusSrcAlpha
 
             HLSLPROGRAM
