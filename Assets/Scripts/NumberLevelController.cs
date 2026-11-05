@@ -15,6 +15,6 @@ public class NumberLevelController : MonoBehaviour
         int levelNum = LevelLoader.GetCurrentLevel();
 
         if (levelNum < 0) level.text = "Tutorial";
-        else level.text = levelNum.ToString();
+        else level.text = (levelNum + 1).ToString();
     }
 }

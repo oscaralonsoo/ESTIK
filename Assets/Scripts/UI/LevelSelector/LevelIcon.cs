@@ -37,7 +37,7 @@ public class LevelIcon : MonoBehaviour
     void RefreshText()
     {
         if (text)
-            text.text = level.ToString();
+            text.text = (level + 1).ToString();
     }
 
     public void UnlockLevel()
